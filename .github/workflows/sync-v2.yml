@@ -25,12 +25,12 @@ jobs:
 
       - name: Sync
         run: |
-          nix develop --command ./ci/sync-v2
+          nix develop --command ./.ci/sync-v2
 
       - name: Commit changes
         run: |
           git add -u
-          git commit -m 'feat: `./ci/sync-v2`' || true
+          git commit -m 'feat: `./.ci/sync-v2`' || true
 
       - name: Push changes
         run: |
