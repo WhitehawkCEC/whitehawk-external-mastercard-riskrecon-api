@@ -56,6 +56,23 @@
         <artifactId>openapi-generator-maven-plugin</artifactId>
         <executions>
           <execution>
+            <id>v1</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>${project.basedir}/../../openapi/v1.json</inputSpec>
+              <generatorName>java</generatorName>
+              <invokerPackage>com.whitehawk.external.mastercard.riskrecon.api.stub.v1.invoker</invokerPackage>
+              <apiPackage>com.whitehawk.external.mastercard.riskrecon.api.stub.v1</apiPackage>
+              <modelPackage>com.whitehawk.external.mastercard.riskrecon.api.stub.v1.model</modelPackage>
+              <configOptions>
+                <library>native</library>
+                <useJakartaEe>true</useJakartaEe>
+              </configOptions>
+            </configuration>
+          </execution>
+          <execution>
             <id>v2</id>
             <goals>
               <goal>generate</goal>
