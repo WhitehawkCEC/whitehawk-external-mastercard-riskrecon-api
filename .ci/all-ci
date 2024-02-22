@@ -1,0 +1,48 @@
+#!/bin/sh
+
+set -o errexit -o nounset -o xtrace
+
+main() {
+  command=$1
+  shift
+
+  case $command in
+  build)
+    build "$@"
+    ;;
+  deploy)
+    deploy "$@"
+    ;;
+  esac
+}
+
+build() {
+  version=$1
+  build_swagger
+  build_java $version
+}
+
+deploy() {
+  deploy_java
+}
+
+build_swagger() {
+  buf lint || exit
+  buf generate || exit
+}
+
+build_java() {
+  version=$1
+  cd java
+  ./mvnw -B -Pprepare-release -DnewVersion=$version -s settings.xml || exit
+  ./mvnw -B -Pbuild-release -s settings.xml || exit
+  cd ..
+}
+
+deploy_java() {
+  cd java
+  ./mvnw -B -Ppublish-release -s settings.xml || exit
+  cd ..
+}
+
+main "$@"
