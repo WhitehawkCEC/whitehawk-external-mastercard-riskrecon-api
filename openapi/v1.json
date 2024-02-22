@@ -1,0 +1,5144 @@
+{
+  "components": {
+    "examples": {
+      "BadRequestExample": {
+        "value": {
+          "Errors": {
+            "Error": [
+              {
+                "Description": "We couldn't handle your request.",
+                "Details": "Invalid JSON payload",
+                "ReasonCode": "BAD_REQUEST",
+                "Recoverable": false,
+                "Source": "RISKRECON_API"
+              }
+            ]
+          }
+        }
+      },
+      "NotFoundExample": {
+        "value": {
+          "Errors": {
+            "Error": [
+              {
+                "Description": "Resource Not found.",
+                "Details": "Resource Not found.",
+                "ReasonCode": "NOT_FOUND",
+                "Recoverable": false,
+                "Source": "RISKRECON_API"
+              }
+            ]
+          }
+        }
+      },
+      "TooManyRequestsExample": {
+        "value": {
+          "Errors": {
+            "Error": [
+              {
+                "Description": "Too many requests sent in a 24 hour period.",
+                "Details": "Try again later.",
+                "ReasonCode": "TOO_MANY_REQUESTS",
+                "Recoverable": false,
+                "Source": "RISKRECON_API"
+              }
+            ]
+          }
+        }
+      },
+      "UnauthorizedExample": {
+        "value": {
+          "Errors": {
+            "Error": [
+              {
+                "Description": "Unauthorized request",
+                "ReasonCode": "UNAUTHORIZED",
+                "Recoverable": false,
+                "Source": "RISKRECON_API"
+              }
+            ]
+          }
+        }
+      },
+      "UnprocessableEntityExample": {
+        "value": {
+          "Errors": {
+            "Error": [
+              {
+                "Description": "The syntax of the request entity is correct, but server was unable to process the contained instructions.",
+                "Details": "server is unable to process the instructions.",
+                "ReasonCode": "UNPROCESSABLE_ENTITY",
+                "Recoverable": false,
+                "Source": "RISKRECON_API"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "headers": {
+      "Location": {
+        "description": "The URL to check on status of resource",
+        "schema": {
+          "example": "/v1/toe/1234",
+          "type": "string"
+        },
+        "style": "simple"
+      }
+    },
+    "parameters": {
+      "PublicEventDateStart": {
+        "description": "Filter results after the provided date string in format YYYY-MM-DD.",
+        "example": "2023-01-03",
+        "explode": true,
+        "in": "query",
+        "name": "public_event_start_date",
+        "schema": {
+          "format": "date",
+          "type": "string"
+        },
+        "style": "form"
+      },
+      "SecurityCriteria": {
+        "description": "Filter results by the Security Criteria.",
+        "in": "query",
+        "name": "security_criteria",
+        "schema": {
+          "example": "patching_app_server",
+          "type": "string"
+        }
+      },
+      "ToeId": {
+        "description": "Filter by the Toe ID.",
+        "in": "path",
+        "name": "toe_id",
+        "required": true,
+        "schema": {
+          "example": "5976423a-ee35-11e3-8569-14109ff1a304",
+          "type": "string"
+        }
+      },
+      "RiskPolicy": {
+        "description": "Filter findings based on customer risk policy.  This can be setup at https://portal.riskrecon.com/portal/risk-policy.",
+        "in": "query",
+        "name": "risk_policy",
+        "schema": {
+          "example": true,
+          "type": "boolean"
+        }
+      },
+      "NumericAssetValues": {
+        "description": "Filter results by asset_value_numeric. An example of a query string with multiple asset_value_numeric values would look like ?asset_value_numeric[]=1&asset_value_numeric[]=3",
+        "explode": true,
+        "in": "query",
+        "name": "asset_value_numeric[]",
+        "schema": {
+          "items": {
+            "example": 1,
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "style": "form"
+      },
+      "AssetValue": {
+        "description": "This parameter filters finding results by asset_value.",
+        "example": "high",
+        "in": "query",
+        "name": "asset_value",
+        "required": false,
+        "schema": {
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            "idle",
+            "key"
+          ],
+          "type": "string"
+        }
+      },
+      "StartDate": {
+        "description": "Filter results after the provided date string in format YYYY-MM-DD. Can't search back further than 1 month.",
+        "example": "2023-01-03",
+        "explode": true,
+        "in": "query",
+        "name": "start_date",
+        "schema": {
+          "format": "date",
+          "type": "string"
+        },
+        "style": "form"
+      },
+      "BreachEventDateStart": {
+        "description": "Filter results after the provided date string in format YYYY-MM-DD.",
+        "example": "2023-01-03",
+        "explode": true,
+        "in": "query",
+        "name": "breach_event_start_date",
+        "schema": {
+          "format": "date",
+          "type": "string"
+        },
+        "style": "form"
+      },
+      "Domain": {
+        "description": "Search TOEs by domain or hostname. This must be a valid domain or hostname.",
+        "in": "query",
+        "name": "domain",
+        "required": true,
+        "schema": {
+          "example": "riskrecon.com",
+          "type": "string"
+        }
+      },
+      "LastRetrieved": {
+        "description": "Filter results published or updated after the provided date string in format YYYY-MM-DD.  An example request would like like ?last_retrieved=2020-11-20 and this would grab results updated on or after 2020-11-20.",
+        "explode": true,
+        "in": "query",
+        "name": "last_retrieved",
+        "schema": {
+          "example": "2020-11-20",
+          "type": "string"
+        },
+        "style": "form"
+      },
+      "Severities": {
+        "description": "Filter results by severity. An example of a query string with multiple severities would look like ?severity[]=low&severity[]=medium&severity[]=high.",
+        "explode": true,
+        "in": "query",
+        "name": "severity[]",
+        "schema": {
+          "items": {
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low"
+            ],
+            "example": "high",
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "style": "form"
+      },
+      "BreachEventsSortAttribute": {
+        "description": "This parameter is optional but allows the user to sort results of breach events by available sort attributes.",
+        "in": "query",
+        "name": "sort_attribute",
+        "required": false,
+        "schema": {
+          "default": "public_event_date",
+          "enum": [
+            "breach_event_date",
+            "public_event_date",
+            "created_at"
+          ],
+          "example": "public_event_date",
+          "type": "string"
+        }
+      },
+      "RiskRelationshipSlugs": {
+        "description": "filter results based on customer risk_relationship_slugs, which are returned from /v1/portfolio/risk_relationships_folders. This is optional.",
+        "explode": true,
+        "in": "query",
+        "name": "risk_relationship_slugs[]",
+        "required": false,
+        "schema": {
+          "items": {
+            "example": "ownenterprise_critical",
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "style": "form"
+      },
+      "RiskStandardId": {
+        "description": "Filter by the risk standard id.",
+        "in": "query",
+        "name": "risk_standard_id",
+        "required": true,
+        "schema": {
+          "example": 12345,
+          "type": "integer"
+        }
+      },
+      "Page": {
+        "description": "This parameter is the page number in routes that have pagination.",
+        "in": "query",
+        "name": "page",
+        "required": false,
+        "schema": {
+          "default": 1,
+          "example": 1,
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "InternalId": {
+        "description": "This parameter filters results by internal_id. A TOE can actually have multiple internal_ids so it will filter if the given internal_id is one of them (if there are multiple).",
+        "explode": true,
+        "in": "query",
+        "name": "internal_id[]",
+        "schema": {
+          "items": {
+            "example": "12345",
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "style": "form"
+      },
+      "IncludeTrend": {
+        "description": "This parameter gives the option to include trending data for current analysis request.  Normally, this is only included when looking at the historical analyses.",
+        "example": true,
+        "in": "query",
+        "name": "include_trend",
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      "AssetValues": {
+        "description": "This parameter filters finding results by asset_values. An example of a query string with multiple asset_values would look like:\n\n?asset_value[]=high&asset_value[]=low",
+        "explode": true,
+        "in": "query",
+        "name": "asset_value[]",
+        "schema": {
+          "items": {
+            "example": "high",
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "style": "form"
+      },
+      "EndDate": {
+        "description": "This parameter filters results before the provided date string in format YYYY-MM-DD. Defaults to current date.  Must be after start_date.",
+        "example": "2023-01-03",
+        "explode": true,
+        "in": "query",
+        "name": "end_date",
+        "schema": {
+          "format": "date",
+          "type": "string"
+        },
+        "style": "form"
+      },
+      "AlertingIssuesSortAttribute": {
+        "description": "This parameter is optional but allows the user to sort results of alerting issues by available sort attributes.",
+        "in": "query",
+        "name": "sort_attribute",
+        "required": false,
+        "schema": {
+          "default": "last_seen",
+          "enum": [
+            "priority",
+            "last_seen",
+            "security_criteria"
+          ],
+          "example": "last_seen",
+          "type": "string"
+        }
+      },
+      "AlertTypes": {
+        "description": "type of score change alert This parameter is optional but allows the user to filter results by available alert_types.",
+        "example": "rating_improved",
+        "explode": true,
+        "in": "query",
+        "name": "alert_types[]",
+        "required": false,
+        "schema": {
+          "items": {
+            "enum": [
+              "rating_improved",
+              "low_threshold",
+              "high_threshold",
+              "rating_dropped"
+            ],
+            "example": "rating_improved",
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "style": "form"
+      },
+      "CveId": {
+        "description": "This parameter filters finding results by single Common Vulnerabilities and Exposures (CVE). For example:\n\n?cve_id=CVE-1999-0001",
+        "in": "query",
+        "name": "cve_id",
+        "required": true,
+        "schema": {
+          "example": "CVE-1999-0001",
+          "type": "string"
+        }
+      },
+      "SortMethod": {
+        "description": "Sort results by ascending or descending order.",
+        "in": "query",
+        "name": "sort_method",
+        "required": false,
+        "schema": {
+          "default": "DESC",
+          "enum": [
+            "ASC",
+            "DESC"
+          ],
+          "example": "DESC",
+          "type": "string"
+        }
+      },
+      "PerPage": {
+        "description": "This parameter sets the results limit per page.  This defaults to 20 and currently has a max of 50.",
+        "in": "query",
+        "name": "per_page",
+        "required": false,
+        "schema": {
+          "default": 20,
+          "example": 20,
+          "maximum": 50,
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "ToeIdQuery": {
+        "description": "Filter by the Toe ID.",
+        "in": "query",
+        "name": "toe_id",
+        "required": false,
+        "schema": {
+          "example": "5976423a-ee35-11e3-8569-14109ff1a304",
+          "type": "string"
+        }
+      },
+      "FindingsSortAttribute": {
+        "description": "This parameter is optional but allows the user to sort results of alerting issues by available sort attributes.",
+        "in": "query",
+        "name": "sort_attribute",
+        "required": false,
+        "schema": {
+          "default": "priority",
+          "enum": [
+            "days_open",
+            "security_criteria",
+            "asset_value",
+            "severity",
+            "priority"
+          ],
+          "example": "priority",
+          "type": "string"
+        }
+      },
+      "CveIds": {
+        "description": "This parameter filters finding results by array of Common Vulnerabilities and Exposures (CVE). An example of a query string with multiple cves would look like:\n\n?cve_ids[]=CVE-1999-0001&cve_ids[]=CVE-1999-0002",
+        "explode": true,
+        "in": "query",
+        "name": "cve_ids[]",
+        "required": false,
+        "schema": {
+          "items": {
+            "example": "CVE-1999-0001",
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "style": "form"
+      },
+      "CreatedAtStart": {
+        "description": "Filter results after the provided date string in format YYYY-MM-DD.",
+        "example": "2023-01-03",
+        "explode": true,
+        "in": "query",
+        "name": "created_at_start_date",
+        "schema": {
+          "format": "date",
+          "type": "string"
+        },
+        "style": "form"
+      },
+      "AlertingScoreChangesSortAttribute": {
+        "description": "This parameter is optional but allows the user to sort results of alerting issues by available sort attributes.",
+        "in": "query",
+        "name": "sort_attribute",
+        "required": false,
+        "schema": {
+          "default": "date",
+          "enum": [
+            "company",
+            "security_domain",
+            "previous_rating",
+            "new_rating",
+            "rating_change",
+            "date"
+          ],
+          "example": "date",
+          "type": "string"
+        }
+      },
+      "Severity": {
+        "description": "Filter finding results by severity.",
+        "in": "query",
+        "name": "severity",
+        "required": false,
+        "schema": {
+          "enum": [
+            "critical",
+            "high",
+            "medium",
+            "low"
+          ],
+          "example": "high",
+          "type": "string"
+        }
+      },
+      "Priority": {
+        "description": "Filter results by priority. An example of a query string with multiple priority values would look like ?priority[]=1&priority[]=3.",
+        "explode": true,
+        "in": "query",
+        "name": "priority[]",
+        "schema": {
+          "items": {
+            "example": 1,
+            "maximum": 6,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        "style": "form"
+      },
+      "Priorities": {
+        "description": "Filter findings based on  priority. Priority is based on asset_value and severity.",
+        "example": 5,
+        "explode": true,
+        "in": "query",
+        "name": "priorities[]",
+        "required": false,
+        "schema": {
+          "items": {
+            "example": 5,
+            "maximum": 6,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        "style": "form"
+      },
+      "SecurityDomain": {
+        "description": "Filter results by the Security Domain.",
+        "in": "query",
+        "name": "security_domain",
+        "schema": {
+          "example": "software_patching",
+          "type": "string"
+        }
+      }
+    },
+    "requestBodies": {
+      "AddCompanyToPortfolioRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CompanyAddToPortfolio"
+            }
+          }
+        },
+        "required": true
+      },
+      "CreateToeRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateTOEs"
+            }
+          }
+        },
+        "required": true
+      },
+      "MoveToeRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/MoveToe"
+            }
+          }
+        },
+        "required": true
+      },
+      "UpdateSubscriptionLevelConfig": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/SubscriptionLevelConfig"
+            }
+          }
+        },
+        "required": true
+      },
+      "UpdateToeRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TOEUpdate"
+            }
+          }
+        },
+        "required": true
+      }
+    },
+    "responses": {
+      "GetSubsidiariesResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Subsidiaries"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "MoveToeResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/MoveToe"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "GetAnalysisRatingsResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Analysis"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "GetAlertingScoreChanges": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AlertingScoreChanges"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "ActionPlanIssueProgress": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ArrayOfActionPlanIssueProgress"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "NotFoundErrorResponse": {
+        "content": {
+          "application/json": {
+            "examples": {
+              "NotFoundExample": {
+                "$ref": "#/components/examples/NotFoundExample"
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/ErrorWrapper"
+            }
+          }
+        },
+        "description": "The URI didn't match an existing resource."
+      },
+      "GetToeSearchResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TOESearchResults"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "GetRiskRelationshipsFoldersResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/RiskRelationshipsFolders"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "GetHistoricalAnalysisRatingsResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Analyses"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "GetUserMgmtResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Users"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "GetActionPlanPriorityMatrixResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PriorityMetricCounts"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "GetFindingResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Findings"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "GetIntegrationRoutes": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/IntegrationRoute"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "AddExistingToeResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TOEUpdated"
+            }
+          }
+        },
+        "description": "OK",
+        "headers": {
+          "Location": {
+            "$ref": "#/components/headers/Location"
+          }
+        }
+      },
+      "GetAlertingNewIssues": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AlertingNewIssues"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "GetActionPlanVendorStatusSummaryCounts": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/VendorStatusSummaryCounts"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "UnauthorizedErrorResponse": {
+        "content": {
+          "application/json": {
+            "examples": {
+              "UnauthorizedExample": {
+                "$ref": "#/components/examples/UnauthorizedExample"
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/ErrorWrapper"
+            }
+          }
+        },
+        "description": "Authentication information was missing or invalid or the user is not authorized to access resource or perform the associated action."
+      },
+      "SubmittedResponse": {
+        "content": {},
+        "description": "OK"
+      },
+      "GetHostsResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Hosts"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "BadRequestErrorResponse": {
+        "content": {
+          "application/json": {
+            "examples": {
+              "BadRequestExample": {
+                "$ref": "#/components/examples/BadRequestExample"
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/ErrorWrapper"
+            }
+          }
+        },
+        "description": "Something was wrong with the request"
+      },
+      "GetPaginatedFindings": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PaginatedFindings"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "GetRiskStandardsControlsResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/RiskStandardControls"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "UnprocessableEntityResponse": {
+        "content": {
+          "application/json": {
+            "examples": {
+              "UnprocessableEntityExample": {
+                "$ref": "#/components/examples/UnprocessableEntityExample"
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/ErrorWrapper"
+            }
+          }
+        },
+        "description": "The syntax of the request entity is correct, but server was unable to process the contained instructions."
+      },
+      "EmptyArrayResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/EmptyArray"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "TooManyRequestsResponse": {
+        "content": {
+          "application/json": {
+            "examples": {
+              "TooManyRequestsExample": {
+                "$ref": "#/components/examples/TooManyRequestsExample"
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/ErrorWrapper"
+            }
+          }
+        },
+        "description": "User has sent too many requests in a given amount of time"
+      },
+      "GetBreachEvents": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BreachEvents"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "GetActionPlanIssueSummaryResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ActionPlanIssueSummary"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "GetToesResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Toes"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "GetDisplayNameResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/DisplayNameMappings"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "SubscriptionLevelConfigResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/SubscriptionLevelConfig"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "GetToeResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Toe"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "UpdatedToeResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TOEUpdated"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "GetDataLossEventsResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/DataLossEvents"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "GetCveSearchResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CveSearchResults"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "GetRiskStandards": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/RiskStandards"
+            }
+          }
+        },
+        "description": "OK"
+      }
+    },
+    "schemas": {
+      "Users": {
+        "properties": {
+          "users": {
+            "description": "A collection of User objects.",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "BreachEvent": {
+        "properties": {
+          "analysis_id": {
+            "description": "The analysis_id associated with the finding.",
+            "example": "12345",
+            "type": "string"
+          },
+          "breach_event_date": {
+            "description": "The date of the breach.",
+            "example": "2021-10-01",
+            "nullable": true,
+            "type": "string"
+          },
+          "compromised_info": {
+            "items": {
+              "description": "Compromised Info from the breach event.",
+              "example": "financial accounts",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "created_at": {
+            "description": "The date the data loss event was created.",
+            "example": "2021-10-01T22:18:57+00:00",
+            "type": "string"
+          },
+          "description": {
+            "description": "A long description of data loss event.",
+            "example": "On August 2020, a breach was detected and data was leaked.",
+            "type": "string"
+          },
+          "id": {
+            "description": "The identifier associated with response object.",
+            "example": 12345,
+            "type": "integer"
+          },
+          "internal_id": {
+            "$ref": "#/components/schemas/InternalId"
+          },
+          "internal_name": {
+            "description": "The user defined names for the TOE.",
+            "items": {
+              "example": "Riskrecon, Inc",
+              "type": "string"
+            },
+            "nullable": true,
+            "type": "array"
+          },
+          "public_event_date": {
+            "description": "The date the breach was made public.",
+            "example": "2021-10-01",
+            "nullable": true,
+            "type": "string"
+          },
+          "records_exposed": {
+            "description": "The number of records exposed if applicable.",
+            "example": 32,
+            "nullable": true,
+            "type": "integer"
+          },
+          "source_urls": {
+            "description": "Source url for the Data Loss Event.",
+            "items": {
+              "example": "riskrecon.com",
+              "type": "string"
+            },
+            "nullable": true,
+            "type": "array"
+          },
+          "threat_action": {
+            "description": "The threat action if available.",
+            "items": {
+              "example": "malware",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "threat_actor": {
+            "description": "The threat actor if available.",
+            "example": "external",
+            "nullable": true,
+            "type": "string"
+          },
+          "threat_vector": {
+            "description": "The threat vector associated with the Data Loss or Breach event.",
+            "example": "malware",
+            "nullable": true,
+            "type": "string"
+          },
+          "toe_id": {
+            "$ref": "#/components/schemas/ToeId"
+          },
+          "toe_short_name": {
+            "description": "The Company or entity name.",
+            "example": "Riskrecon, CO.",
+            "type": "string"
+          },
+          "updated_at": {
+            "description": "The date a data loss event was updated.",
+            "example": "2021-10-01T22:18:57+00:00",
+            "type": "string"
+          },
+          "uuid": {
+            "description": "The unique identifier for a data loss event.",
+            "example": "3976423a-ee35-11e3-8569-14109ff1a307",
+            "format": "uuid",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "uuid",
+          "analysis_id",
+          "updated_at",
+          "toe_id",
+          "toe_short_name",
+          "internal_name",
+          "internal_id",
+          "threat_vector",
+          "threat_actor",
+          "threat_action",
+          "records_exposed",
+          "public_event_date",
+          "source_urls",
+          "description",
+          "created_at",
+          "compromised_info",
+          "breach_event_date"
+        ],
+        "title": "Breach Event",
+        "type": "object"
+      },
+      "ToeId": {
+        "description": "The unique identifier for the Target Of Evaluation (TOE).",
+        "example": "5976423a-ee35-11e3-8569-14109ff1a304",
+        "format": "uuid",
+        "type": "string"
+      },
+      "ActionPlanIssueProgress": {
+        "description": "Action Plan Issue Progress items.",
+        "properties": {
+          "current_action_plan_issues_count": {
+            "description": "The current issue count for an action plan.",
+            "example": 5,
+            "type": "number"
+          },
+          "current_shared_issues_count": {
+            "description": "The current shared issue count for an action plan.",
+            "example": 5,
+            "type": "number"
+          },
+          "event_name": {
+            "description": "The event description.",
+            "example": "AnalysisPublishedToCustomers",
+            "type": "string"
+          },
+          "occurred_on": {
+            "description": "The date associated with issue counts.",
+            "example": "2021-10-01T22:18:57+00:00",
+            "type": "string"
+          },
+          "total_resolved_issues_count": {
+            "description": "The total resolved issue count for an action plan.",
+            "example": 5,
+            "type": "number"
+          },
+          "total_shared_issues_count": {
+            "description": "The total shared issue count for an action plan.",
+            "example": 5,
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "AlertingNewIssues": {
+        "properties": {
+          "issue_alerts": {
+            "items": {
+              "$ref": "#/components/schemas/AlertingNewIssue"
+            },
+            "type": "array"
+          },
+          "meta": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PaginationMeta"
+              },
+              {
+                "properties": {
+                  "total_new": {
+                    "description": "The total number of new issues.",
+                    "example": 37,
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              }
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "Toes": {
+        "description": "A collection of Toes.",
+        "items": {
+          "$ref": "#/components/schemas/Toe"
+        },
+        "title": "Toes",
+        "type": "array"
+      },
+      "ErrorWrapper": {
+        "properties": {
+          "Errors": {
+            "$ref": "#/components/schemas/Errors"
+          }
+        },
+        "required": [
+          "Errors"
+        ],
+        "title": "Error Response",
+        "type": "object"
+      },
+      "Hosts": {
+        "description": "A collection of Hosts.",
+        "items": {
+          "$ref": "#/components/schemas/Host"
+        },
+        "title": "Hosts",
+        "type": "array"
+      },
+      "VendorStatusSummaryCount": {
+        "description": "The Vendor Status Summary Count items.",
+        "properties": {
+          "count": {
+            "description": "The issue count by current vendor status.",
+            "example": 37,
+            "type": "number"
+          },
+          "label": {
+            "description": "The display name for vendor status.",
+            "example": "Investigating",
+            "type": "string"
+          },
+          "status": {
+            "description": "The current vendor status.",
+            "example": "investigating",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "VendorStatusSummaryCounts": {
+        "description": "A collection of Vendor Status Summary Count objects.",
+        "items": {
+          "$ref": "#/components/schemas/VendorStatusSummaryCount"
+        },
+        "title": "VendorStatusSummaryCounts",
+        "type": "array"
+      },
+      "PaginationMeta": {
+        "properties": {
+          "current_page": {
+            "description": "The current page of paginated responses.",
+            "example": 2,
+            "type": "integer"
+          },
+          "next_page": {
+            "description": "The next page of paginated responses if applicable.",
+            "example": 3,
+            "nullable": true,
+            "type": "integer"
+          },
+          "prev_page": {
+            "description": "The previous page of paginated responses if applicable.",
+            "example": 1,
+            "nullable": true,
+            "type": "integer"
+          },
+          "total_count": {
+            "description": "The total count of items.",
+            "example": 52,
+            "type": "integer"
+          },
+          "total_pages": {
+            "description": "The total number of pages for paginated responses.",
+            "example": 10,
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "CreateTOE": {
+        "description": "A request to add a company or TOE to the users portfolio",
+        "properties": {
+          "assessment_frequency": {
+            "description": "The Scan frequency. This is required and must be either one_time or continuous.",
+            "enum": [
+              "one_time",
+              "continuous"
+            ],
+            "example": "continuous",
+            "type": "string"
+          },
+          "company_domains": {
+            "description": "An array of domains. There must include at least one.",
+            "items": {
+              "example": "riskrecon.domain.org",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "company_name": {
+            "description": "The Name of the Company. This is required.",
+            "example": "Riskrecon, Co.",
+            "type": "string"
+          },
+          "internal_id": {
+            "$ref": "#/components/schemas/InternalId"
+          },
+          "internal_name": {
+            "$ref": "#/components/schemas/InternalName"
+          },
+          "risk_relationship_slugs": {
+            "description": "Risk relationship slugs which are returned from /v1/portfolio/risk_relationships_folders. This is optional.",
+            "items": {
+              "example": "ownenterprise_critical",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "subscription_level": {
+            "description": "The SubscriptionLevelConfig must be 1 (Discover) or 2 (Advisor). Either this or a subscription level config are required.",
+            "enum": [
+              "1",
+              "2"
+            ],
+            "example": "2",
+            "type": "string"
+          }
+        },
+        "required": [
+          "assessment_frequency",
+          "company_domains",
+          "company_name"
+        ],
+        "title": "Customer Toe Request",
+        "type": "object"
+      },
+      "DisplayNameMappings": {
+        "description": "A collection of DisplayNameMapping objects.",
+        "items": {
+          "$ref": "#/components/schemas/DisplayNameMapping"
+        },
+        "title": "DisplayNameMappings",
+        "type": "array"
+      },
+      "Scope": {
+        "properties": {
+          "created_at": {
+            "description": "The created at timestamp.",
+            "example": "2021-10-01T22:18:57+00:00",
+            "type": "string"
+          },
+          "description": {
+            "description": "The scope description.",
+            "example": "Provides the ability to Add Companies to a Portfolio.",
+            "nullable": true,
+            "type": "string"
+          },
+          "display_name": {
+            "description": "The display name.",
+            "example": "Add Company",
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "description": "The unique identifier for the scope.",
+            "example": 1234,
+            "type": "number"
+          },
+          "name": {
+            "description": "The scope name.",
+            "example": "AddCompany",
+            "type": "string"
+          },
+          "updated_at": {
+            "description": "Last updated timestamp.",
+            "example": "2021-10-01T22:18:57+00:00",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "DataLossEvents": {
+        "description": "A collection of Data Loss Events.",
+        "items": {
+          "$ref": "#/components/schemas/DataLossEvent"
+        },
+        "title": "Data Loss Events",
+        "type": "array"
+      },
+      "DisplayNameMapping": {
+        "description": "A field name and the accompanying customer portal display name.",
+        "properties": {
+          "deprecated": {
+            "description": "Is this domain or criteria deprecated?",
+            "example": false,
+            "type": "boolean"
+          },
+          "display_name": {
+            "description": "The display name seen on RiskRecon portal site.",
+            "example": "OpenSSL Patching",
+            "type": "string"
+          },
+          "name": {
+            "description": "The name or key used throughout RiskRecon APIs.",
+            "example": "patching_openssl",
+            "type": "string"
+          },
+          "rated": {
+            "description": "Is this domain or criteria rated?",
+            "example": true,
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "EmptyArray": {
+        "description": "An empty array.",
+        "items": {
+          "type": "string"
+        },
+        "maxItems": 0,
+        "title": "EmptyArray",
+        "type": "array"
+      },
+      "IntegrationLinks": {
+        "description": "An object containing the available portal routes.",
+        "properties": {
+          "data_loss": {
+            "description": "A link to the relevant page on the RiskRecon site for the given security domain and TOE id.",
+            "example": "https://portal.riskrecon.com/portal/vendor/1234/security-profile/data_loss",
+            "type": "string"
+          },
+          "defensibility": {
+            "description": "A link to the relevant page on the RiskRecon site for the given security domain and TOE id.",
+            "example": "https://portal.riskrecon.com/portal/vendor/1234/security-profile/defensibility",
+            "type": "string"
+          },
+          "dns_security": {
+            "description": "A link to the relevant page on the RiskRecon site for the given security domain and TOE id.",
+            "example": "https://portal.riskrecon.com/portal/vendor/1234/security-profile/dns_security",
+            "type": "string"
+          },
+          "email_security": {
+            "description": "A link to the relevant page on the RiskRecon site for the given security domain and TOE id.",
+            "example": "https://portal.riskrecon.com/portal/vendor/1234/security-profile/email_security",
+            "type": "string"
+          },
+          "governance": {
+            "description": "A link to the relevant page on the RiskRecon site for the given security domain and TOE id.",
+            "example": "https://portal.riskrecon.com/portal/vendor/1234/security-profile/governance",
+            "type": "string"
+          },
+          "network_filtering": {
+            "description": "A link to the relevant page on the RiskRecon site for the given security domain and TOE id.",
+            "example": "https://portal.riskrecon.com/portal/vendor/1234/security-profile/network_filtering",
+            "type": "string"
+          },
+          "overview": {
+            "description": "A link to the relevant page on the RiskRecon site for the given security domain and TOE id.",
+            "example": "https://portal.riskrecon.com/portal/vendor/1234/overview",
+            "type": "string"
+          },
+          "software_patching": {
+            "description": "A link to the relevant page on the RiskRecon site for the given security domain and TOE id.",
+            "example": "https://portal.riskrecon.com/portal/vendor/1234/security-profile/software_patching",
+            "type": "string"
+          },
+          "system_hosting": {
+            "description": "A link to the relevant page on the RiskRecon site for the given security domain and TOE id.",
+            "example": "https://portal.riskrecon.com/portal/vendor/1234/security-profile/system_hosting",
+            "type": "string"
+          },
+          "threat_intel": {
+            "description": "A link to the relevant page on the RiskRecon site for the given security domain and TOE id.",
+            "example": "https://portal.riskrecon.com/portal/vendor/1234/security-profile/threat_intell",
+            "type": "string"
+          },
+          "web_app_security": {
+            "description": "A link to the relevant page on the RiskRecon site for the given security domain and TOE id.",
+            "example": "https://portal.riskrecon.com/portal/vendor/1234/security-profile/web_app_security",
+            "type": "string"
+          },
+          "web_encryption": {
+            "description": "A link to the relevant page on the RiskRecon site for the given security domain and TOE id.",
+            "example": "https://portal.riskrecon.com/portal/vendor/1234/security-profile/web_encryption",
+            "type": "string"
+          }
+        },
+        "required": [
+          "overview"
+        ],
+        "title": "Integration Route Links",
+        "type": "object"
+      },
+      "CreateTOEs": {
+        "description": "A collection of CustomerToeRequest request objects.",
+        "properties": {
+          "customer_toe_requests": {
+            "items": {
+              "$ref": "#/components/schemas/CreateTOE"
+            },
+            "maxItems": 25,
+            "minItems": 1,
+            "type": "array"
+          }
+        },
+        "title": "Customer Toe Requests",
+        "type": "object"
+      },
+      "RiskStandardControlDomainCriteriaRatingCounts": {
+        "description": "An array of the securityCriteria and securityDomains under RiskStandardControls.",
+        "properties": {
+          "issue_count": {
+            "description": "The issue count.",
+            "example": 5,
+            "nullable": true,
+            "type": "integer"
+          },
+          "issue_rate": {
+            "description": "The issue rate.",
+            "example": 5,
+            "nullable": true,
+            "type": "number"
+          },
+          "name": {
+            "description": "The Domain or Criteria name.",
+            "example": "GOV-01",
+            "type": "string"
+          },
+          "rated": {
+            "description": "Is this Domain or Criteria rated?",
+            "example": true,
+            "type": "boolean"
+          },
+          "rating": {
+            "description": "The Domain or Criteria rating.",
+            "example": "3.0",
+            "type": "string"
+          },
+          "rating_numeric": {
+            "description": "The Domain or Criteria rating Numeric.",
+            "example": 5,
+            "type": "number"
+          },
+          "total_count": {
+            "description": "The total count.",
+            "example": 5,
+            "nullable": true,
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "InternalName": {
+        "description": "The user defined names for the TOE.",
+        "items": {
+          "example": "Riskrecon",
+          "type": "string"
+        },
+        "nullable": true,
+        "type": "array"
+      },
+      "RiskStandards": {
+        "description": "A collection of risk standards.",
+        "properties": {
+          "data": {
+            "description": "A collection of risk standards.",
+            "items": {
+              "properties": {
+                "attributes": {
+                  "$ref": "#/components/schemas/RiskStandard"
+                },
+                "id": {
+                  "description": "The id associated with the response object.",
+                  "example": 12345,
+                  "type": "integer"
+                },
+                "type": {
+                  "description": "The type of object returned.",
+                  "example": "risk_standard",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "TOESearchResults": {
+        "description": "A collection of TOESearchResult objects.",
+        "items": {
+          "$ref": "#/components/schemas/TOESearchResult"
+        },
+        "type": "array"
+      },
+      "Subsidiaries": {
+        "description": "A collection of subsidiaries.",
+        "items": {
+          "$ref": "#/components/schemas/Subsidiary"
+        },
+        "title": "Subsidiaries",
+        "type": "array"
+      },
+      "CveSearchResults": {
+        "description": "A collection of CveSearchResult objects.",
+        "items": {
+          "$ref": "#/components/schemas/CveSearchResult"
+        },
+        "type": "array"
+      },
+      "CompanyName": {
+        "description": "The name of the company.",
+        "example": "Riskrecon, Co.",
+        "type": "string"
+      },
+      "DataLossEvent": {
+        "properties": {
+          "breach_date": {
+            "description": "The date of the breach.",
+            "example": "2021-10-01T22:18:57+00:00",
+            "type": "string"
+          },
+          "compromised_info": {
+            "items": {
+              "description": "Compromised Info from the breach event.",
+              "example": "financial accounts",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "created_at": {
+            "description": "The date the data loss event was created.",
+            "example": "2021-10-01T22:18:57+00:00",
+            "type": "string"
+          },
+          "data_loss_event_long_desc": {
+            "description": "A long description of data loss event.",
+            "example": "On September 2020, a breach was detected and data was leaked.",
+            "type": "string"
+          },
+          "data_loss_event_source_url": {
+            "description": "Source url for the Data Loss Event.",
+            "example": "riskrecon.com",
+            "type": "string"
+          },
+          "public_date": {
+            "description": "The date the breach was made public.",
+            "example": "2021-10-01T22:18:57+00:00",
+            "type": "string"
+          },
+          "records_exposed": {
+            "description": "The number of records exposed if applicable.",
+            "example": "32",
+            "type": "string"
+          },
+          "threat_action": {
+            "description": "The threat action if available.",
+            "example": "malware",
+            "type": "string"
+          },
+          "threat_actor": {
+            "description": "The threat actor if available.",
+            "example": "external",
+            "type": "string"
+          },
+          "threat_vector": {
+            "description": "The threat vector associated with the Data Loss or Breach event.",
+            "example": "malware",
+            "type": "string"
+          },
+          "toe_id": {
+            "$ref": "#/components/schemas/ToeId"
+          },
+          "updated_at": {
+            "description": "The date a data loss event was updated.",
+            "example": "2021-10-01T22:18:57+00:00",
+            "type": "string"
+          },
+          "uuid": {
+            "description": "The unique identifier for a data loss event.",
+            "example": "3976423a-ee35-11e3-8569-14109ff1a307",
+            "format": "uuid",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "title": "Data Loss Event",
+        "type": "object"
+      },
+      "RiskStandard": {
+        "description": "A custom or industry risk standard.",
+        "properties": {
+          "assess_count": {
+            "description": "The Assess Count.",
+            "example": 25,
+            "type": "integer"
+          },
+          "description": {
+            "description": "The Risk Standard description.",
+            "example": "Legacy Custom Standard",
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "description": "The unique identifier for a Risk Standard.",
+            "example": 1234,
+            "type": "integer"
+          },
+          "inform_count": {
+            "description": "The inform Count.",
+            "example": 5,
+            "type": "integer"
+          },
+          "is_public": {
+            "description": "Is the standard public?",
+            "example": true,
+            "type": "boolean"
+          },
+          "name": {
+            "description": "The risk standard name.",
+            "example": "Secure Controls Framework 2023_2",
+            "type": "string"
+          },
+          "rating_counts": {
+            "description": "The rating counts by rating label/range.",
+            "items": {
+              "properties": {
+                "count": {
+                  "description": "The rating counts.",
+                  "example": 5,
+                  "type": "integer"
+                },
+                "rating": {
+                  "description": "The rating.",
+                  "example": "3",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "type": {
+            "description": "The type of risk standard.",
+            "example": "RiskStandard::CustomStandard",
+            "type": "string"
+          },
+          "version": {
+            "description": "The risk standard version if applicable.",
+            "example": "1.0",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Findings": {
+        "description": "A collection of Findings.",
+        "items": {
+          "$ref": "#/components/schemas/Finding"
+        },
+        "title": "Findings",
+        "type": "array"
+      },
+      "Toe": {
+        "properties": {
+          "analysis_id": {
+            "description": "The unique identifier for analysis.",
+            "example": "12345",
+            "type": "string"
+          },
+          "analysis_ts": {
+            "description": "The date the analysis was updated.",
+            "example": "2021-10-01T22:18:57+00:00",
+            "type": "string"
+          },
+          "analysis_type": {
+            "description": "Is this TOE setup for a one_time or continuous scan?",
+            "example": "continuous",
+            "type": "string"
+          },
+          "data_loss_rating": {
+            "$ref": "#/components/schemas/DomainRating"
+          },
+          "defensibility_rating": {
+            "$ref": "#/components/schemas/DomainRating"
+          },
+          "dns_security_rating": {
+            "$ref": "#/components/schemas/DomainRating"
+          },
+          "duns_numbers": {
+            "description": "The DUNS number for the TOE.  This may or may not be populated.",
+            "items": {
+              "example": "12345",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "email_security_rating": {
+            "$ref": "#/components/schemas/DomainRating"
+          },
+          "governance_rating": {
+            "$ref": "#/components/schemas/DomainRating"
+          },
+          "internal_id": {
+            "$ref": "#/components/schemas/InternalId"
+          },
+          "internal_name": {
+            "$ref": "#/components/schemas/InternalName"
+          },
+          "network_filtering_rating": {
+            "$ref": "#/components/schemas/DomainRating"
+          },
+          "rating": {
+            "description": "The legacy overall rating for the most recent analysis for the TOE.",
+            "example": "fix",
+            "type": "string"
+          },
+          "rating_numeric": {
+            "description": "The overall numeric rating for the most recent analysis for the TOE.",
+            "example": 1,
+            "maximum": 10,
+            "minimum": 0,
+            "type": "number"
+          },
+          "rating_v2": {
+            "description": "The overall rating for the most recent analysis for the TOE.",
+            "example": "b",
+            "type": "string"
+          },
+          "risk_configurations": {
+            "$ref": "#/components/schemas/RiskConfigurations"
+          },
+          "seed_hostnames": {
+            "description": "The seed hostnames are the hostnames used to start the scan.  This doesn't include all hostnames from the scan results",
+            "items": {
+              "description": "The hostname used to start scan.",
+              "example": "riskrecon.com",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "software_patching_rating": {
+            "$ref": "#/components/schemas/DomainRating"
+          },
+          "subscription_level": {
+            "description": "The subscription level for the TOE.",
+            "example": "enterprise",
+            "type": "string"
+          },
+          "system_hosting_rating": {
+            "$ref": "#/components/schemas/DomainRating"
+          },
+          "threat_intell_rating": {
+            "$ref": "#/components/schemas/DomainRating"
+          },
+          "ticker_symbols": {
+            "$ref": "#/components/schemas/TickerSymbols"
+          },
+          "toe_id": {
+            "$ref": "#/components/schemas/ToeId"
+          },
+          "toe_short_name": {
+            "description": "The Company or entity name.",
+            "example": "Riskrecon, CO.",
+            "type": "string"
+          },
+          "web_app_security_rating": {
+            "$ref": "#/components/schemas/DomainRating"
+          },
+          "web_encryption_rating": {
+            "$ref": "#/components/schemas/DomainRating"
+          }
+        },
+        "title": "Target of Evaluation (TOE)",
+        "type": "object"
+      },
+      "InternalId": {
+        "description": "The user defined identifiers for the TOE. These can be used to query the TOE.",
+        "items": {
+          "example": "1234",
+          "type": "string"
+        },
+        "nullable": true,
+        "type": "array"
+      },
+      "CompanyAddToPortfolio": {
+        "properties": {
+          "assessment_frequency": {
+            "default": "continuous",
+            "description": "Scan frequency. This must be either one_time or continuous. The default is continuous.",
+            "enum": [
+              "one_time",
+              "continuous"
+            ],
+            "example": "continuous",
+            "type": "string"
+          },
+          "internal_ids": {
+            "$ref": "#/components/schemas/InternalId"
+          },
+          "internal_names": {
+            "$ref": "#/components/schemas/InternalName"
+          },
+          "risk_relationship_slugs": {
+            "description": "Risk relationship slugs which are returned from /v1/portfolio/risk_relationships_folders. This is optional.",
+            "items": {
+              "example": "ownenterprise_critical",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "subscription_level": {
+            "default": 2,
+            "description": "The SubscriptionLevelConfig.  1 (Discover) or 2 (Advisor). This defaults to 2.",
+            "enum": [
+              1,
+              2
+            ],
+            "example": 2,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "subscription_level",
+          "assessment_frequency"
+        ],
+        "title": "Add a company to portfolio",
+        "type": "object"
+      },
+      "RiskRelationshipsFolders": {
+        "description": "A collection of RiskRelationshipsFolder objects.",
+        "items": {
+          "properties": {
+            "name": {
+              "description": "The Name of the risk relationship folder.",
+              "example": "Own Enterprise > Critical",
+              "type": "string"
+            },
+            "slug": {
+              "description": "A Slug that uniquely identifies the risk relationship folder.",
+              "example": "ownenterprise_critical",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "title": "RiskRelationshipsFolders",
+        "type": "array"
+      },
+      "CveSearchResult": {
+        "properties": {
+          "company_name": {
+            "$ref": "#/components/schemas/CompanyName"
+          },
+          "toe_id": {
+            "$ref": "#/components/schemas/ToeId"
+          }
+        },
+        "type": "object"
+      },
+      "Finding": {
+        "properties": {
+          "registrant_city": {
+            "description": "The registrant_city if available.",
+            "example": "Aileen",
+            "nullable": true,
+            "type": "string"
+          },
+          "city_name": {
+            "description": "The city name if available.",
+            "example": "Aileen",
+            "nullable": true,
+            "type": "string"
+          },
+          "registrant_zip": {
+            "description": "The registrant_zip if available.",
+            "example": "75524",
+            "nullable": true,
+            "type": "string"
+          },
+          "asset_value_numeric": {
+            "description": "The numeric asset_value associated with a findings host.",
+            "example": "3.5",
+            "type": "string"
+          },
+          "metro_code": {
+            "description": "The metro_code if available.",
+            "example": "12345",
+            "nullable": true,
+            "type": "string"
+          },
+          "registry_tech_id": {
+            "description": "The registry_tech_id if available.",
+            "example": "5",
+            "nullable": true,
+            "type": "string"
+          },
+          "severity_numeric": {
+            "description": "The numeric severity for a finding.",
+            "example": "3.5",
+            "type": "string"
+          },
+          "finding_data_description": {
+            "description": "The finding data description.",
+            "example": "Missing Security Headers",
+            "nullable": true,
+            "type": "string"
+          },
+          "finding_subtype": {
+            "description": "The finding subtype.",
+            "example": "application server",
+            "nullable": true,
+            "type": "string"
+          },
+          "continent_name": {
+            "description": "The continent if available.",
+            "example": "South America",
+            "nullable": true,
+            "type": "string"
+          },
+          "admin_email": {
+            "description": "The admin_email if available.",
+            "example": "jordan.jacobi@wilkinson.name",
+            "nullable": true,
+            "type": "string"
+          },
+          "auth_detected": {
+            "description": "Any authentication detected?",
+            "example": "no",
+            "nullable": true,
+            "type": "string"
+          },
+          "admin_street": {
+            "description": "The admin street associated with host if available.",
+            "example": "Sampson street",
+            "nullable": true,
+            "type": "string"
+          },
+          "tech_name": {
+            "description": "The tech name if available.",
+            "example": "Riskrecon, Co.",
+            "nullable": true,
+            "type": "string"
+          },
+          "tech_city": {
+            "description": "The tech city name if available.",
+            "example": "Aileen",
+            "nullable": true,
+            "type": "string"
+          },
+          "name_server": {
+            "description": "The name server if available.",
+            "example": "thiel.name",
+            "nullable": true,
+            "type": "string"
+          },
+          "tech_phone": {
+            "description": "The tech_phone if available.",
+            "example": "+44348154931",
+            "nullable": true,
+            "type": "string"
+          },
+          "scan": {
+            "description": "The scan number.",
+            "example": "1",
+            "type": "string"
+          },
+          "finding_auto_comments": {
+            "description": "The finding_auto_comments if available or applicable.",
+            "example": "Certificate subject is invalid",
+            "type": "string"
+          },
+          "registrant_phone_ext": {
+            "description": "The registrant_phone_ext if available or applicable.",
+            "example": "5323",
+            "nullable": true
+          },
+          "registrant_org": {
+            "description": "The registrant_org if available.",
+            "example": "Riskrecon, Co.",
+            "nullable": true,
+            "type": "string"
+          },
+          "false_positive": {
+            "description": "Was the finding determined to be a false positive?",
+            "example": "false",
+            "nullable": true,
+            "type": "string"
+          },
+          "country_name": {
+            "$ref": "#/components/schemas/CountryName"
+          },
+          "last_seen": {
+            "description": "The date the finding was last seen.",
+            "example": "2020-10-10",
+            "type": "string"
+          },
+          "priority": {
+            "description": "The finding priority based on the asset_value and severity.",
+            "example": 5,
+            "type": "integer"
+          },
+          "hosting_provider": {
+            "$ref": "#/components/schemas/HostingProvider"
+          },
+          "latitude": {
+            "description": "The longitude associated with host if available.",
+            "example": "-112.3351",
+            "nullable": true,
+            "type": "string"
+          },
+          "finding_type": {
+            "description": "The type of finding.",
+            "example": "dns",
+            "nullable": true,
+            "type": "string"
+          },
+          "registrant_name": {
+            "description": "The registrant_phone if available.",
+            "example": "domain administrator",
+            "nullable": true,
+            "type": "string"
+          },
+          "registrant_phone": {
+            "description": "The registrant_phone if available.",
+            "example": "+44348154931",
+            "nullable": true,
+            "type": "string"
+          },
+          "security_domain": {
+            "description": "The security_domain category for the finding.",
+            "example": "patching_app_server",
+            "type": "string"
+          },
+          "vendor": {
+            "description": "vendor if available",
+            "example": "Riskrecon, Co.",
+            "nullable": true,
+            "type": "string"
+          },
+          "postal_code": {
+            "description": "The postal code associated with host if available.",
+            "example": "75524",
+            "nullable": true,
+            "type": "string"
+          },
+          "domain_name": {
+            "description": "The domain name if available.",
+            "example": "thiel.name",
+            "nullable": true,
+            "type": "string"
+          },
+          "admin_phone": {
+            "description": "The admin_phone if available.",
+            "example": "+44348154931",
+            "nullable": true,
+            "type": "string"
+          },
+          "state_abbrev": {
+            "description": "The state_abbrev if available or applicable.",
+            "example": "NY",
+            "nullable": true,
+            "type": "string"
+          },
+          "finding_detail": {
+            "description": "The details about the finding.",
+            "example": "shared_hosting",
+            "nullable": true,
+            "type": "string"
+          },
+          "tech_email": {
+            "description": "The tech_email if available.",
+            "example": "jordan.jacobi@wilkinson.name",
+            "nullable": true,
+            "type": "string"
+          },
+          "ip_address": {
+            "description": "The ip address associated with host.",
+            "example": "40.14.1.146",
+            "type": "string"
+          },
+          "analyst_status": {
+            "description": "The analyst status of the finding.",
+            "example": "fail",
+            "nullable": true,
+            "type": "string"
+          },
+          "tech_org": {
+            "description": "The tech_org if available.",
+            "example": "Riskrecon, Co.",
+            "nullable": true,
+            "type": "string"
+          },
+          "registrar_id": {
+            "description": "The registrar_id if available.",
+            "example": "12349832749",
+            "nullable": true,
+            "type": "string"
+          },
+          "expires_on": {
+            "description": "The expires_on date if applicable.",
+            "example": "2022-09-08 00:00:00 UTC",
+            "nullable": true,
+            "type": "string"
+          },
+          "registrar_abuse_email": {
+            "description": "The registrar_abuse_email if available.",
+            "example": "jordan.jacobi@wilkinson.name",
+            "nullable": true,
+            "type": "string"
+          },
+          "finding": {
+            "description": "High level finding information.",
+            "example": "DNS Hijacking protection configuration",
+            "nullable": true,
+            "type": "string"
+          },
+          "registrar_iana": {
+            "description": "The registrar_iana if available.",
+            "example": "12349832749",
+            "nullable": true,
+            "type": "string"
+          },
+          "host_name": {
+            "$ref": "#/components/schemas/HostName"
+          },
+          "analysis_id": {
+            "description": "The analysis_id associated with the finding.",
+            "example": "12345",
+            "type": "string"
+          },
+          "registrant_country": {
+            "description": "The name of registrant_country if available.",
+            "example": "Luxembourg",
+            "nullable": true,
+            "type": "string"
+          },
+          "finding_id": {
+            "description": "The unique identifier for the finding.",
+            "example": "5976423a-ee35-11e3-8569-14109ff1a304",
+            "type": "string"
+          },
+          "admin_city": {
+            "description": "The admin city name if available.",
+            "example": "Aileen",
+            "nullable": true,
+            "type": "string"
+          },
+          "form_field_types_detected": {
+            "description": "Any form fields detected.",
+            "example": "token;email address",
+            "nullable": true,
+            "type": "string"
+          },
+          "tech_zip": {
+            "description": "The tech_zip if available or applicable.",
+            "example": "12348",
+            "nullable": true,
+            "type": "string"
+          },
+          "finding_context": {
+            "description": "Any additional context related to the finding.",
+            "example": "The domain is missing one or more domain hijacking flags (clientTransferProhibited, clientDeleteProhibited, clientUpdateProhibited).",
+            "nullable": true,
+            "type": "string"
+          },
+          "auto_status": {
+            "description": "The auto status of the finding.",
+            "example": "fail",
+            "nullable": true,
+            "type": "string"
+          },
+          "admin_zip": {
+            "description": "The admin_zip if available.",
+            "example": "12348",
+            "nullable": true,
+            "type": "string"
+          },
+          "asset_value": {
+            "description": "asset value associated with host.  high, medium, low or idle",
+            "example": "high",
+            "type": "string"
+          },
+          "admin_name": {
+            "description": "The admin_name if available.",
+            "example": "domain administrator",
+            "nullable": true,
+            "type": "string"
+          },
+          "record_load_timestamp": {
+            "description": "The timestamp for when record was loaded.",
+            "example": "2022-02-09 21:04:47.429380",
+            "type": "string"
+          },
+          "registrant_email": {
+            "description": "The registrant_email if available.",
+            "example": "jordan.jacobi@wilkinson.name",
+            "nullable": true,
+            "type": "string"
+          },
+          "admin_country": {
+            "description": "The name of the admin country if available.",
+            "example": "Luxembourg",
+            "nullable": true,
+            "type": "string"
+          },
+          "admin_phone_ext": {
+            "description": "The admin phone extension if available or applicable.",
+            "example": "5323",
+            "nullable": true
+          },
+          "hosting_type": {
+            "description": "The hosting type can be internal or external hosting.",
+            "example": "internal",
+            "type": "string"
+          },
+          "severity": {
+            "description": "The severity for the finding.",
+            "example": "high",
+            "type": "string"
+          },
+          "registrar": {
+            "description": "The registrar if available.",
+            "example": "Riskrecon, Co.",
+            "nullable": true,
+            "type": "string"
+          },
+          "longitude": {
+            "description": "The latitude associated with host if available.",
+            "example": "46.9302",
+            "nullable": true,
+            "type": "string"
+          },
+          "industry": {
+            "description": "The industry if available.",
+            "example": "Industrials",
+            "nullable": true,
+            "type": "string"
+          },
+          "admin_org": {
+            "description": "The admin org if available.",
+            "example": "Riskrecon, Co.",
+            "nullable": true,
+            "type": "string"
+          },
+          "is_web": {
+            "description": "Was a web server found? The value could be 0 or 1.",
+            "example": "0",
+            "type": "string"
+          },
+          "service": {
+            "description": "The type of service detected.  This could be dns, email, web or blank.",
+            "example": "dns",
+            "nullable": true,
+            "type": "string"
+          },
+          "finding_data_value": {
+            "description": "The type of finding data.",
+            "example": "shared_hosting",
+            "nullable": true,
+            "type": "string"
+          },
+          "toe_id": {
+            "$ref": "#/components/schemas/ToeId"
+          },
+          "finding_extra_data_value": {
+            "description": "Any additional data associated with the finding.",
+            "example": "shared_hosting",
+            "nullable": true,
+            "type": "string"
+          },
+          "state_name": {
+            "description": "The state name associated with host if available or applicable.",
+            "example": "NY",
+            "nullable": true,
+            "type": "string"
+          },
+          "tech_street": {
+            "description": "The tech street associated with host if available.",
+            "example": "Sampson street",
+            "nullable": true,
+            "type": "string"
+          },
+          "registrar_abuse_phone": {
+            "description": "The registrar_abuse_phone if available.",
+            "example": "+44348154931",
+            "nullable": true,
+            "type": "string"
+          },
+          "registrar_expire_date": {
+            "description": "The registrar_expire_date if available.",
+            "example": "2021-10-01T22:18:57+00:00",
+            "nullable": true,
+            "type": "string"
+          },
+          "continent_code": {
+            "description": "The continent code if available.",
+            "example": "SA",
+            "nullable": true,
+            "type": "string"
+          },
+          "security_criteria": {
+            "description": "The security_criteria associated with the finding.",
+            "example": "threatintel_phishing_site",
+            "type": "string"
+          },
+          "registrant_street": {
+            "description": "The registrant street associated with host if available.",
+            "example": "11185 street",
+            "nullable": true,
+            "type": "string"
+          },
+          "shared_ip": {
+            "description": "The use of shared ip address hosting.",
+            "example": "40.14.1.146",
+            "nullable": true,
+            "type": "string"
+          },
+          "tech_country": {
+            "description": "The tech country associated with host if provided.",
+            "example": "Luxembourg",
+            "nullable": true,
+            "type": "string"
+          },
+          "first_seen": {
+            "description": "The date the finding was first discovered.",
+            "example": "2021-10-01T22:18:57+00:00",
+            "nullable": true,
+            "type": "string"
+          },
+          "country_iso_code": {
+            "description": "The country ISO code if available.",
+            "example": "AW",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "title": "Finding",
+        "type": "object"
+      },
+      "Host": {
+        "properties": {
+          "analysis_id": {
+            "description": "The unique identifier for an Analysis.",
+            "example": "1234",
+            "type": "string"
+          },
+          "asset_value": {
+            "description": "The asset value associated with host. The value can be high, medium, low or idle.",
+            "example": "high",
+            "type": "string"
+          },
+          "asset_value_numeric": {
+            "description": "The numeric asset value associated with the host.",
+            "example": "4",
+            "type": "string"
+          },
+          "auth_detected": {
+            "description": "Was the host auto detected? The value can be yes or no.",
+            "example": "yes",
+            "type": "string"
+          },
+          "city_name": {
+            "description": "The city name if available.",
+            "example": "Aileen",
+            "nullable": true,
+            "type": "string"
+          },
+          "continent_code": {
+            "description": "The continent code if available.",
+            "example": "SA",
+            "nullable": true,
+            "type": "string"
+          },
+          "continent_name": {
+            "description": "The continent if available.",
+            "example": "South America",
+            "nullable": true,
+            "type": "string"
+          },
+          "country_iso_code": {
+            "description": "The country ISO code if available.",
+            "example": "AW",
+            "nullable": true,
+            "type": "string"
+          },
+          "country_name": {
+            "$ref": "#/components/schemas/CountryName"
+          },
+          "domain_name": {
+            "description": "The domain name if available.",
+            "example": "thiel.name",
+            "nullable": true,
+            "type": "string"
+          },
+          "form_field_types_detected": {
+            "description": "Any form fields detected.",
+            "example": "password",
+            "nullable": true,
+            "type": "string"
+          },
+          "host_name": {
+            "$ref": "#/components/schemas/HostName"
+          },
+          "hosting_provider": {
+            "$ref": "#/components/schemas/HostingProvider"
+          },
+          "hosting_type": {
+            "description": "Is it hosted internally or externally? The value can be internal or external.",
+            "example": "external",
+            "type": "string"
+          },
+          "ip_addr": {
+            "description": "The ip address associated with the host.",
+            "example": "40.14.1.146",
+            "type": "string"
+          },
+          "is_web": {
+            "description": "Was a web server found? The value can be 0 or 1.",
+            "example": "0",
+            "type": "string"
+          },
+          "latitude": {
+            "description": "The longitude associated with the host if available.",
+            "example": "-112.3351",
+            "nullable": true,
+            "type": "string"
+          },
+          "longitude": {
+            "description": "The latitude associated with the host if available.",
+            "example": "46.9302",
+            "nullable": true,
+            "type": "string"
+          },
+          "metro_code": {
+            "description": "The metro code associated with the host if available.",
+            "example": "511",
+            "nullable": true,
+            "type": "string"
+          },
+          "netblock_id": {
+            "description": "The netblock id associated with the host.",
+            "example": "131.153.117.136/13",
+            "nullable": true,
+            "type": "string"
+          },
+          "netblock_scan_status": {
+            "description": "The status of the netblock scan.",
+            "example": "0",
+            "nullable": true,
+            "type": "string"
+          },
+          "postal_code": {
+            "description": "The postal code associated with host if available.",
+            "example": "75524",
+            "nullable": true,
+            "type": "string"
+          },
+          "record_load_timestamp": {
+            "description": "The timestamp for when record was loaded.",
+            "example": "2022-02-09 21:04:47.429380",
+            "type": "string"
+          },
+          "scan_http": {
+            "description": "The company owns this resource and it should be scanned if possible. The value can be 0 or 1.",
+            "example": "0",
+            "type": "string"
+          },
+          "service": {
+            "description": "The type of service associated with host.",
+            "example": "dns",
+            "type": "string"
+          },
+          "subdivision_1_iso_code": {
+            "description": "The subdivision ISO if applicable.",
+            "example": "VA",
+            "nullable": true,
+            "type": "string"
+          },
+          "subdivision_1_name": {
+            "description": "The subdivision name if applicable.",
+            "example": "Virginia",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "title": "Host",
+        "type": "object"
+      },
+      "ArrayOfActionPlanIssueProgress": {
+        "description": "A collection of ActionPlanIssueProgress objects.",
+        "items": {
+          "$ref": "#/components/schemas/ActionPlanIssueProgress"
+        },
+        "title": "ArrayOfActionPlanIssueProgress",
+        "type": "array"
+      },
+      "IntegrationRoute": {
+        "description": "An object containing the available portal routes.",
+        "properties": {
+          "links": {
+            "$ref": "#/components/schemas/IntegrationLinks"
+          },
+          "toe_id": {
+            "$ref": "#/components/schemas/ToeId"
+          },
+          "toe_short_name": {
+            "description": "The Company or entity name.",
+            "example": "Riskrecon, CO.",
+            "type": "string"
+          }
+        },
+        "title": "Integration Route",
+        "type": "object"
+      },
+      "User": {
+        "properties": {
+          "cell_phone": {
+            "description": "The cell phone of the user if available.",
+            "example": "18001231234",
+            "nullable": true,
+            "type": "string"
+          },
+          "company_id": {
+            "description": "The company id of the user.  This is a legacy field and the customer_id should be used instead.",
+            "example": "1234",
+            "nullable": true,
+            "type": "number"
+          },
+          "current_sign_in_at": {
+            "description": "The current sign in timestamp.",
+            "example": "2021-10-01T22:18:57+00:00",
+            "nullable": true,
+            "type": "string"
+          },
+          "customer_id": {
+            "description": "The customer Id of the user.",
+            "example": "5976423a-ee35-11e3-8569-14109ff1a304",
+            "format": "uuid",
+            "type": "string"
+          },
+          "email": {
+            "description": "The listed email address of the user.",
+            "example": "bob@riskrecon.com",
+            "type": "string"
+          },
+          "employee_id": {
+            "description": "The employee Id.",
+            "example": "1234",
+            "nullable": true,
+            "type": "string"
+          },
+          "eula_accepted_on": {
+            "description": "The EULA accepted date.",
+            "example": "2021-10-01T22:18:57+00:00",
+            "nullable": true,
+            "type": "string"
+          },
+          "first_name": {
+            "description": "The first name of the user.",
+            "example": "Bob",
+            "type": "string"
+          },
+          "is_active": {
+            "description": "Is the user active?",
+            "example": true,
+            "type": "boolean"
+          },
+          "last_name": {
+            "description": "The last Name of the user.",
+            "example": "Sampson",
+            "type": "string"
+          },
+          "last_sign_in_at": {
+            "description": "The last RiskRecon portal sign in timestamp.",
+            "example": "2021-10-01T22:18:57+00:00",
+            "nullable": true,
+            "type": "string"
+          },
+          "primary_user_id": {
+            "description": "The primary user id if the user has multiple accounts and this isn't the primary one.",
+            "example": "1",
+            "nullable": true,
+            "type": "number"
+          },
+          "scopes": {
+            "description": "The user scopes.",
+            "items": {
+              "$ref": "#/components/schemas/Scope"
+            },
+            "nullable": true,
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "SecurityDomainRating": {
+        "properties": {
+          "data_loss": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Rating"
+              },
+              {
+                "properties": {
+                  "data_loss_12": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "data_loss_24": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "data_loss_36": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "data_loss_6": {
+                    "$ref": "#/components/schemas/Rating"
+                  }
+                },
+                "type": "object"
+              }
+            ]
+          },
+          "defensibility": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Rating"
+              },
+              {
+                "properties": {
+                  "attack_surface_web_hostname": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "attack_surface_web_ip": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "defensibility_hosting_providers": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "shared_hosting": {
+                    "$ref": "#/components/schemas/Rating"
+                  }
+                },
+                "type": "object"
+              }
+            ]
+          },
+          "dns_security": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Rating"
+              },
+              {
+                "properties": {
+                  "dns_hosting_providers": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "domain_hijacking_protection": {
+                    "$ref": "#/components/schemas/Rating"
+                  }
+                },
+                "type": "object"
+              }
+            ]
+          },
+          "email_security": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Rating"
+              },
+              {
+                "properties": {
+                  "email_authentication": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "email_encryption_enabled": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "email_hosting_providers": {
+                    "$ref": "#/components/schemas/Rating"
+                  }
+                },
+                "type": "object"
+              }
+            ]
+          },
+          "governance": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Rating"
+              },
+              {
+                "properties": {
+                  "governance_customer_base": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "governance_regulatory_requirements": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "governance_security_certifications": {
+                    "$ref": "#/components/schemas/Rating"
+                  }
+                },
+                "type": "object"
+              }
+            ]
+          },
+          "network_filtering": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Rating"
+              },
+              {
+                "properties": {
+                  "iot_devices": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "unsafe_network_services": {
+                    "$ref": "#/components/schemas/Rating"
+                  }
+                },
+                "type": "object"
+              }
+            ]
+          },
+          "software_patching": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Rating"
+              },
+              {
+                "properties": {
+                  "patching_app_server": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "patching_vuln_open_ssl": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "patching_web_cms": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "patching_web_server": {
+                    "$ref": "#/components/schemas/Rating"
+                  }
+                },
+                "type": "object"
+              }
+            ]
+          },
+          "system_hosting": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Rating"
+              },
+              {
+                "properties": {
+                  "host_hosting_providers": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "hosting_countries": {
+                    "$ref": "#/components/schemas/Rating"
+                  }
+                },
+                "type": "object"
+              }
+            ]
+          },
+          "threat_intell": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Rating"
+              },
+              {
+                "properties": {
+                  "threatintel_botnet_host": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "threatintel_cc_server": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "threatintel_hostile_host_hacking": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "threatintel_hostile_host_scanning": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "threatintel_other": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "threatintel_phishing_site": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "threatintel_spamming_host": {
+                    "$ref": "#/components/schemas/Rating"
+                  }
+                },
+                "type": "object"
+              }
+            ]
+          },
+          "web_app_security": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Rating"
+              },
+              {
+                "properties": {
+                  "config_web_cms_authentication": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "threat_intel_alert_external": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "web_http_security_headers": {
+                    "$ref": "#/components/schemas/Rating"
+                  }
+                },
+                "type": "object"
+              }
+            ]
+          },
+          "web_encryption": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Rating"
+              },
+              {
+                "properties": {
+                  "web_encryption_date_expire": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "web_encryption_date_valid": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "web_encryption_hash": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "web_encryption_key_length": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "web_encryption_protocol": {
+                    "$ref": "#/components/schemas/Rating"
+                  },
+                  "web_encryption_subject": {
+                    "$ref": "#/components/schemas/Rating"
+                  }
+                },
+                "type": "object"
+              }
+            ]
+          }
+        },
+        "title": "Security Domain Rating",
+        "type": "object"
+      },
+      "HostName": {
+        "description": "The name of the host.",
+        "example": "riskrecon.com",
+        "nullable": true,
+        "type": "string"
+      },
+      "Rating": {
+        "description": "Trend data is available for historical analysis or if the `include_trend` is passed in as a param for current analysis request.",
+        "properties": {
+          "rating": {
+            "description": "The legacy Rating label of an analysis or of some domain or criteria of the analysis.",
+            "example": "proceed",
+            "type": "string"
+          },
+          "rating_numeric": {
+            "description": "The numeric rating of an analysis or of some domain or criteria of the analysis.",
+            "example": 5,
+            "type": "number"
+          },
+          "rating_v2": {
+            "description": "The rating label of an analysis or of some domain or criteria of the analysis.",
+            "example": "a",
+            "type": "string"
+          },
+          "trend": {
+            "description": "Increase or decrease from the previous analysis rating.",
+            "example": 1.9,
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "PaginatedFinding": {
+        "description": "finding details",
+        "properties": {
+          "analysis_id": {
+            "description": "The unique identifier for an Analysis.",
+            "example": "12345",
+            "type": "string"
+          },
+          "asset_value": {
+            "description": "The numeric asset_value associated with a findings host.",
+            "example": "4",
+            "type": "string"
+          },
+          "cve_ids": {
+            "description": "The CVE ids associated with the finding.",
+            "items": {
+              "description": "The CVE ids associated with the finding.",
+              "example": "CVE-1999-0001",
+              "type": "string"
+            },
+            "nullable": true,
+            "type": "array"
+          },
+          "domain_name": {
+            "description": "The domain name associated with a finding.",
+            "example": "riskrecon.com",
+            "nullable": true,
+            "type": "string"
+          },
+          "finding_data_value": {
+            "description": "The type of finding data.",
+            "example": "shared_hosting",
+            "nullable": true,
+            "type": "string"
+          },
+          "finding_detail": {
+            "description": "Details about the finding.",
+            "example": "shared_hosting",
+            "nullable": true,
+            "type": "string"
+          },
+          "finding_extra_data_value": {
+            "description": "Any additional data associated with finding.",
+            "example": "shared_hosting",
+            "nullable": true,
+            "type": "string"
+          },
+          "finding_id": {
+            "description": "Unique identifier for the finding.",
+            "example": "5976423a-ee35-11e3-8569-14109ff1a304",
+            "type": "string"
+          },
+          "first_seen": {
+            "description": "The date the finding was first seen.",
+            "example": "2020-10-10",
+            "type": "string"
+          },
+          "host_name": {
+            "$ref": "#/components/schemas/HostName"
+          },
+          "hosting_provider": {
+            "$ref": "#/components/schemas/HostingProvider"
+          },
+          "ip_address": {
+            "description": "The ip address for the finding if available.",
+            "example": "127.0.0.1",
+            "nullable": true,
+            "type": "string"
+          },
+          "last_seen": {
+            "description": "The date the finding was last seen.",
+            "example": "2020-10-10",
+            "type": "string"
+          },
+          "priority": {
+            "description": "The finding priority based on asset_value and severity.",
+            "example": 5,
+            "type": "integer"
+          },
+          "security_criteria": {
+            "description": "The security_criteria category associated with the finding.",
+            "example": "software_patching",
+            "type": "string"
+          },
+          "security_domain": {
+            "description": "The security_domain category associated with the finding.",
+            "example": "patching_app_server",
+            "type": "string"
+          },
+          "severity": {
+            "description": "The severity for a finding.",
+            "example": "4",
+            "type": "string"
+          }
+        },
+        "required": [
+          "analysis_id",
+          "asset_value",
+          "domain_name",
+          "finding_data_value",
+          "finding_detail",
+          "finding_extra_data_value",
+          "finding_id",
+          "first_seen",
+          "host_name",
+          "hosting_provider",
+          "ip_address",
+          "last_seen",
+          "security_criteria",
+          "security_domain",
+          "severity",
+          "priority"
+        ],
+        "type": "object"
+      },
+      "Errors": {
+        "properties": {
+          "Error": {
+            "description": "Errors array wrapped in an error object",
+            "items": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "Error"
+        ],
+        "title": "Errors",
+        "type": "object"
+      },
+      "AlertingScoreChanges": {
+        "properties": {
+          "meta": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PaginationMeta"
+              },
+              {
+                "properties": {
+                  "total_new": {
+                    "description": "The total number of new score changes.",
+                    "example": 37,
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              }
+            ]
+          },
+          "rating_change_alerts": {
+            "items": {
+              "$ref": "#/components/schemas/AlertingScoreChange"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "TickerSymbols": {
+        "description": "A collection of TickerSymbols",
+        "items": {
+          "properties": {
+            "exchange_name": {
+              "description": "The exchange the ticker symbol is associated with.",
+              "example": "NYSE",
+              "type": "string"
+            },
+            "ticker_symbol": {
+              "description": "A ticker symbol associated with the TOE if available.",
+              "example": "0023.HK",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "title": "TickerSymbols",
+        "type": "array"
+      },
+      "AlertingScoreChange": {
+        "description": "AlertingScoreChange response data.",
+        "properties": {
+          "alert_type": {
+            "description": "The type of score change alert.",
+            "example": "rating_improved",
+            "type": "string"
+          },
+          "company_name": {
+            "$ref": "#/components/schemas/CompanyName"
+          },
+          "current_analysis": {
+            "description": "The current analysis_id for the TOE.",
+            "example": 15,
+            "type": "string"
+          },
+          "date": {
+            "description": "The date of the alert.",
+            "example": "2023-01-03",
+            "type": "string"
+          },
+          "id": {
+            "description": "The alert identifier.",
+            "example": 20,
+            "type": "integer"
+          },
+          "new": {
+            "description": "Is this alert new? Was it found in the most recent scan?",
+            "example": true,
+            "type": "boolean"
+          },
+          "new_rating": {
+            "properties": {
+              "letter": {
+                "description": "The letter rating of the new rating.",
+                "example": "a",
+                "type": "string"
+              },
+              "value": {
+                "description": "The numeric rating of the new rating.",
+                "example": 10,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "previous_rating": {
+            "properties": {
+              "letter": {
+                "description": "The letter rating of the previous rating.",
+                "example": "a",
+                "type": "string"
+              },
+              "value": {
+                "description": "The numeric rating of the previous rating.",
+                "example": 10,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "rating_change": {
+            "description": "The rating change from the previous and new ratings.",
+            "example": 5,
+            "nullable": true,
+            "type": "string"
+          },
+          "risk_structure": {
+            "description": "The category of the TOE. Uncategorized by default.",
+            "example": "Uncategorized",
+            "type": "string"
+          },
+          "security_domain_key": {
+            "description": "The security_domain category for the finding.",
+            "example": "software_patching",
+            "type": "string"
+          },
+          "seen": {
+            "description": "Has this alert been marked as seen on the riskrecon site?",
+            "example": true,
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "RiskStandardControls": {
+        "properties": {
+          "data": {
+            "description": "Risk response data.",
+            "properties": {
+              "attributes": {
+                "properties": {
+                  "id": {
+                    "description": "The unique identifier for the RiskStandard.",
+                    "example": 1234,
+                    "type": "integer"
+                  },
+                  "risk_standard": {
+                    "description": "The risk Standard name.",
+                    "example": "Secure Controls Framework 2023_2",
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "risk_standard_controls": {
+                    "description": "An array of risk standard controls.",
+                    "items": {
+                      "$ref": "#/components/schemas/RiskStandardControl"
+                    },
+                    "type": "array"
+                  }
+                },
+                "type": "object"
+              },
+              "id": {
+                "description": "The unique identifier for the RiskStandard.",
+                "example": 1234,
+                "type": "integer"
+              },
+              "type": {
+                "description": "The type of object returned.",
+                "example": "risk_standard",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "CountryName": {
+        "description": "The name of country if available.",
+        "example": "Luxembourg",
+        "nullable": true,
+        "type": "string"
+      },
+      "TOEUpdate": {
+        "description": "This is for updating the internal_id and/or internal_name of a TOE in a portfolio.",
+        "properties": {
+          "internal_id": {
+            "$ref": "#/components/schemas/InternalId"
+          },
+          "internal_name": {
+            "$ref": "#/components/schemas/InternalName"
+          }
+        },
+        "title": "TOE Update",
+        "type": "object"
+      },
+      "SubscriptionLevelConfig": {
+        "properties": {
+          "subscription_level": {
+            "description": "The customer SubscriptionLevelConfig.  Options are 1 (Discover) or 2 (Advisor).",
+            "enum": [
+              "1",
+              "2"
+            ],
+            "example": "1",
+            "type": "string"
+          }
+        },
+        "required": [
+          "subscription_level"
+        ],
+        "title": "SubscriptionLevelConfig",
+        "type": "object"
+      },
+      "TOESearchResult": {
+        "properties": {
+          "assessment_frequency": {
+            "default": "continuous",
+            "description": "Scan frequency. This must be either one_time or continuous. The default is continuous.",
+            "enum": [
+              "one_time",
+              "continuous"
+            ],
+            "example": "continuous",
+            "nullable": true,
+            "type": "string"
+          },
+          "duns_numbers": {
+            "description": "The DUNS number for the TOE.  This may or may not be populated.",
+            "items": {
+              "example": "12345",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "hq_location": {
+            "description": "The location of company headquarters if available.",
+            "example": "Sampson street",
+            "nullable": true,
+            "type": "string"
+          },
+          "seed_hostnames": {
+            "description": "The seed hostnames are the hostnames used to start the scan. This doesn't include all hostnames from the scan results.",
+            "items": {
+              "description": "hostname used to start scan",
+              "example": "riskrecon.com",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "subscribed": {
+            "description": "Is the current user subscribed?.",
+            "example": false,
+            "type": "boolean"
+          },
+          "subscription_level": {
+            "description": "The subscription level for the TOE.",
+            "enum": [
+              "AUTO",
+              "1",
+              "2",
+              "3"
+            ],
+            "example": "2",
+            "nullable": true,
+            "type": "string"
+          },
+          "toe_id": {
+            "$ref": "#/components/schemas/ToeId"
+          },
+          "toe_name": {
+            "description": "The Company or entity name.",
+            "example": "Riskrecon, CO.",
+            "type": "string"
+          },
+          "toe_size": {
+            "description": "The text description of TOE size.",
+            "example": "xl",
+            "nullable": true,
+            "type": "string"
+          },
+          "toe_type": {
+            "description": "The TOE category.",
+            "example": "parent",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TOEUpdated": {
+        "description": "The response for updating values for a given TOE.  Only internal_id and internal_name are allowed to be updated by a user.",
+        "properties": {
+          "internal_id": {
+            "$ref": "#/components/schemas/InternalId"
+          },
+          "internal_name": {
+            "$ref": "#/components/schemas/InternalName"
+          },
+          "toe_id": {
+            "$ref": "#/components/schemas/ToeId"
+          },
+          "toe_short_name": {
+            "description": "The Company or entity name.",
+            "example": "Riskrecon",
+            "type": "string"
+          }
+        },
+        "title": "TOE Update Response",
+        "type": "object"
+      },
+      "DomainRating": {
+        "description": "The numeric rating for given security_domain.",
+        "example": 1,
+        "maximum": 10,
+        "minimum": 0,
+        "type": "number"
+      },
+      "PriorityMetricCount": {
+        "description": "The priority metric count by severity and priority.",
+        "properties": {
+          "asset_value": {
+            "description": "The asset_value for findings.",
+            "example": "4",
+            "type": "string"
+          },
+          "count": {
+            "description": "The count of findings for given asset_value and severity.",
+            "example": 37,
+            "type": "number"
+          },
+          "severity": {
+            "description": "The severity for findings.",
+            "example": "4",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "HostingProvider": {
+        "description": "The hosting provider if available.",
+        "example": "Riskrecon, Co.",
+        "nullable": true,
+        "type": "string"
+      },
+      "ActionPlanIssueSummary": {
+        "properties": {
+          "action_plan_last_shared_on": {
+            "description": "The date the action plan was shared with the vendor.",
+            "example": "2021-10-01T22:18:57+00:00",
+            "nullable": true,
+            "type": "string"
+          },
+          "current_action_plan_issues_count": {
+            "description": "The current issue count for the action plan.",
+            "example": 5,
+            "type": "integer"
+          },
+          "current_open_issues_count": {
+            "description": "The current open issue count for the action plan.",
+            "example": 5,
+            "type": "integer"
+          },
+          "current_shared_issues_count": {
+            "description": "The current shared issue count for the action plan.",
+            "example": 5,
+            "type": "integer"
+          },
+          "latest_analysis_published_on": {
+            "description": "The date the last analysis was published.",
+            "example": "2021-10-01T22:18:57+00:00",
+            "nullable": true,
+            "type": "string"
+          },
+          "new_open_issues_count": {
+            "description": "The new open issue count for the action plan.",
+            "example": 5,
+            "type": "integer"
+          },
+          "total_resolved_issues_count": {
+            "description": "The resolved issues count.",
+            "example": 20,
+            "type": "integer"
+          },
+          "total_shared_issues_count": {
+            "description": "The total shared issues count.",
+            "example": 20,
+            "type": "integer"
+          },
+          "vendor_shared_with_customer": {
+            "description": "Was action plan shared with the customer?",
+            "example": true,
+            "nullable": true,
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "Subsidiary": {
+        "properties": {
+          "created_at": {
+            "description": "A created at timestamp.",
+            "example": "2021-10-01T22:18:57+00:00",
+            "type": "string"
+          },
+          "date_updated": {
+            "description": "An updated timestamp.",
+            "example": "2021-10-01T22:18:57+00:00",
+            "nullable": true,
+            "type": "string"
+          },
+          "domains": {
+            "items": {
+              "description": "The subsidiaries domain url.",
+              "example": "riskrecon.com",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "factset_id": {
+            "description": "The associated factsetId.",
+            "example": "12345",
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier for subsidiary record.",
+            "example": 43,
+            "type": "number"
+          },
+          "is_removed": {
+            "description": "Is this removed?",
+            "example": true,
+            "type": "boolean"
+          },
+          "is_scannable": {
+            "description": "Is this scannable?",
+            "example": true,
+            "type": "boolean"
+          },
+          "name": {
+            "description": "The entity name.",
+            "example": "Riskrecon",
+            "type": "string"
+          },
+          "note": {
+            "description": "Any additional notes.",
+            "example": "No Linking Evidence",
+            "nullable": true,
+            "type": "string"
+          },
+          "own_toe_id": {
+            "description": "The unique identifier for the Target Of Evaluation (TOE).",
+            "example": "5976423a-ee35-11e3-8569-14109ff1a304",
+            "format": "uuid",
+            "nullable": true,
+            "type": "string"
+          },
+          "possible_own_toe_ids": {
+            "items": {
+              "description": "The unique identifier for the Target Of Evaluation (TOE).",
+              "example": "5976423a-ee35-11e3-8569-14109ff1a304",
+              "format": "uuid",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "primary_evidence": {
+            "description": "The Primary Evidence.",
+            "example": "Copyright, Logo, Page Reference etc",
+            "nullable": true,
+            "type": "string"
+          },
+          "primary_evidence_reference": {
+            "description": "The Primary Evidence Reference.",
+            "example": "url",
+            "nullable": true,
+            "type": "string"
+          },
+          "scan": {
+            "description": "The scan number.",
+            "example": "1",
+            "type": "string"
+          },
+          "secondary_evidence": {
+            "description": "Any secondary evidence.",
+            "example": "Factset, About Us, Hoovers etc.",
+            "nullable": true,
+            "type": "string"
+          },
+          "support_email": {
+            "description": "An email for support if available.",
+            "example": "support@riskrecon.com",
+            "nullable": true,
+            "type": "string"
+          },
+          "toe_id": {
+            "$ref": "#/components/schemas/ToeId"
+          },
+          "updated_at": {
+            "description": "An updated timestamp.",
+            "example": "2021-10-01T22:18:57+00:00",
+            "type": "string"
+          },
+          "validation_artifacts": {
+            "description": "Any validation artifacts.",
+            "example": "Logo",
+            "nullable": true,
+            "type": "string"
+          },
+          "validation_status": {
+            "description": "Has the subsidiary been validated?",
+            "example": "true",
+            "nullable": true,
+            "type": "string"
+          },
+          "verified": {
+            "description": "Is this subsidiary verified?  Valid options are 1 or 0.",
+            "example": "1",
+            "type": "string"
+          }
+        },
+        "title": "Subsidiary",
+        "type": "object"
+      },
+      "BreachEvents": {
+        "properties": {
+          "data": {
+            "description": "Data associated with response object.",
+            "items": {
+              "properties": {
+                "attributes": {
+                  "$ref": "#/components/schemas/BreachEvent"
+                },
+                "id": {
+                  "description": "The identifier associated with response object.",
+                  "example": 12345,
+                  "type": "integer"
+                },
+                "type": {
+                  "description": "The type of object returned.",
+                  "example": "breach_event",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "attributes",
+                "id",
+                "type"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/PaginationMeta"
+          }
+        },
+        "required": [
+          "meta",
+          "data"
+        ],
+        "type": "object"
+      },
+      "MoveToe": {
+        "properties": {
+          "risk_relationship_slugs": {
+            "description": "Risk relationship slugs which are returned from [/v1/portfolio/risk_relationships_folders](#/Portfolio/getRiskRelationshipsFolders)",
+            "items": {
+              "example": "ownenterprise_critical",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "toe_id": {
+            "$ref": "#/components/schemas/ToeId"
+          }
+        },
+        "required": [
+          "toe_id",
+          "risk_relationship_slugs"
+        ],
+        "title": "Move Toe to slug",
+        "type": "object"
+      },
+      "RiskConfigurations": {
+        "description": "A collection of RiskConfigurations.",
+        "items": {
+          "properties": {
+            "inherent_risk": {
+              "description": "A Risk Rating Scheme associated with TOE in current customers portfolio.",
+              "example": "Critical",
+              "type": "string"
+            },
+            "risk_relationship": {
+              "description": "The Custom Category for a TOE in the current customers portfolio.",
+              "example": "Own Enterprise",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "title": "RiskConfigurations",
+        "type": "array"
+      },
+      "AlertingNewIssue": {
+        "description": "AlertingNewIssue data.",
+        "properties": {
+          "analysis_id": {
+            "description": "The current analysis_id for the TOE.",
+            "example": 15,
+            "type": "string"
+          },
+          "asset_value": {
+            "description": "The asset_value for the finding.",
+            "example": "high",
+            "type": "string"
+          },
+          "company_name": {
+            "$ref": "#/components/schemas/CompanyName"
+          },
+          "date": {
+            "description": "The last_seen date of the alert.",
+            "example": "2023-01-03",
+            "type": "string"
+          },
+          "domain_name": {
+            "description": "The domain name if available.",
+            "example": "thiel.name",
+            "nullable": true,
+            "type": "string"
+          },
+          "finding_context": {
+            "description": "Any additional context related to the finding.",
+            "example": "The domain is missing one or more domain hijacking flags (clientTransferProhibited, clientDeleteProhibited, clientUpdateProhibited).",
+            "nullable": true,
+            "type": "string"
+          },
+          "finding_id": {
+            "description": "The unique identifier for the finding.",
+            "example": "5976423a-ee35-11e3-8569-14109ff1a304",
+            "type": "string"
+          },
+          "first_seen": {
+            "description": "The first_seen date of the alert.",
+            "example": "2023-01-03",
+            "type": "string"
+          },
+          "host_name": {
+            "$ref": "#/components/schemas/HostName"
+          },
+          "id": {
+            "description": "The alert identifier.",
+            "example": "5976423a-ee35-11e3-8569-14109ff1a304",
+            "type": "string"
+          },
+          "internal_id": {
+            "$ref": "#/components/schemas/InternalId"
+          },
+          "ip_address": {
+            "description": "The ip address associated with host.",
+            "example": "40.14.1.146",
+            "nullable": true
+          },
+          "issue": {
+            "description": "A description of the issue.",
+            "example": "Missing Security Headers",
+            "nullable": true,
+            "type": "string"
+          },
+          "new": {
+            "description": "Is this alert new? Was it found in the most recent scan?",
+            "example": true,
+            "type": "boolean"
+          },
+          "priority": {
+            "description": "The finding priority is based on the asset_value and severity.",
+            "example": 5,
+            "type": "integer"
+          },
+          "resolved": {
+            "description": "Has this issue been resolved?",
+            "example": false,
+            "type": "boolean"
+          },
+          "risk_structure": {
+            "description": "The category of the TOE.  Defaults to Uncategorized.",
+            "example": "Uncategorized",
+            "type": "string"
+          },
+          "security_criteria_key": {
+            "description": "The security_criteria category for the finding.",
+            "example": "patching_app_server",
+            "type": "string"
+          },
+          "security_domain_key": {
+            "description": "The security_domain category for the finding.",
+            "example": "software_patching",
+            "type": "string"
+          },
+          "seen": {
+            "description": "Has this alert been marked seen on the riskrecon site?",
+            "example": true,
+            "type": "boolean"
+          },
+          "severity": {
+            "description": "The severity for the finding.",
+            "example": "critical",
+            "type": "string"
+          },
+          "toe_id": {
+            "$ref": "#/components/schemas/ToeId"
+          }
+        },
+        "type": "object"
+      },
+      "RiskStandardControl": {
+        "properties": {
+          "description": {
+            "description": "A description of the risk standard control.",
+            "example": "Mechanisms exist to facilitate the implementation of cybersecurity and privacy governance controls.",
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "description": "The unique identifier for the RiskStandardControl.",
+            "example": 1234,
+            "type": "integer"
+          },
+          "risk_standard_control": {
+            "description": "The risk Standard Control name.",
+            "example": "Secure Controls Framework 2023_2",
+            "type": "string"
+          },
+          "security_criteria": {
+            "items": {
+              "$ref": "#/components/schemas/RiskStandardControlDomainCriteriaRatingCounts"
+            },
+            "type": "array"
+          },
+          "security_domains": {
+            "items": {
+              "$ref": "#/components/schemas/RiskStandardControlDomainCriteriaRatingCounts"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "Analysis": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Rating"
+          },
+          {
+            "properties": {
+              "analysis_id": {
+                "description": "The unique identifier for an analysis.",
+                "example": "12345",
+                "type": "string"
+              },
+              "analysis_ts": {
+                "description": "The date an analysis was updated.",
+                "example": "2021-10-01T22:18:57+00:00",
+                "type": "string"
+              },
+              "security_domain_ratings": {
+                "$ref": "#/components/schemas/SecurityDomainRating"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "title": "Analysis"
+      },
+      "PriorityMetricCounts": {
+        "description": "A collection of PriorityMetricCount objects.",
+        "items": {
+          "$ref": "#/components/schemas/PriorityMetricCount"
+        },
+        "title": "PriorityMetricCounts",
+        "type": "array"
+      },
+      "Error": {
+        "description": "Error Object",
+        "properties": {
+          "Description": {
+            "description": "Human-readable short description of the reasonCode",
+            "example": "Unauthorized request",
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string"
+          },
+          "Details": {
+            "description": "Optional detailed description provides information about data received and calculated during request processing.  This helps the user to diagnose errors.",
+            "example": "Some optional detailed human readable explanation for the error.",
+            "maxLength": 200,
+            "minLength": 0,
+            "nullable": true,
+            "type": "string"
+          },
+          "ReasonCode": {
+            "description": "Reason code is a unique constant identifying the error case encountered during request processing.",
+            "example": "UNAUTHORIZED",
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string"
+          },
+          "Recoverable": {
+            "description": "Recoverable flag indicates whether this error is always returned for this request, or retrying could change the outcome.  For example, 'true' or 'false'.",
+            "example": false,
+            "type": "boolean"
+          },
+          "Source": {
+            "description": "The application or component that generated this error.",
+            "example": "RISKRECON_API",
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "PaginatedFindings": {
+        "properties": {
+          "data": {
+            "description": "Data associated with response object.",
+            "items": {
+              "properties": {
+                "attributes": {
+                  "$ref": "#/components/schemas/PaginatedFinding"
+                },
+                "id": {
+                  "description": "The identifier associated with response object.",
+                  "example": "12345",
+                  "type": "string"
+                },
+                "type": {
+                  "description": "The type of object returned.",
+                  "example": "finding",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/PaginationMeta"
+          }
+        },
+        "type": "object"
+      },
+      "Analyses": {
+        "description": "A collection of Analysis objects.",
+        "items": {
+          "$ref": "#/components/schemas/Analysis"
+        },
+        "title": "Analyses",
+        "type": "array"
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "bearerFormat": "JWT",
+        "scheme": "bearer",
+        "type": "http"
+      }
+    }
+  },
+  "info": {
+    "contact": {
+      "email": "support@riskrecon.com",
+      "name": "API Support",
+      "url": "https://riskrecon.zendesk.com/hc/en-us"
+    },
+    "description": "RiskRecon provides organizations with frequent, comprehensive, actionable visibility into the security quality of their business partners.  RiskRecon does this by automatically measuring the security performance of any enterprise across security domains and criteria, providing visibility into security programs.\n\nAll of the security discovery and analytics are based on public information with no inside access required.  The RiskRecon service requires an account with RiskRecon.",
+    "title": "Riskrecon API",
+    "version": "1.0"
+  },
+  "openapi": "3.0.3",
+  "paths": {
+    "/v1/action_plan/findings/{toe_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This API returns a list of findings for a given action plan of a TOE. The end-user needs to input the TOE ID (toe_id) for a given action plan in the API request.",
+        "operationId": "getActionPlanFindings",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          },
+          {
+            "$ref": "#/components/parameters/Page"
+          },
+          {
+            "$ref": "#/components/parameters/PerPage"
+          },
+          {
+            "$ref": "#/components/parameters/FindingsSortAttribute"
+          },
+          {
+            "$ref": "#/components/parameters/SortMethod"
+          },
+          {
+            "$ref": "#/components/parameters/Severity"
+          },
+          {
+            "$ref": "#/components/parameters/AssetValue"
+          },
+          {
+            "$ref": "#/components/parameters/SecurityDomain"
+          },
+          {
+            "$ref": "#/components/parameters/SecurityCriteria"
+          },
+          {
+            "$ref": "#/components/parameters/CveIds"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetPaginatedFindings"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This resource returns a list of finding details from an action plan of a TOE.",
+        "tags": [
+          "Action Plans"
+        ]
+      }
+    },
+    "/v1/action_plan/issue_progress/{toe_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "RiskRecon automatically reports each vendor’s progress in addressing their action plan issues. This API returns issue progress for a given action plan.",
+        "operationId": "actionPlanIssueProgress",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ActionPlanIssueProgress"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This resource tracks and reports a vendors progress in addressing action plan issues.",
+        "tags": [
+          "Action Plans"
+        ]
+      }
+    },
+    "/v1/action_plan/issue_summary/{toe_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This API returns a list of issue summaries for a given action plan. There are no parameters for this use case. The end-user needs to input the TOE ID (toe_id) for a given action plan in the API request.",
+        "operationId": "getActionPlanIssueSummary",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetActionPlanIssueSummaryResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This resource returns a vendor's action plan issue summary.",
+        "tags": [
+          "Action Plans"
+        ]
+      }
+    },
+    "/v1/action_plan/priority_matrix_counts/{toe_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This API returns the counts of action plans as per their severity and priority. Found issues are assigned a Priority and Severity index. The end-user needs to input the TOE ID (toe_id) for a given action plan in the API request.\n\nIn this scenario, the following are returned in the response:\n* the asset value starting from 1 to 4, where 1 = Idle, 2 = Low, 3 = Medium, 4 = High\n* total count of issues for each asset value\n* total count of issues by severity. The severity values can be Low, Medium, High, and Critical.\n",
+        "operationId": "getActionPlanPriorityMatrix",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetActionPlanPriorityMatrixResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This API returns the count of current action plan issues per their severity and priority.",
+        "tags": [
+          "Action Plans"
+        ]
+      }
+    },
+    "/v1/action_plan/vendor_status_summary_counts/{toe_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This API returns the vendor status summary counts of a given action plan. The end-user needs to input the TOE ID (toe_id) for a given action plan in the API request.\n\nIn this scenario, the following are returned in the response:\n\n* total action plans provided to the vendor\n* the label of the action plans\n* the status of the action plans\n",
+        "operationId": "getActionPlanVendorStatusSummaryCounts",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetActionPlanVendorStatusSummaryCounts"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This API returns the vendor status summary counts of a given action plan.",
+        "tags": [
+          "Action Plans"
+        ]
+      }
+    },
+    "/v1/alerting/issues": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This resource returns Alerting Issues from new scans in their portfolio based on the users alert settings.  Alert settings can be changed at https://portal.riskrecon.com/portal/alert-center/alert-settings.",
+        "operationId": "getAlertingNewIssues",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Page"
+          },
+          {
+            "$ref": "#/components/parameters/PerPage"
+          },
+          {
+            "$ref": "#/components/parameters/SortMethod"
+          },
+          {
+            "$ref": "#/components/parameters/StartDate"
+          },
+          {
+            "$ref": "#/components/parameters/EndDate"
+          },
+          {
+            "$ref": "#/components/parameters/Priorities"
+          },
+          {
+            "$ref": "#/components/parameters/AlertingIssuesSortAttribute"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetAlertingNewIssues"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          }
+        },
+        "summary": "This resource returns Alerting Issues from new scans in their portfolio based on the users alert settings.",
+        "tags": [
+          "Alerts"
+        ]
+      }
+    },
+    "/v1/alerting/rating_changes": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This resource returns any rating/score changes from new scans in the users portfolio based on the users alert settings. Alert settings can be changed at https://portal.riskrecon.com/portal/alert-center/alert-settings.",
+        "operationId": "getAlertingScoreChanges",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Page"
+          },
+          {
+            "$ref": "#/components/parameters/PerPage"
+          },
+          {
+            "$ref": "#/components/parameters/SortMethod"
+          },
+          {
+            "$ref": "#/components/parameters/StartDate"
+          },
+          {
+            "$ref": "#/components/parameters/EndDate"
+          },
+          {
+            "$ref": "#/components/parameters/AlertTypes"
+          },
+          {
+            "$ref": "#/components/parameters/AlertingScoreChangesSortAttribute"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetAlertingScoreChanges"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          }
+        },
+        "summary": "This resource returns any rating/score changes from new scans in the users portfolio based on the users alert settings.",
+        "tags": [
+          "Alerts"
+        ]
+      }
+    },
+    "/v1/analysis/current/{toe_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This resource returns the most recent `Analysis` object by the TOE identifier. This includes the security domain and criteria ratings. Trend data is only included if `include_trend` query param is added.",
+        "operationId": "getAnalysisRatings",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          },
+          {
+            "$ref": "#/components/parameters/IncludeTrend"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetAnalysisRatingsResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This resource returns the most recent `Analysis` object by the TOE identifier. Trend data is only included if `include_trend` query param is added.",
+        "tags": [
+          "Analyses"
+        ]
+      }
+    },
+    "/v1/analysis/history/{toe_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This resource returns a collection of historical `Analysis` objects by the TOE identifier. This includes the security domain and criteria ratings for each analysis.",
+        "operationId": "getHistoricalAnalysisRatings",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetHistoricalAnalysisRatingsResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This resource returns a collection of historical `Analysis` objects by the TOE identifier.",
+        "tags": [
+          "Analyses"
+        ]
+      }
+    },
+    "/v1/compliance/controls/{toe_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This resource returns risk standard controls associated with a TOE id and a particular custom or industry standard.  The risk standard id can be obtained from the /v1/compliance/{toe_id} response. Some will be mapped to RiskRecon security domain and criteria so will include the ratings for these domain/criteria and the TOE being queried.",
+        "operationId": "getRiskStandardsControls",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          },
+          {
+            "$ref": "#/components/parameters/RiskStandardId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetRiskStandardsControlsResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This resource returns risk standard controls associated with a TOE id and a particular custom or industry standard.",
+        "tags": [
+          "Compliance"
+        ]
+      }
+    },
+    "/v1/compliance/{toe_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This resource returns an list of custom and industry standards. Each standard has a number of controls.  Some of these will be mapped to RiskRecon security domain and criteria and will have the associated ratings.",
+        "operationId": "getRiskStandards",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetRiskStandards"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This resource returns an list of custom and industry standards.",
+        "tags": [
+          "Compliance"
+        ]
+      }
+    },
+    "/v1/data_loss_events/{toe_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "\"::Legacy Route please use portfolio_data_loss_events:: This resource returns a collection of `DataLossEvent` objects for a given TOE id. This are referred to as Breach Events in the RiskRecon site.\"",
+        "operationId": "getDataLossEvents",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetDataLossEventsResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": ":: Legacy Route :: This resource returns a collection of `DataLossEvent` objects.",
+        "tags": [
+          "Data Loss Events"
+        ]
+      }
+    },
+    "/v1/display_names/security_criteria": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This resource returns a mapping of security_criteria labels and their current display names in the RiskRecon portal.  It also includes if the security_criteria is currently rated and if it is deprecated.",
+        "operationId": "getCriteriaDisplayNames",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetDisplayNameResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          }
+        },
+        "summary": "This resource returns a mapping of security_criteria labels and their current display names in the RiskRecon portal.",
+        "tags": [
+          "Display Name"
+        ]
+      }
+    },
+    "/v1/display_names/security_domain": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This resource returns a mapping of security_domain labels and their current display names in the RiskRecon portal.  It also includes if the security_domain is currently rated and if it is deprecated.",
+        "operationId": "getDomainDisplayNames",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetDisplayNameResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          }
+        },
+        "summary": "This resource returns a mapping of security_domain labels and their current display names in the RiskRecon portal.",
+        "tags": [
+          "Display Name"
+        ]
+      }
+    },
+    "/v1/findings/{toe_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "::Legacy Route please use findings_paginated:: This use case describes how the Findings API is used to retrieve a list of findings for the latest analysis for a TOE. The toe_id is passed in the API request. In this scenario, all findings for that TOE are returned in the response.\nTo limit or filter the data returned in the response, you can use various parameters in the API request:\n* Filter by an asset value: You can use the asset_value parameter to search for findings with high, medium, or low asset value.\n* Filter by severity: You can use the severity parameter to search for findings with high, medium, or low severity.\n* Filter by asset value and severity: You can use asset_value and severity parameters to search for findings with high, medium, or low asset value and severity.\n* Filter by multiple asset values: You can use the asset_value parameter multiple times to search for findings with multiple asset values.",
+        "operationId": "getFindings",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          },
+          {
+            "$ref": "#/components/parameters/RiskPolicy"
+          },
+          {
+            "$ref": "#/components/parameters/SecurityDomain"
+          },
+          {
+            "$ref": "#/components/parameters/SecurityCriteria"
+          },
+          {
+            "$ref": "#/components/parameters/AssetValues"
+          },
+          {
+            "$ref": "#/components/parameters/NumericAssetValues"
+          },
+          {
+            "$ref": "#/components/parameters/Priority"
+          },
+          {
+            "$ref": "#/components/parameters/Severities"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetFindingResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": ":: Legacy Route :: This resource returns a list of findings for latest analysis for a given TOE.",
+        "tags": [
+          "Findings"
+        ]
+      }
+    },
+    "/v1/findings_paginated/{toe_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This use case describes how the Findings API is used to retrieve a list of findings for the latest analysis for a TOE. The toe_id is passed in the API request. In this scenario, all findings for that TOE are returned in the response.\nTo limit or filter the data returned in the response, you can use various parameters in the API request:\n* Filter by an asset value: You can use the asset_value parameter to search for findings with high, medium, or low asset value.\n* Filter by severity: You can use the severity parameter to search for findings with high, medium, or low severity.\n* Filter by asset value and severity: You can use asset_value and severity parameters to search for findings with high, medium, or low asset value and severity.\n* Filter by page: You can use the page parameter to search for findings pages.\n* Sort by Findings Attribute: You can use the sort attribute to sort results of alerting issues by available sort attributes.",
+        "operationId": "getPaginatedFindings",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          },
+          {
+            "$ref": "#/components/parameters/Page"
+          },
+          {
+            "$ref": "#/components/parameters/PerPage"
+          },
+          {
+            "$ref": "#/components/parameters/FindingsSortAttribute"
+          },
+          {
+            "$ref": "#/components/parameters/SortMethod"
+          },
+          {
+            "$ref": "#/components/parameters/Severity"
+          },
+          {
+            "$ref": "#/components/parameters/AssetValue"
+          },
+          {
+            "$ref": "#/components/parameters/SecurityDomain"
+          },
+          {
+            "$ref": "#/components/parameters/SecurityCriteria"
+          },
+          {
+            "$ref": "#/components/parameters/CveIds"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetPaginatedFindings"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This resource returns a list of findings for latest analysis for a given TOE.",
+        "tags": [
+          "Findings"
+        ]
+      }
+    },
+    "/v1/hosts/{toe_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This resource returns a list of Hosts for latest analysis for a given TOE. This includes domain and netblock information as well.",
+        "operationId": "getHosts",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetHostsResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This resource returns a list of Hosts for latest analysis for a given TOE.",
+        "tags": [
+          "Hosts"
+        ]
+      }
+    },
+    "/v1/integration/routes/{toe_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "The Integration Routes API provides a list of URLs for the security domains within the Security Profile section of the RiskRecon Portal.\nIf one of the URLs is followed by an unauthenticated user, they will be prompted to authenticate before they are redirected to the requested URL.\nThe only parameter for this API is the TOE ID, which is required.",
+        "operationId": "getIntegrationRoutes",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetIntegrationRoutes"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "The Integration Routes API provides a list of URLs for the security domains within the Security Profile section of the RiskRecon Portal.",
+        "tags": [
+          "Integration Routes"
+        ]
+      }
+    },
+    "/v1/portfolio/bulk_add": {
+      "post": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This is a bulk request for requesting to add new TOEs (targets of evaluation) to your portfolio.\nThe request must have at least one item but no more than 25 per request.",
+        "operationId": "bulkToeRequest",
+        "parameters": [],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CreateToeRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SubmittedResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          }
+        },
+        "summary": "This endpoint is for requesting to add new TOEs (targets of evaluation) to your portfolio.",
+        "tags": [
+          "Portfolio"
+        ]
+      }
+    },
+    "/v1/portfolio/risk_relationships_folders": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This resource gets the customer's risk relationship folders names and slugs.\nThe slug will be used in requests that require the risk relationship. Risk relationships can be updated here https://portal.riskrecon.com/portal/risk-configuration if you have necessary permissions.",
+        "operationId": "getRiskRelationshipsFolders",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetRiskRelationshipsFoldersResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This resource gets the customer's risk relationship folders names and slugs.",
+        "tags": [
+          "Portfolio"
+        ]
+      }
+    },
+    "/v1/portfolio/subscription_level_config": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This resource returns the default subscription_level for bulk toe requests for your customer if it has been set.\n\nThis can be set if you want all /v1/portfolio/bulk_add requests to have the same subscription level.\n\nOptions are 1 (Discover) or 2 (Advisor)",
+        "operationId": "getSubscriptionLevelConfig",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SubscriptionLevelConfigResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This resource returns the default subscription_level for bulk toe requests for your customer.",
+        "tags": [
+          "Portfolio"
+        ]
+      },
+      "put": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This resource sets the default subscription_level for bulk toe requests for your customer if it has been set.\n\nThis can be set if you want all /v1/portfolio/bulk_add requests to have the same subscription level.\n\nOptions are 1 (Discover) or 2 (Advisor)",
+        "operationId": "setSubscriptionLevelConfig",
+        "parameters": [],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateSubscriptionLevelConfig"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SubscriptionLevelConfigResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This resource sets the default subscription_level for bulk toe requests for your customer.",
+        "tags": [
+          "Portfolio"
+        ]
+      }
+    },
+    "/v1/portfolio_data_loss_events": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This resource returns a collection of `DataLossEvent` objects for a portfolio. This is for the entire portfolio and has pagination unlike the data_loss_events route.",
+        "operationId": "getBreachEvents",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/BreachEventsSortAttribute"
+          },
+          {
+            "$ref": "#/components/parameters/BreachEventDateStart"
+          },
+          {
+            "$ref": "#/components/parameters/ToeIdQuery"
+          },
+          {
+            "$ref": "#/components/parameters/CreatedAtStart"
+          },
+          {
+            "$ref": "#/components/parameters/Page"
+          },
+          {
+            "$ref": "#/components/parameters/PerPage"
+          },
+          {
+            "$ref": "#/components/parameters/PublicEventDateStart"
+          },
+          {
+            "$ref": "#/components/parameters/RiskRelationshipSlugs"
+          },
+          {
+            "$ref": "#/components/parameters/SortMethod"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetBreachEvents"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          }
+        },
+        "summary": "This resource returns a collection of `BreachEvent` objects.",
+        "tags": [
+          "Data Loss Events"
+        ]
+      }
+    },
+    "/v1/subsidiaries/toe_id/{toe_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This route returns a collection of `Subsidiary` objects associated with a toe.\nAny TOEs that appear to be a subsidiary of the provided TOE id are returned in the response.",
+        "operationId": "getSubsidiariesByToeId",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetSubsidiariesResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This route returns a collection of `Subsidiary` objects associated with a toe.",
+        "tags": [
+          "Subsidiaries"
+        ]
+      }
+    },
+    "/v1/toe/{toe_id}": {
+      "delete": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "User can delete a TOE from their portfolio by providing the toe_id in endpoint.",
+        "operationId": "deleteToeByToeId",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/EmptyArrayResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntityResponse"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequestsResponse"
+          }
+        },
+        "summary": "This endpoint deletes an existing TOE to the users portfolio.",
+        "tags": [
+          "Target Of Evaluation TOE"
+        ]
+      },
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This resource gets a `TOE` object by its identifier.\nThis include overall ratings and some domain rating information for the current analysis of the provided TOE id.",
+        "operationId": "getToesByToeId",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetToeResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This resource gets a `TOE` object by its identifier.",
+        "tags": [
+          "Target Of Evaluation TOE"
+        ]
+      },
+      "post": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This endpoint adds an existing TOE to the users portfolio.\nThe toe_id and other information can be obtained from the /v1/toes/by_domains response.",
+        "operationId": "addCompanyToToeByToeId",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/AddCompanyToPortfolioRequest"
+        },
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/AddExistingToeResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntityResponse"
+          }
+        },
+        "summary": "This endpoint adds an existing TOE to the users portfolio.",
+        "tags": [
+          "Target Of Evaluation TOE"
+        ]
+      },
+      "put": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This endpoint allows a user to update the internal_ids and/or internal_name of an existing `TOE` by its identifier.\nThese can be used to map a TOE in the RiskRecon system to an entity in the users system.",
+        "operationId": "updateToesByToeId",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateToeRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/UpdatedToeResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This endpoint allows a user to update the internal_ids and/or internal_name of an existing `TOE` by its identifier.",
+        "tags": [
+          "Target Of Evaluation TOE"
+        ]
+      }
+    },
+    "/v1/toes": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This API retrieves a collection of TOE objects mapped to a customer.\nThis include overall ratings and some domain rating information for the current analysis of the provided TOE id.\nAs a TOE can have multiple internal IDs, this API filters if the internal ID is one among the multiple internal IDs.",
+        "operationId": "getToes",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/InternalId"
+          },
+          {
+            "$ref": "#/components/parameters/LastRetrieved"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetToesResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          }
+        },
+        "summary": "This resource returns a collection of `TOE` objects mapped to a customer.",
+        "tags": [
+          "Target Of Evaluation TOE"
+        ]
+      }
+    },
+    "/v1/toes/by_cve": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This endpoint allows the user to search for Company name, TOE ID by a valid CVE.\nThe user must provide a valid cve in query param.",
+        "operationId": "getToeByCve",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/CveId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetCveSearchResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          }
+        },
+        "summary": "This endpoint allows the user to search for Company name, TOE ID by a valid CVE.",
+        "tags": [
+          "Target Of Evaluation TOE"
+        ]
+      }
+    },
+    "/v1/toes/by_domains": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This endpoint allows the user to search for a TOE by a valid domain or hostname.\nThe user must provide a valid domain or hostname in domain query param.",
+        "operationId": "getToeByDomain",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Domain"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetToeSearchResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          }
+        },
+        "summary": "This endpoint allows the user to search for a TOE by a valid domain or hostname.",
+        "tags": [
+          "Target Of Evaluation TOE"
+        ]
+      }
+    },
+    "/v1/toes/risk_relationships": {
+      "put": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "User can move a TOE from one risk relationship folder to another by providing the toe_id and relationship folder slug in request. Relationship folder slug can be retrieved from [/v1/portfolio/risk_relationships_folders](#/Portfolio/getRiskRelationshipsFolders).",
+        "operationId": "moveToeRequest",
+        "parameters": [],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/MoveToeRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/MoveToeResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntityResponse"
+          }
+        },
+        "summary": "This endpoint moves an existing TOE from one risk relationship folder to another",
+        "tags": [
+          "Target Of Evaluation TOE"
+        ]
+      }
+    },
+    "/v1/user_mgmt": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "The User route is used to get all the user data for one’s organization.\nThere currently are no filters or params.",
+        "operationId": "getUserData",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetUserMgmtResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "The User route is used to get all the user data for one’s organization.",
+        "tags": [
+          "Users"
+        ]
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "servers": [
+    {
+      "description": "Sandbox server",
+      "url": "https://api.sandbox.riskrecon.com",
+      "variables": {
+        "protocol": {
+          "default": "https",
+          "enum": [
+            "http",
+            "https"
+          ]
+        }
+      }
+    },
+    {
+      "description": "Production server",
+      "url": "https://api.riskrecon.com",
+      "variables": {
+        "protocol": {
+          "default": "https",
+          "enum": [
+            "http",
+            "https"
+          ]
+        }
+      }
+    }
+  ],
+  "tags": [
+    {
+      "description": "Operations related to Action Plans",
+      "name": "Action Plans"
+    },
+    {
+      "description": "Operations related to Alerts",
+      "name": "Alerts"
+    },
+    {
+      "description": "Operations related to Analyses",
+      "name": "Analyses"
+    },
+    {
+      "description": "Operations related to Compliance",
+      "name": "Compliance"
+    },
+    {
+      "description": "Operations related to Data Loss Events",
+      "name": "Data Loss Events"
+    },
+    {
+      "description": "Operations related to Display Names",
+      "name": "Display Name"
+    },
+    {
+      "description": "Operations related to Findings",
+      "name": "Findings"
+    },
+    {
+      "description": "Operations related to Hosts",
+      "name": "Hosts"
+    },
+    {
+      "description": "Operations related to Integration Routes",
+      "name": "Integration Routes"
+    },
+    {
+      "description": "Operations related to the users Portfolio",
+      "name": "Portfolio"
+    },
+    {
+      "description": "Operations related to a TOEs subsidiaries",
+      "name": "Subsidiaries"
+    },
+    {
+      "description": "Operations related to TOEs (Target of Evaluation)",
+      "name": "Target Of Evaluation TOE"
+    },
+    {
+      "description": "Operations related to Users",
+      "name": "Users"
+    }
+  ]
+}
