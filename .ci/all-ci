@@ -18,17 +18,11 @@ main() {
 
 build() {
   version=$1
-  build_swagger
   build_java $version
 }
 
 deploy() {
   deploy_java
-}
-
-build_swagger() {
-  buf lint || exit
-  buf generate || exit
 }
 
 build_java() {
