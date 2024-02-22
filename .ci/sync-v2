@@ -1,3 +1,4 @@
 #!/bin/sh
 
+curl https://api.riskrecon.com/v1/openapi | jq . >openapi/v1.json
 curl https://api.riskrecon.com/v2/openapi | jq . >openapi/v2.json
