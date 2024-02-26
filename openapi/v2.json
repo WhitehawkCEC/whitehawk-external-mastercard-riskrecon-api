@@ -401,7 +401,9 @@
           }
         },
         "summary": "Streaming Newline delimited JSON response containing findings for latest analysis for a given TOE. Swagger didn't have a way of showing this so please don't let the schema of mislead you with the array of findings",
-        "tags": ["Finding"]
+        "tags": [
+          "Finding"
+        ]
       }
     },
     "/v2/findings/{toe_id}/finding/{finding_id}": {
@@ -451,7 +453,9 @@
           }
         },
         "summary": "Retrieve finding given toe id and finding id",
-        "tags": ["Finding"]
+        "tags": [
+          "Finding"
+        ]
       }
     },
     "/v2/findings/{toe_id}/security_domain/{security_domain}": {
@@ -517,7 +521,9 @@
           }
         },
         "summary": "Streaming Newline delimited JSON response containing findings for latest analysis for a given TOE and security domain. Swagger didn't have a way of showing this so please don't let the schema of mislead you with the array of findings",
-        "tags": ["Finding"]
+        "tags": [
+          "Finding"
+        ]
       }
     },
     "/v2/findings/{toe_id}/security_domain/{security_domain}/security_criteria/{security_criteria}": {
@@ -592,7 +598,9 @@
           }
         },
         "summary": "Streaming Newline delimited JSON response containing findings for latest analysis for a given TOE, security domain and security criteria. Swagger didn't have a way of showing this so please don't let the schema of mislead you with the array of findings",
-        "tags": ["Finding"]
+        "tags": [
+          "Finding"
+        ]
       }
     }
   },
@@ -607,7 +615,10 @@
       "variables": {
         "protocol": {
           "default": "https",
-          "enum": ["http", "https"]
+          "enum": [
+            "http",
+            "https"
+          ]
         }
       }
     },
@@ -616,7 +627,10 @@
       "variables": {
         "protocol": {
           "default": "https",
-          "enum": ["http", "https"]
+          "enum": [
+            "http",
+            "https"
+          ]
         }
       }
     }
