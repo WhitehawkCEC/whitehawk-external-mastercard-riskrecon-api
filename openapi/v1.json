@@ -148,7 +148,13 @@
         "name": "asset_value",
         "required": false,
         "schema": {
-          "enum": ["high", "medium", "low", "idle", "key"],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            "idle",
+            "key"
+          ],
           "type": "string"
         }
       },
@@ -204,7 +210,12 @@
         "name": "severity[]",
         "schema": {
           "items": {
-            "enum": ["critical", "high", "medium", "low"],
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low"
+            ],
             "example": "high",
             "type": "string"
           },
@@ -219,7 +230,11 @@
         "required": false,
         "schema": {
           "default": "public_event_date",
-          "enum": ["breach_event_date", "public_event_date", "created_at"],
+          "enum": [
+            "breach_event_date",
+            "public_event_date",
+            "created_at"
+          ],
           "example": "public_event_date",
           "type": "string"
         }
@@ -317,7 +332,11 @@
         "required": false,
         "schema": {
           "default": "last_seen",
-          "enum": ["priority", "last_seen", "security_criteria"],
+          "enum": [
+            "priority",
+            "last_seen",
+            "security_criteria"
+          ],
           "example": "last_seen",
           "type": "string"
         }
@@ -361,7 +380,10 @@
         "required": false,
         "schema": {
           "default": "DESC",
-          "enum": ["ASC", "DESC"],
+          "enum": [
+            "ASC",
+            "DESC"
+          ],
           "example": "DESC",
           "type": "string"
         }
@@ -459,7 +481,12 @@
         "name": "severity",
         "required": false,
         "schema": {
-          "enum": ["critical", "high", "medium", "low"],
+          "enum": [
+            "critical",
+            "high",
+            "medium",
+            "low"
+          ],
           "example": "high",
           "type": "string"
         }
@@ -1166,7 +1193,9 @@
             "$ref": "#/components/schemas/Errors"
           }
         },
-        "required": ["Errors"],
+        "required": [
+          "Errors"
+        ],
         "title": "Error Response",
         "type": "object"
       },
@@ -1244,7 +1273,10 @@
         "properties": {
           "assessment_frequency": {
             "description": "The Scan frequency. This is required and must be either one_time or continuous.",
-            "enum": ["one_time", "continuous"],
+            "enum": [
+              "one_time",
+              "continuous"
+            ],
             "example": "continuous",
             "type": "string"
           },
@@ -1277,12 +1309,19 @@
           },
           "subscription_level": {
             "description": "The SubscriptionLevelConfig must be 1 (Discover) or 2 (Advisor). Either this or a subscription level config are required.",
-            "enum": ["1", "2"],
+            "enum": [
+              "1",
+              "2"
+            ],
             "example": "2",
             "type": "string"
           }
         },
-        "required": ["assessment_frequency", "company_domains", "company_name"],
+        "required": [
+          "assessment_frequency",
+          "company_domains",
+          "company_name"
+        ],
         "title": "Customer Toe Request",
         "type": "object"
       },
@@ -1438,7 +1477,9 @@
             "type": "string"
           }
         },
-        "required": ["overview"],
+        "required": [
+          "overview"
+        ],
         "title": "Integration Route Links",
         "type": "object"
       },
@@ -1841,7 +1882,10 @@
           "assessment_frequency": {
             "default": "continuous",
             "description": "Scan frequency. This must be either one_time or continuous. The default is continuous.",
-            "enum": ["one_time", "continuous"],
+            "enum": [
+              "one_time",
+              "continuous"
+            ],
             "example": "continuous",
             "type": "string"
           },
@@ -1862,12 +1906,18 @@
           "subscription_level": {
             "default": 2,
             "description": "The SubscriptionLevelConfig.  1 (Discover) or 2 (Advisor). This defaults to 2.",
-            "enum": [1, 2],
+            "enum": [
+              1,
+              2
+            ],
             "example": 2,
             "type": "integer"
           }
         },
-        "required": ["subscription_level", "assessment_frequency"],
+        "required": [
+          "subscription_level",
+          "assessment_frequency"
+        ],
         "title": "Add a company to portfolio",
         "type": "object"
       },
@@ -3054,7 +3104,9 @@
             "type": "array"
           }
         },
-        "required": ["Error"],
+        "required": [
+          "Error"
+        ],
         "title": "Errors",
         "type": "object"
       },
@@ -3258,12 +3310,17 @@
         "properties": {
           "subscription_level": {
             "description": "The customer SubscriptionLevelConfig.  Options are 1 (Discover) or 2 (Advisor).",
-            "enum": ["1", "2"],
+            "enum": [
+              "1",
+              "2"
+            ],
             "example": "1",
             "type": "string"
           }
         },
-        "required": ["subscription_level"],
+        "required": [
+          "subscription_level"
+        ],
         "title": "SubscriptionLevelConfig",
         "type": "object"
       },
@@ -3272,7 +3329,10 @@
           "assessment_frequency": {
             "default": "continuous",
             "description": "Scan frequency. This must be either one_time or continuous. The default is continuous.",
-            "enum": ["one_time", "continuous"],
+            "enum": [
+              "one_time",
+              "continuous"
+            ],
             "example": "continuous",
             "nullable": true,
             "type": "string"
@@ -3307,7 +3367,12 @@
           },
           "subscription_level": {
             "description": "The subscription level for the TOE.",
-            "enum": ["AUTO", "1", "2", "3"],
+            "enum": [
+              "AUTO",
+              "1",
+              "2",
+              "3"
+            ],
             "example": "2",
             "nullable": true,
             "type": "string"
@@ -3590,7 +3655,11 @@
                   "type": "string"
                 }
               },
-              "required": ["attributes", "id", "type"],
+              "required": [
+                "attributes",
+                "id",
+                "type"
+              ],
               "type": "object"
             },
             "type": "array"
@@ -3599,7 +3668,10 @@
             "$ref": "#/components/schemas/PaginationMeta"
           }
         },
-        "required": ["meta", "data"],
+        "required": [
+          "meta",
+          "data"
+        ],
         "type": "object"
       },
       "MoveToe": {
@@ -3616,7 +3688,10 @@
             "$ref": "#/components/schemas/ToeId"
           }
         },
-        "required": ["toe_id", "risk_relationship_slugs"],
+        "required": [
+          "toe_id",
+          "risk_relationship_slugs"
+        ],
         "title": "Move Toe to slug",
         "type": "object"
       },
@@ -3970,7 +4045,9 @@
           }
         },
         "summary": "This resource returns a list of finding details from an action plan of a TOE.",
-        "tags": ["Action Plans"]
+        "tags": [
+          "Action Plans"
+        ]
       }
     },
     "/v1/action_plan/issue_progress/{toe_id}": {
@@ -3996,7 +4073,9 @@
           }
         },
         "summary": "This resource tracks and reports a vendors progress in addressing action plan issues.",
-        "tags": ["Action Plans"]
+        "tags": [
+          "Action Plans"
+        ]
       }
     },
     "/v1/action_plan/issue_summary/{toe_id}": {
@@ -4022,7 +4101,9 @@
           }
         },
         "summary": "This resource returns a vendor's action plan issue summary.",
-        "tags": ["Action Plans"]
+        "tags": [
+          "Action Plans"
+        ]
       }
     },
     "/v1/action_plan/priority_matrix_counts/{toe_id}": {
@@ -4048,7 +4129,9 @@
           }
         },
         "summary": "This API returns the count of current action plan issues per their severity and priority.",
-        "tags": ["Action Plans"]
+        "tags": [
+          "Action Plans"
+        ]
       }
     },
     "/v1/action_plan/vendor_status_summary_counts/{toe_id}": {
@@ -4074,7 +4157,9 @@
           }
         },
         "summary": "This API returns the vendor status summary counts of a given action plan.",
-        "tags": ["Action Plans"]
+        "tags": [
+          "Action Plans"
+        ]
       }
     },
     "/v1/alerting/issues": {
@@ -4118,7 +4203,9 @@
           }
         },
         "summary": "This resource returns Alerting Issues from new scans in their portfolio based on the users alert settings.",
-        "tags": ["Alerts"]
+        "tags": [
+          "Alerts"
+        ]
       }
     },
     "/v1/alerting/rating_changes": {
@@ -4162,7 +4249,9 @@
           }
         },
         "summary": "This resource returns any rating/score changes from new scans in the users portfolio based on the users alert settings.",
-        "tags": ["Alerts"]
+        "tags": [
+          "Alerts"
+        ]
       }
     },
     "/v1/analysis/current/{toe_id}": {
@@ -4194,7 +4283,9 @@
           }
         },
         "summary": "This resource returns the most recent `Analysis` object by the TOE identifier. Trend data is only included if `include_trend` query param is added.",
-        "tags": ["Analyses"]
+        "tags": [
+          "Analyses"
+        ]
       }
     },
     "/v1/analysis/history/{toe_id}": {
@@ -4220,7 +4311,9 @@
           }
         },
         "summary": "This resource returns a collection of historical `Analysis` objects by the TOE identifier.",
-        "tags": ["Analyses"]
+        "tags": [
+          "Analyses"
+        ]
       }
     },
     "/v1/compliance/controls/{toe_id}": {
@@ -4252,7 +4345,9 @@
           }
         },
         "summary": "This resource returns risk standard controls associated with a TOE id and a particular custom or industry standard.",
-        "tags": ["Compliance"]
+        "tags": [
+          "Compliance"
+        ]
       }
     },
     "/v1/compliance/{toe_id}": {
@@ -4278,7 +4373,9 @@
           }
         },
         "summary": "This resource returns an list of custom and industry standards.",
-        "tags": ["Compliance"]
+        "tags": [
+          "Compliance"
+        ]
       }
     },
     "/v1/data_loss_events/{toe_id}": {
@@ -4304,7 +4401,9 @@
           }
         },
         "summary": ":: Legacy Route :: This resource returns a collection of `DataLossEvent` objects.",
-        "tags": ["Data Loss Events"]
+        "tags": [
+          "Data Loss Events"
+        ]
       }
     },
     "/v1/display_names/security_criteria": {
@@ -4323,7 +4422,9 @@
           }
         },
         "summary": "This resource returns a mapping of security_criteria labels and their current display names in the RiskRecon portal.",
-        "tags": ["Display Name"]
+        "tags": [
+          "Display Name"
+        ]
       }
     },
     "/v1/display_names/security_domain": {
@@ -4342,7 +4443,9 @@
           }
         },
         "summary": "This resource returns a mapping of security_domain labels and their current display names in the RiskRecon portal.",
-        "tags": ["Display Name"]
+        "tags": [
+          "Display Name"
+        ]
       }
     },
     "/v1/findings/{toe_id}": {
@@ -4389,7 +4492,9 @@
           }
         },
         "summary": ":: Legacy Route :: This resource returns a list of findings for latest analysis for a given TOE.",
-        "tags": ["Findings"]
+        "tags": [
+          "Findings"
+        ]
       }
     },
     "/v1/findings_paginated/{toe_id}": {
@@ -4445,7 +4550,9 @@
           }
         },
         "summary": "This resource returns a list of findings for latest analysis for a given TOE.",
-        "tags": ["Findings"]
+        "tags": [
+          "Findings"
+        ]
       }
     },
     "/v1/hosts/{toe_id}": {
@@ -4471,7 +4578,9 @@
           }
         },
         "summary": "This resource returns a list of Hosts for latest analysis for a given TOE.",
-        "tags": ["Hosts"]
+        "tags": [
+          "Hosts"
+        ]
       }
     },
     "/v1/integration/routes/{toe_id}": {
@@ -4497,7 +4606,9 @@
           }
         },
         "summary": "The Integration Routes API provides a list of URLs for the security domains within the Security Profile section of the RiskRecon Portal.",
-        "tags": ["Integration Routes"]
+        "tags": [
+          "Integration Routes"
+        ]
       }
     },
     "/v1/portfolio/bulk_add": {
@@ -4522,7 +4633,9 @@
           }
         },
         "summary": "This endpoint is for requesting to add new TOEs (targets of evaluation) to your portfolio.",
-        "tags": ["Portfolio"]
+        "tags": [
+          "Portfolio"
+        ]
       }
     },
     "/v1/portfolio/risk_relationships_folders": {
@@ -4544,7 +4657,9 @@
           }
         },
         "summary": "This resource gets the customer's risk relationship folders names and slugs.",
-        "tags": ["Portfolio"]
+        "tags": [
+          "Portfolio"
+        ]
       }
     },
     "/v1/portfolio/subscription_level_config": {
@@ -4566,7 +4681,9 @@
           }
         },
         "summary": "This resource returns the default subscription_level for bulk toe requests for your customer.",
-        "tags": ["Portfolio"]
+        "tags": [
+          "Portfolio"
+        ]
       },
       "put": {
         "callbacks": {},
@@ -4589,7 +4706,9 @@
           }
         },
         "summary": "This resource sets the default subscription_level for bulk toe requests for your customer.",
-        "tags": ["Portfolio"]
+        "tags": [
+          "Portfolio"
+        ]
       }
     },
     "/v1/portfolio_data_loss_events": {
@@ -4639,7 +4758,9 @@
           }
         },
         "summary": "This resource returns a collection of `BreachEvent` objects.",
-        "tags": ["Data Loss Events"]
+        "tags": [
+          "Data Loss Events"
+        ]
       }
     },
     "/v1/subsidiaries/toe_id/{toe_id}": {
@@ -4665,7 +4786,9 @@
           }
         },
         "summary": "This route returns a collection of `Subsidiary` objects associated with a toe.",
-        "tags": ["Subsidiaries"]
+        "tags": [
+          "Subsidiaries"
+        ]
       }
     },
     "/v1/toe/{toe_id}": {
@@ -4694,7 +4817,9 @@
           }
         },
         "summary": "This endpoint deletes an existing TOE to the users portfolio.",
-        "tags": ["Target Of Evaluation TOE"]
+        "tags": [
+          "Target Of Evaluation TOE"
+        ]
       },
       "get": {
         "callbacks": {},
@@ -4718,7 +4843,9 @@
           }
         },
         "summary": "This resource gets a `TOE` object by its identifier.",
-        "tags": ["Target Of Evaluation TOE"]
+        "tags": [
+          "Target Of Evaluation TOE"
+        ]
       },
       "post": {
         "callbacks": {},
@@ -4748,7 +4875,9 @@
           }
         },
         "summary": "This endpoint adds an existing TOE to the users portfolio.",
-        "tags": ["Target Of Evaluation TOE"]
+        "tags": [
+          "Target Of Evaluation TOE"
+        ]
       },
       "put": {
         "callbacks": {},
@@ -4778,7 +4907,9 @@
           }
         },
         "summary": "This endpoint allows a user to update the internal_ids and/or internal_name of an existing `TOE` by its identifier.",
-        "tags": ["Target Of Evaluation TOE"]
+        "tags": [
+          "Target Of Evaluation TOE"
+        ]
       }
     },
     "/v1/toes": {
@@ -4807,7 +4938,9 @@
           }
         },
         "summary": "This resource returns a collection of `TOE` objects mapped to a customer.",
-        "tags": ["Target Of Evaluation TOE"]
+        "tags": [
+          "Target Of Evaluation TOE"
+        ]
       }
     },
     "/v1/toes/by_cve": {
@@ -4833,7 +4966,9 @@
           }
         },
         "summary": "This endpoint allows the user to search for Company name, TOE ID by a valid CVE.",
-        "tags": ["Target Of Evaluation TOE"]
+        "tags": [
+          "Target Of Evaluation TOE"
+        ]
       }
     },
     "/v1/toes/by_domains": {
@@ -4859,7 +4994,9 @@
           }
         },
         "summary": "This endpoint allows the user to search for a TOE by a valid domain or hostname.",
-        "tags": ["Target Of Evaluation TOE"]
+        "tags": [
+          "Target Of Evaluation TOE"
+        ]
       }
     },
     "/v1/toes/risk_relationships": {
@@ -4887,7 +5024,9 @@
           }
         },
         "summary": "This endpoint moves an existing TOE from one risk relationship folder to another",
-        "tags": ["Target Of Evaluation TOE"]
+        "tags": [
+          "Target Of Evaluation TOE"
+        ]
       }
     },
     "/v1/user_mgmt": {
@@ -4909,7 +5048,9 @@
           }
         },
         "summary": "The User route is used to get all the user data for one’s organization.",
-        "tags": ["Users"]
+        "tags": [
+          "Users"
+        ]
       }
     }
   },
@@ -4925,7 +5066,10 @@
       "variables": {
         "protocol": {
           "default": "https",
-          "enum": ["http", "https"]
+          "enum": [
+            "http",
+            "https"
+          ]
         }
       }
     },
@@ -4935,7 +5079,10 @@
       "variables": {
         "protocol": {
           "default": "https",
-          "enum": ["http", "https"]
+          "enum": [
+            "http",
+            "https"
+          ]
         }
       }
     }
