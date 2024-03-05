@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/whitehawkcec/whitehawk-external-mastercard-riskrecon-api/compare/0.2.0...0.3.0) (2024-03-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* **java:** remove `api-stub` submodule
+
+### Features
+
+* **java:** add submodule `api-v1-client-micronaut` ([cf887e5](https://github.com/whitehawkcec/whitehawk-external-mastercard-riskrecon-api/commit/cf887e55124b1ea7f1edea88a3d384ec4214942b))
+* **java:** add submodule `api-v2-client-micronaut` ([396d141](https://github.com/whitehawkcec/whitehawk-external-mastercard-riskrecon-api/commit/396d141a2c2eee136b13bc26f595fa4a490a3aa4))
+* **java:** remove `api-stub` submodule ([2caaa25](https://github.com/whitehawkcec/whitehawk-external-mastercard-riskrecon-api/commit/2caaa256e69ded2097487c0a74309c8f58b21d7a))
+
 ## [0.2.0](https://github.com/whitehawkcec/whitehawk-external-mastercard-riskrecon-api/compare/0.1.2...0.2.0) (2024-02-22)
 
 
