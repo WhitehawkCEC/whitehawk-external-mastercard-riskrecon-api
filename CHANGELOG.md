@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.1](https://github.com/whitehawkcec/whitehawk-external-mastercard-riskrecon-api/compare/0.3.0...0.3.1) (2024-03-05)
+
+
+### Bug Fixes
+
+* **java:** properly generate `@Client` id for v1 ([a4fd7f9](https://github.com/whitehawkcec/whitehawk-external-mastercard-riskrecon-api/commit/a4fd7f9bbbf263c51aec9d65408af6043380ad58))
+* **java:** properly generate `@Client` id for v2 ([3b42a78](https://github.com/whitehawkcec/whitehawk-external-mastercard-riskrecon-api/commit/3b42a789e71b73ba92b707a5834d39a3f02950e6))
+
 ## [0.3.0](https://github.com/whitehawkcec/whitehawk-external-mastercard-riskrecon-api/compare/0.2.0...0.3.0) (2024-03-05)
 
 
