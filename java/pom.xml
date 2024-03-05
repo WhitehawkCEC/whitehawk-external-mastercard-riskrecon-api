@@ -31,7 +31,6 @@
 
   <modules>
     <module>api-parent</module>
-    <module>api-stub</module>
     <module>api-v1-client-micronaut</module>
     <module>api-v2-client-micronaut</module>
   </modules>
