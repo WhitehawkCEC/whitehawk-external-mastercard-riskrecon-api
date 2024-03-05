@@ -164,7 +164,15 @@
         <plugin>
           <groupId>io.micronaut.maven</groupId>
           <artifactId>micronaut-maven-plugin</artifactId>
-          <version>4.4.0</version>
+          <version>4.4.1</version>
+          <dependencies>
+            <!-- Bumps version to properly generate `clientId` in `api.mustache` -->
+            <dependency>
+              <groupId>io.micronaut.openapi</groupId>
+              <artifactId>micronaut-openapi-generator</artifactId>
+              <version>6.6.3</version>
+            </dependency>
+          </dependencies>
         </plugin>
 
         <plugin>
