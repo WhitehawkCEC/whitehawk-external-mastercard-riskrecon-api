@@ -70,6 +70,7 @@
             <configuration>
               <enabled>true</enabled>
               <definitionFile>${project.basedir}/../../openapi/v2.json</definitionFile>
+              <clientId>${project.groupId}:${project.artifactId}</clientId>
               <invokerPackageName>com.whitehawk.external.mastercard.riskrecon.api.v2.client.micronaut.invoker</invokerPackageName>
               <apiPackageName>com.whitehawk.external.mastercard.riskrecon.api.v2.client.micronaut.api</apiPackageName>
               <modelPackageName>com.whitehawk.external.mastercard.riskrecon.api.v2.client.micronaut.model</modelPackageName>
