@@ -63,7 +63,6 @@
               <invokerPackage>com.whitehawk.external.mastercard.riskrecon.api.v1.client.native_.invoker</invokerPackage>
               <apiPackage>com.whitehawk.external.mastercard.riskrecon.api.v1.client.native_</apiPackage>
               <modelPackage>com.whitehawk.external.mastercard.riskrecon.api.v1.client.native_.model</modelPackage>
-              <generateSupportingFiles>false</generateSupportingFiles>
               <configOptions>
                 <library>native</library>
                 <useJakartaEe>true</useJakartaEe>
