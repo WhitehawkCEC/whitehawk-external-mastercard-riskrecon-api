@@ -32,6 +32,7 @@
   <modules>
     <module>api-parent</module>
     <module>api-v1-client-micronaut</module>
+    <module>api-v1-client-native</module>
     <module>api-v2-client-micronaut</module>
   </modules>
 
