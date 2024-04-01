@@ -525,6 +525,18 @@
         },
         "style": "form"
       },
+      "RequestId": {
+        "description": "This parameter is the report request ID.",
+        "in": "path",
+        "name": "request_id",
+        "required": true,
+        "schema": {
+          "default": 1,
+          "example": 1,
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
       "SecurityDomain": {
         "description": "Filter results by the Security Domain.",
         "in": "query",
@@ -561,6 +573,16 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/MoveToe"
+            }
+          }
+        },
+        "required": true
+      },
+      "OrderToeReportRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/OrderToeReport"
             }
           }
         },
@@ -723,6 +745,16 @@
         },
         "description": "OK"
       },
+      "PdfReportResponse": {
+        "content": {
+          "application/pdf": {
+            "schema": {
+              "$ref": "#/components/schemas/ToeReportPdf"
+            }
+          }
+        },
+        "description": "OK"
+      },
       "AddExistingToeResponse": {
         "content": {
           "application/json": {
@@ -738,11 +770,31 @@
           }
         }
       },
+      "ToeReportOrderedResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ToeReportOrdered"
+            }
+          }
+        },
+        "description": "OK"
+      },
       "GetAlertingNewIssues": {
         "content": {
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/AlertingNewIssues"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "ActiveToeReportOrders": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ArrayOfToeReportOrdered"
             }
           }
         },
@@ -1186,6 +1238,48 @@
         },
         "title": "Toes",
         "type": "array"
+      },
+      "ToeReportOrdered": {
+        "description": "When a report has been successfully ordered.        ",
+        "properties": {
+          "analysis_id": {
+            "description": "The unique analysis Id",
+            "example": 51233544,
+            "type": "number"
+          },
+          "report_key": {
+            "description": "The unique name of the report.",
+            "example": "company-overview-report-Sample-Enterprises,-USA-4635645253-2024-1-9:10-21-18.pdf",
+            "type": "string"
+          },
+          "report_type": {
+            "description": "The unique name of the report.",
+            "example": "executive-report",
+            "type": "string"
+          },
+          "request_id": {
+            "description": "The unique ID of the request.",
+            "example": 123,
+            "type": "number"
+          },
+          "status": {
+            "description": "The current status of the request.",
+            "example": "pending",
+            "type": "string"
+          },
+          "toe_id": {
+            "description": "TEO on which report was requested",
+            "example": "5976423a-ee35-11e3-8569-14109ff1a304",
+            "type": "string"
+          },
+          "toe_name": {
+            "description": "TOE name",
+            "example": "Sample Enterprises, USA",
+            "type": "string"
+          }
+        },
+        "title": "TOE Report Ordered Response",
+        "type": "object"
       },
       "ErrorWrapper": {
         "properties": {
@@ -2581,6 +2675,32 @@
         "title": "Host",
         "type": "object"
       },
+      "OrderToeReport": {
+        "properties": {
+          "report_type": {
+            "description": "Executive Report (executive-report), Summary Report (summary-report), Detailed Report (detailed-report), Action Plan (action-plan)",
+            "enum": [
+              "executive-report",
+              "summary-report",
+              "detailed-report",
+              "action-plan"
+            ],
+            "example": "summary-report",
+            "type": "string"
+          },
+          "toe_id": {
+            "description": "The TOE to use to get pdf report ",
+            "example": "5976423a-ee35-11e3-8569-14109ff1a304",
+            "type": "string"
+          }
+        },
+        "required": [
+          "report_type",
+          "toe_id"
+        ],
+        "title": "Order a TOE PDF Report",
+        "type": "object"
+      },
       "ArrayOfActionPlanIssueProgress": {
         "description": "A collection of ActionPlanIssueProgress objects.",
         "items": {
@@ -3635,6 +3755,12 @@
         "title": "Subsidiary",
         "type": "object"
       },
+      "ToeReportPdf": {
+        "description": "A PDF file",
+        "format": "binary",
+        "title": "TOE Report PDF",
+        "type": "string"
+      },
       "BreachEvents": {
         "properties": {
           "data": {
@@ -3962,6 +4088,14 @@
           }
         },
         "type": "object"
+      },
+      "ArrayOfToeReportOrdered": {
+        "description": "All toe report requests by customer in the last 24 hours.",
+        "items": {
+          "$ref": "#/components/schemas/ToeReportOrdered"
+        },
+        "title": "ArrayOfToeReportOrdered",
+        "type": "array"
       },
       "Analyses": {
         "description": "A collection of Analysis objects.",
@@ -4912,6 +5046,86 @@
         ]
       }
     },
+    "/v1/toe_reports": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This resource returns all report requests submitted in the last 24 hours by the client.",
+        "operationId": "requestPdfReportStatus",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ActiveToeReportOrders"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          }
+        },
+        "summary": "This resource returns the list of active report request.",
+        "tags": [
+          "TOE Reports"
+        ]
+      },
+      "post": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This endpoint provides the ordering of the following toe reports:\n  - Executive Report - The Executive Report (executive-report) provides an executive summary  of the RiskRecon ratings and security performance metrics.\n  - Summary Report - The RiskRecon Summary Report (summary-report) provides the summary  RiskRecon ratings and security performance metrics.\n  - Detailed Report - The RiskRecon Detailed Report (detailed-report) provides the RiskRecon  ratings, security performance metrics, and detailed findings and recommendations. \n  - Action Plan - The action plan (action-plan) on this toe.",
+        "operationId": "requestPdfReport",
+        "parameters": [],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/OrderToeReportRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ToeReportOrderedResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntityResponse"
+          }
+        },
+        "summary": "This resource allows the ordering and downloading of toe reports",
+        "tags": [
+          "TOE Reports"
+        ]
+      }
+    },
+    "/v1/toe_reports/{request_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This resource gets the PDF report.",
+        "operationId": "downloadPdfReport",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RequestId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PdfReportResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          }
+        },
+        "summary": "This resource returns the PDF report.",
+        "tags": [
+          "TOE Reports"
+        ]
+      }
+    },
     "/v1/toes": {
       "get": {
         "callbacks": {},
@@ -5139,6 +5353,10 @@
     {
       "description": "Operations related to Users",
       "name": "Users"
+    },
+    {
+      "description": "Operations related to TOE Reports",
+      "name": "TOE Reports"
     }
   ]
 }
