@@ -31,6 +31,7 @@
 
   <modules>
     <module>api-parent</module>
+    <module>api-v0-cpe-client-native</module>
     <module>api-v1-client-native</module>
     <module>api-v2-client-native</module>
   </modules>
