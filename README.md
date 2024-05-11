@@ -4,6 +4,7 @@
 
 Generates various language stub code from swagger specifications.
 
+- [v0/cpe](https://api.riskrecon.com/v0/cpe/swagger)
 - [v1](https://api.riskrecon.com/v1/swagger)
 - [v2](https://api.riskrecon.com/v2/swagger)
 
