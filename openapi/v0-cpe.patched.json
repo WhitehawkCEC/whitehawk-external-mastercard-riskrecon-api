@@ -1,0 +1,454 @@
+{
+  "components": {
+    "schemas": {
+      "CveProductLookup": {
+        "description": "Look up products and versions associated with a provided cve code",
+        "properties": {
+          "cve_id": {
+            "type": "string"
+          },
+          "product_long_name": {
+            "type": "string"
+          },
+          "product_short_name": {
+            "type": "string"
+          }
+        },
+        "title": "CVE Product Lookup",
+        "type": "object"
+      },
+      "CveProductLookups": {
+        "description": "Array of CveProductLookups associated provided cves",
+        "items": {
+          "$ref": "#/components/schemas/CveProductLookup"
+        },
+        "title": "CveProductLookups",
+        "type": "array"
+      },
+      "FindingsLanguage": {
+        "description": "Findings language associated with a given platform and version",
+        "properties": {
+          "issue_long_eol": {
+            "type": "string"
+          },
+          "issue_long_intro": {
+            "type": "string"
+          },
+          "issue_long_vuln": {
+            "type": "string"
+          },
+          "issue_short_eol": {
+            "type": "string"
+          },
+          "issue_short_vuln": {
+            "type": "string"
+          },
+          "solution_owner_long": {
+            "type": "string"
+          },
+          "solution_owner_short": {
+            "type": "string"
+          },
+          "solution_short": {
+            "type": "string"
+          },
+          "solution_long": {
+            "type": "string"
+          },
+          "solution_references": {
+            "type": "string"
+          }
+        },
+        "title": "Findings language",
+        "type": "object"
+      },
+      "ThreatIntellResult": {
+        "description": "Threat Intell Result",
+        "properties": {
+          "asn": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "family": {
+            "type": "string"
+          },
+          "host_name": {
+            "type": "string"
+          },
+          "intell_date": {
+            "type": "string"
+          },
+          "ip": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "title": "Threat Intell Result",
+        "type": "object"
+      },
+      "ThreatIntellResults": {
+        "description": "Array of Threat intell results",
+        "items": {
+          "$ref": "#/components/schemas/ThreatIntellResult"
+        },
+        "title": "Threat Intell Results",
+        "type": "array"
+      },
+      "Vulnerabilities": {
+        "description": "Array of Vulnerabilities associated with given platform and version",
+        "items": {
+          "$ref": "#/components/schemas/Vulnerability"
+        },
+        "title": "Vulnerabilities",
+        "type": "array"
+      },
+      "VulnerabilitiesAndLanguage": {
+        "description": "Vulnerabilities and Language associated with given platform and version",
+        "properties": {
+          "language": {
+            "$ref": "#/components/schemas/FindingsLanguage"
+          },
+          "vulnerabilities": {
+            "$ref": "#/components/schemas/Vulnerabilities"
+          }
+        },
+        "title": "Vulnerabilities and Language",
+        "type": "object"
+      },
+      "Vulnerability": {
+        "description": "Vulnerability associated with given platform and version",
+        "properties": {
+          "access_complexity": {
+            "type": "string"
+          },
+          "access_vector": {
+            "type": "string"
+          },
+          "authentication": {
+            "type": "string"
+          },
+          "availability_impact": {
+            "type": "string"
+          },
+          "confidentiality_impact": {
+            "type": "string"
+          },
+          "cve_id": {
+            "type": "string"
+          },
+          "integrity_impact": {
+            "type": "string"
+          },
+          "last_modified_datetime": {
+            "type": "string"
+          },
+          "published_datetime": {
+            "type": "string"
+          },
+          "score": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "urls": {
+            "type": "string"
+          }
+        },
+        "title": "Vulnerability",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "bearerFormat": "JWT",
+        "scheme": "bearer",
+        "type": "http"
+      }
+    }
+  },
+  "info": {
+    "title": "Common Platform Enumeration APIs V0",
+    "version": "0"
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/v0/cpe/cve_product_lookup": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "lookup product association with a given cves",
+        "operationId": "CPEWeb.CPEController.cve_product_lookup",
+        "parameters": [
+          {
+            "description": "query by cves",
+            "explode": true,
+            "in": "query",
+            "name": "cves[]",
+            "required": true,
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CveProductLookups"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {},
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {},
+            "description": "Not found"
+          }
+        },
+        "summary": "lookup product association with given cves",
+        "tags": [
+          "CPE"
+        ]
+      }
+    },
+    "/v0/cpe/query": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "query vulnerabilities by product and version using the query param",
+        "operationId": "CPEWeb.CPEController.query",
+        "parameters": [
+          {
+            "description": "query by product and version",
+            "in": "query",
+            "name": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vulnerabilities"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {},
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {},
+            "description": "Not found"
+          }
+        },
+        "summary": "query vulnerabilities by product and version using the query param",
+        "tags": [
+          "CPE"
+        ]
+      }
+    },
+    "/v0/cpe/query_threat_intel": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "query threat_intel service by ip or host_name using the query params. Each is optional but one is required.",
+        "operationId": "CPEWeb.CPEController.threat_intel_query",
+        "parameters": [
+          {
+            "description": "filter results by ip address",
+            "in": "query",
+            "name": "ip",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "filter results by host_name",
+            "in": "query",
+            "name": "host_name",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ThreatIntellResults"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {},
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {},
+            "description": "Not found"
+          }
+        },
+        "summary": "query threat_intel service by ip or host_name using the query params",
+        "tags": [
+          "CPE"
+        ]
+      }
+    },
+    "/v0/cpe/query_with_language": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "query service by product and version, language and security_criteria using the query params",
+        "operationId": "CPEWeb.CPEController.query_with_language",
+        "parameters": [
+          {
+            "description": "query by product and version",
+            "in": "query",
+            "name": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "filter results by security_criteria",
+            "in": "query",
+            "name": "security_criteria",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "filter results by language",
+            "in": "query",
+            "name": "language",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VulnerabilitiesAndLanguage"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {},
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {},
+            "description": "Not found"
+          }
+        },
+        "summary": "query service by product and version, language and security_criteria using the query params",
+        "tags": [
+          "CPE"
+        ]
+      }
+    },
+    "/v0/cpe/raw_language": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "query language and security_criteria using the query params",
+        "operationId": "CPEWeb.CPEController.raw_language",
+        "parameters": [
+          {
+            "description": "filter results by security_criteria",
+            "in": "query",
+            "name": "security_criteria",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "filter results by language",
+            "in": "query",
+            "name": "language",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FindingsLanguage"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {},
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {},
+            "description": "Not found"
+          }
+        },
+        "summary": "query language and security_criteria using the query params",
+        "tags": [
+          "CPE"
+        ]
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "servers": [
+    {
+      "url": "/",
+      "variables": {}
+    }
+  ],
+  "tags": []
+}
