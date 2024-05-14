@@ -57,7 +57,7 @@
               <goal>generate</goal>
             </goals>
             <configuration>
-              <inputSpec>${project.basedir}/../../openapi/v0-cpe.json</inputSpec>
+              <inputSpec>${project.basedir}/../../openapi/v0-cpe.patched.json</inputSpec>
               <generatorName>java</generatorName>
 
               <invokerPackage>com.whitehawk.external.mastercard.riskrecon.api.v0.cpe.client.native_.invoker</invokerPackage>
