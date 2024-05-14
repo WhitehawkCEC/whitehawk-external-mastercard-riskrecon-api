@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.2](https://github.com/WhitehawkCEC/whitehawk-external-mastercard-riskrecon-api/compare/0.4.1...0.4.2) (2024-05-14)
+
+
+### Bug Fixes
+
+* generate from v0-cpe-patched.json ([0e2438d](https://github.com/WhitehawkCEC/whitehawk-external-mastercard-riskrecon-api/commit/0e2438dc3bf0449ccab3fcc6735476e265646c74))
+
 ### [0.4.1](https://github.com/WhitehawkCEC/whitehawk-external-mastercard-riskrecon-api/compare/0.4.0...0.4.1) (2024-05-14)
 
 
