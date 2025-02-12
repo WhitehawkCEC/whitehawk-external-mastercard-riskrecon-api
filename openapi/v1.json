@@ -16,6 +16,20 @@
           }
         }
       },
+      "ForbiddenExample": {
+        "value": {
+          "Errors": {
+            "Error": [
+              {
+                "Description": "Forbidden request",
+                "ReasonCode": "FORBIDDEN",
+                "Recoverable": false,
+                "Source": "RISKRECON_API"
+              }
+            ]
+          }
+        }
+      },
       "NotFoundExample": {
         "value": {
           "Errors": {
@@ -289,6 +303,19 @@
           "type": "array"
         },
         "style": "form"
+      },
+      "PerPage250": {
+        "description": "This parameter sets the results limit per page.  This defaults to 20 and currently has a max of 250.",
+        "in": "query",
+        "name": "per_page",
+        "required": false,
+        "schema": {
+          "default": 20,
+          "example": 20,
+          "maximum": 250,
+          "minimum": 1,
+          "type": "integer"
+        }
       },
       "IncludeTrend": {
         "description": "This parameter gives the option to include trending data for current analysis request.  Normally, this is only included when looking at the historical analyses.",
@@ -863,6 +890,21 @@
           }
         },
         "description": "OK"
+      },
+      "ForbiddenErrorResponse": {
+        "content": {
+          "application/json": {
+            "examples": {
+              "UnauthorizedExample": {
+                "$ref": "#/components/examples/ForbiddenExample"
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/ErrorWrapper"
+            }
+          }
+        },
+        "description": "FORBIDDEN"
       },
       "GetRiskStandardsControlsResponse": {
         "content": {
@@ -1512,62 +1554,62 @@
         "properties": {
           "data_loss": {
             "description": "A link to the relevant page on the RiskRecon site for the given security domain and TOE id.",
-            "example": "https://portal.riskrecon.com/portal/vendor/1234/security-profile/data_loss",
+            "example": "https://portal.riskrecon.com/portal/vendor/1234/cyber/security-profile/data_loss",
             "type": "string"
           },
           "defensibility": {
             "description": "A link to the relevant page on the RiskRecon site for the given security domain and TOE id.",
-            "example": "https://portal.riskrecon.com/portal/vendor/1234/security-profile/defensibility",
+            "example": "https://portal.riskrecon.com/portal/vendor/1234/cyber/security-profile/defensibility",
             "type": "string"
           },
           "dns_security": {
             "description": "A link to the relevant page on the RiskRecon site for the given security domain and TOE id.",
-            "example": "https://portal.riskrecon.com/portal/vendor/1234/security-profile/dns_security",
+            "example": "https://portal.riskrecon.com/portal/vendor/1234/cyber/security-profile/dns_security",
             "type": "string"
           },
           "email_security": {
             "description": "A link to the relevant page on the RiskRecon site for the given security domain and TOE id.",
-            "example": "https://portal.riskrecon.com/portal/vendor/1234/security-profile/email_security",
+            "example": "https://portal.riskrecon.com/portal/vendor/1234/cyber/security-profile/email_security",
             "type": "string"
           },
           "governance": {
             "description": "A link to the relevant page on the RiskRecon site for the given security domain and TOE id.",
-            "example": "https://portal.riskrecon.com/portal/vendor/1234/security-profile/governance",
+            "example": "https://portal.riskrecon.com/portal/vendor/1234/cyber/security-profile/governance",
             "type": "string"
           },
           "network_filtering": {
             "description": "A link to the relevant page on the RiskRecon site for the given security domain and TOE id.",
-            "example": "https://portal.riskrecon.com/portal/vendor/1234/security-profile/network_filtering",
+            "example": "https://portal.riskrecon.com/portal/vendor/1234/cyber/security-profile/network_filtering",
             "type": "string"
           },
           "overview": {
             "description": "A link to the relevant page on the RiskRecon site for the given security domain and TOE id.",
-            "example": "https://portal.riskrecon.com/portal/vendor/1234/overview",
+            "example": "https://portal.riskrecon.com/portal/vendor/1234/cyber/overview",
             "type": "string"
           },
           "software_patching": {
             "description": "A link to the relevant page on the RiskRecon site for the given security domain and TOE id.",
-            "example": "https://portal.riskrecon.com/portal/vendor/1234/security-profile/software_patching",
+            "example": "https://portal.riskrecon.com/portal/vendor/1234/cyber/security-profile/software_patching",
             "type": "string"
           },
           "system_hosting": {
             "description": "A link to the relevant page on the RiskRecon site for the given security domain and TOE id.",
-            "example": "https://portal.riskrecon.com/portal/vendor/1234/security-profile/system_hosting",
+            "example": "https://portal.riskrecon.com/portal/vendor/1234/cyber/security-profile/system_hosting",
             "type": "string"
           },
           "threat_intel": {
             "description": "A link to the relevant page on the RiskRecon site for the given security domain and TOE id.",
-            "example": "https://portal.riskrecon.com/portal/vendor/1234/security-profile/threat_intell",
+            "example": "https://portal.riskrecon.com/portal/vendor/1234/cyber/security-profile/threat_intell",
             "type": "string"
           },
           "web_app_security": {
             "description": "A link to the relevant page on the RiskRecon site for the given security domain and TOE id.",
-            "example": "https://portal.riskrecon.com/portal/vendor/1234/security-profile/web_app_security",
+            "example": "https://portal.riskrecon.com/portal/vendor/1234/cyber/security-profile/web_app_security",
             "type": "string"
           },
           "web_encryption": {
             "description": "A link to the relevant page on the RiskRecon site for the given security domain and TOE id.",
-            "example": "https://portal.riskrecon.com/portal/vendor/1234/security-profile/web_encryption",
+            "example": "https://portal.riskrecon.com/portal/vendor/1234/cyber/security-profile/web_encryption",
             "type": "string"
           }
         },
@@ -2323,6 +2365,12 @@
             "nullable": true,
             "type": "string"
           },
+          "how_to_fix_it": {
+            "description": "How to fix the finding.",
+            "example": "Add security headers",
+            "nullable": true,
+            "type": "string"
+          },
           "finding_id": {
             "description": "The unique identifier for the finding.",
             "example": "5976423a-ee35-11e3-8569-14109ff1a304",
@@ -2392,10 +2440,22 @@
             "nullable": true,
             "type": "string"
           },
+          "support_site": {
+            "description": "The support site if available.",
+            "example": "https://support.riskrecon.com",
+            "nullable": true,
+            "type": "string"
+          },
           "admin_phone_ext": {
             "description": "The admin phone extension if available or applicable.",
             "example": "5323",
             "nullable": true
+          },
+          "who_should_fix_it": {
+            "description": "Who should fix the finding.",
+            "example": "Security Team",
+            "nullable": true,
+            "type": "string"
           },
           "hosting_type": {
             "description": "The hosting type can be internal or external hosting.",
@@ -3128,6 +3188,11 @@
             "nullable": true,
             "type": "string"
           },
+          "finding_data_description": {
+            "description": "The description of the finding data.",
+            "example": "Missing Security Headers",
+            "type": "string"
+          },
           "finding_data_value": {
             "description": "The type of finding data.",
             "example": "shared_hosting",
@@ -3162,6 +3227,11 @@
           "hosting_provider": {
             "$ref": "#/components/schemas/HostingProvider"
           },
+          "how_to_fix_it": {
+            "description": "How to fix the finding.",
+            "example": "Update the software",
+            "type": "string"
+          },
           "ip_address": {
             "description": "The ip address for the finding if available.",
             "example": "127.0.0.1",
@@ -3192,12 +3262,23 @@
             "description": "The severity for a finding.",
             "example": "4",
             "type": "string"
+          },
+          "support_site": {
+            "description": "The support site for the finding.",
+            "example": "https://support.riskrecon.com",
+            "type": "string"
+          },
+          "who_should_fix_it": {
+            "description": "Who should fix the finding.",
+            "example": "The system administrator",
+            "type": "string"
           }
         },
         "required": [
           "analysis_id",
           "asset_value",
           "domain_name",
+          "finding_data_description",
           "finding_data_value",
           "finding_detail",
           "finding_extra_data_value",
@@ -3205,12 +3286,15 @@
           "first_seen",
           "host_name",
           "hosting_provider",
+          "how_to_fix_it",
           "ip_address",
           "last_seen",
           "security_criteria",
           "security_domain",
           "severity",
-          "priority"
+          "priority",
+          "support_site",
+          "who_should_fix_it"
         ],
         "type": "object"
       },
@@ -4032,7 +4116,7 @@
           "Details": {
             "description": "Optional detailed description provides information about data received and calculated during request processing.  This helps the user to diagnose errors.",
             "example": "Some optional detailed human readable explanation for the error.",
-            "maxLength": 200,
+            "maxLength": 350,
             "minLength": 0,
             "nullable": true,
             "type": "string"
@@ -4140,7 +4224,7 @@
             "$ref": "#/components/parameters/Page"
           },
           {
-            "$ref": "#/components/parameters/PerPage"
+            "$ref": "#/components/parameters/PerPage250"
           },
           {
             "$ref": "#/components/parameters/FindingsSortAttribute"
@@ -4173,6 +4257,9 @@
           },
           "401": {
             "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenErrorResponse"
           },
           "404": {
             "$ref": "#/components/responses/NotFoundErrorResponse"
@@ -4530,6 +4617,9 @@
           "401": {
             "$ref": "#/components/responses/UnauthorizedErrorResponse"
           },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenErrorResponse"
+          },
           "404": {
             "$ref": "#/components/responses/NotFoundErrorResponse"
           }
@@ -4645,7 +4735,7 @@
             "$ref": "#/components/parameters/Page"
           },
           {
-            "$ref": "#/components/parameters/PerPage"
+            "$ref": "#/components/parameters/PerPage250"
           },
           {
             "$ref": "#/components/parameters/FindingsSortAttribute"
@@ -4679,6 +4769,9 @@
           "401": {
             "$ref": "#/components/responses/UnauthorizedErrorResponse"
           },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenErrorResponse"
+          },
           "404": {
             "$ref": "#/components/responses/NotFoundErrorResponse"
           }
@@ -4706,6 +4799,9 @@
           },
           "401": {
             "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenErrorResponse"
           },
           "404": {
             "$ref": "#/components/responses/NotFoundErrorResponse"
@@ -5072,7 +5168,7 @@
       "post": {
         "callbacks": {},
         "deprecated": false,
-        "description": "This endpoint provides the ordering of the following toe reports:\n  - Executive Report - The Executive Report (executive-report) provides an executive summary  of the RiskRecon ratings and security performance metrics.\n  - Summary Report - The RiskRecon Summary Report (summary-report) provides the summary  RiskRecon ratings and security performance metrics.\n  - Detailed Report - The RiskRecon Detailed Report (detailed-report) provides the RiskRecon  ratings, security performance metrics, and detailed findings and recommendations. \n  - Action Plan - The action plan (action-plan) on this toe.",
+        "description": "This endpoint provides the ordering of the following toe reports:\n  - Executive Report - The Executive Report (executive-report) provides an executive summary  of the RiskRecon ratings and security performance metrics.\n  - Summary Report - The RiskRecon Summary Report (summary-report) provides the summary  RiskRecon ratings and security performance metrics.\n  - Detailed Report - The RiskRecon Detailed Report (detailed-report) provides the RiskRecon  ratings, security performance metrics, and detailed findings and recommendations.\n  - Action Plan - The action plan (action-plan) on this toe.",
         "operationId": "requestPdfReport",
         "parameters": [],
         "requestBody": {

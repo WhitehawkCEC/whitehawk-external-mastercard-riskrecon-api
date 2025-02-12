@@ -150,6 +150,9 @@
           "registrant_country": {
             "type": "string"
           },
+          "how_to_fix_it": {
+            "type": "string"
+          },
           "finding_id": {
             "type": "string"
           },
@@ -186,7 +189,13 @@
           "admin_country": {
             "type": "string"
           },
+          "support_site": {
+            "type": "string"
+          },
           "admin_phone_ext": {
+            "type": "string"
+          },
+          "who_should_fix_it": {
             "type": "string"
           },
           "hosting_type": {
