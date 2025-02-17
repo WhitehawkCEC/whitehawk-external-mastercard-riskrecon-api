@@ -50,7 +50,7 @@
           "Errors": {
             "Error": [
               {
-                "Description": "Too many requests sent in a 24 hour period.",
+                "Description": "Too many requests sent for given period.",
                 "Details": "Try again later.",
                 "ReasonCode": "TOO_MANY_REQUESTS",
                 "Recoverable": false,
@@ -615,6 +615,16 @@
         },
         "required": true
       },
+      "ShareActionPlanRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ShareActionPlan"
+            }
+          }
+        },
+        "required": true
+      },
       "UpdateSubscriptionLevelConfig": {
         "content": {
           "application/json": {
@@ -752,6 +762,17 @@
         },
         "description": "OK"
       },
+      "AddShareActionPlanResponse": {
+        "content": {
+          "application/text": {
+            "schema": {
+              "example": "Created",
+              "type": "string"
+            }
+          }
+        },
+        "description": "OK"
+      },
       "GetFindingResponse": {
         "content": {
           "application/json": {
@@ -777,6 +798,16 @@
           "application/pdf": {
             "schema": {
               "$ref": "#/components/schemas/ToeReportPdf"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "GetActionPlanConfigResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ActionPlanConfig"
             }
           }
         },
@@ -1201,6 +1232,31 @@
           "breach_event_date"
         ],
         "title": "Breach Event",
+        "type": "object"
+      },
+      "ShareActionPlan": {
+        "properties": {
+          "frequency": {
+            "default": 0,
+            "description": "The frequency of the action plan.",
+            "enum": [
+              0,
+              30,
+              60,
+              90
+            ],
+            "example": 0,
+            "type": "integer"
+          },
+          "recipients": {
+            "description": "A collection of recipients.",
+            "items": {
+              "$ref": "#/components/schemas/Recipient"
+            },
+            "type": "array"
+          }
+        },
+        "title": "Share Action Plan",
         "type": "object"
       },
       "ToeId": {
@@ -1715,6 +1771,30 @@
         },
         "type": "object"
       },
+      "AutomaticActionPlanConfig": {
+        "properties": {
+          "automated": {
+            "type": "boolean"
+          },
+          "frequency": {
+            "description": "The frequency of the action plan.",
+            "enum": [
+              30,
+              60,
+              90
+            ],
+            "example": 30,
+            "type": "integer"
+          },
+          "recipients": {
+            "items": {
+              "$ref": "#/components/schemas/Recipient"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "TOESearchResults": {
         "description": "A collection of TOESearchResult objects.",
         "items": {
@@ -1879,6 +1959,17 @@
             "example": "1.0",
             "nullable": true,
             "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ManualActionPlanConfig": {
+        "properties": {
+          "recipients": {
+            "items": {
+              "$ref": "#/components/schemas/Recipient"
+            },
+            "type": "array"
           }
         },
         "type": "object"
@@ -2586,6 +2677,37 @@
         "title": "Finding",
         "type": "object"
       },
+      "Recipient": {
+        "properties": {
+          "email": {
+            "description": "The email address of the recipient. External recipients domain checked against the TOE domain.",
+            "example": "john.doe@external.com",
+            "type": "string"
+          },
+          "first_name": {
+            "description": "The first name of the recipient.",
+            "example": "John",
+            "type": "string"
+          },
+          "internal": {
+            "description": "Is the recipient internal? Intenal recipients only receives confirmation emails when action plan is shared. Atleast one external recipient is required if not previously shared.",
+            "example": false,
+            "type": "boolean"
+          },
+          "last_name": {
+            "description": "The last name of the recipient.",
+            "example": "Doe",
+            "type": "string"
+          }
+        },
+        "required": [
+          "first_name",
+          "last_name",
+          "email",
+          "internal"
+        ],
+        "type": "object"
+      },
       "Host": {
         "properties": {
           "analysis_id": {
@@ -2768,6 +2890,20 @@
         },
         "title": "ArrayOfActionPlanIssueProgress",
         "type": "array"
+      },
+      "ActionPlanConfig": {
+        "properties": {
+          "automatic_action_plan_config": {
+            "$ref": "#/components/schemas/AutomaticActionPlanConfig"
+          },
+          "issue_summary": {
+            "$ref": "#/components/schemas/IssueSummary"
+          },
+          "manual_action_plan_config": {
+            "$ref": "#/components/schemas/ManualActionPlanConfig"
+          }
+        },
+        "type": "object"
       },
       "IntegrationRoute": {
         "description": "An object containing the available portal routes.",
@@ -3491,6 +3627,27 @@
         },
         "type": "object"
       },
+      "IssueSummary": {
+        "properties": {
+          "action_plan_last_shared_on": {
+            "example": "2021-10-01T22:18:57+00:00",
+            "type": "string"
+          },
+          "current_open_issues_count": {
+            "example": 8,
+            "type": "integer"
+          },
+          "total_resolved_issues_count": {
+            "example": 17,
+            "type": "integer"
+          },
+          "total_shared_issues_count": {
+            "example": 25,
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
       "CountryName": {
         "description": "The name of country if available.",
         "example": "Luxembourg",
@@ -4109,7 +4266,7 @@
           "Description": {
             "description": "Human-readable short description of the reasonCode",
             "example": "Unauthorized request",
-            "maxLength": 200,
+            "maxLength": 350,
             "minLength": 0,
             "type": "string"
           },
@@ -4378,6 +4535,66 @@
           }
         },
         "summary": "This API returns the vendor status summary counts of a given action plan.",
+        "tags": [
+          "Action Plans"
+        ]
+      }
+    },
+    "/v1/action_plan/{toe_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This API returns action plan configrations both automated and manual for a given TOE.  The end-user needs to input the TOE ID (toe_id) for a given action plan in the API request.",
+        "operationId": "getActionPlanConfig",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetActionPlanConfigResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This resource returns action plan configrations both automated and manual for a given TOE.",
+        "tags": [
+          "Action Plans"
+        ]
+      },
+      "post": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This API sends action plan findings to internal and external recipients. The end-user needs to input the TOE ID (toe_id) for a given action plan in the API request. \n\nRecipients and frequency are optional. If recipients are not provided,  the action plan will be shared with previously shared recipients. If  frequency is not provided, the action plan will be shared manually.\n\nUsers can retrive action plan configuration from   ```(GET) /v1/action_plan/{toe_id} ``` API.\n* recipients: An Array of first_name, last_name, email, internal (true/false)  for each recipient. See schema for more details.\n* frequency:  0 (default) is for manaul/one-off, where 30/60/90 sets periodic automated action plan emails.",
+        "operationId": "shareActionPlan",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ShareActionPlanRequest"
+        },
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/AddShareActionPlanResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntityResponse"
+          }
+        },
+        "summary": "This resource sends action plan email to recipients of a TOE.",
         "tags": [
           "Action Plans"
         ]
