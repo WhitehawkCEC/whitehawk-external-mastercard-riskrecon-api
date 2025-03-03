@@ -253,6 +253,26 @@
           "type": "string"
         }
       },
+      "PortfolioRatingReportSortAttribute": {
+        "description": "This parameter is optional but allows the user to sort results of portfolio ratings by available sort attributes.",
+        "in": "query",
+        "name": "sort_attribute",
+        "required": false,
+        "schema": {
+          "default": "rating_change",
+          "enum": [
+            "start_date",
+            "end_date",
+            "vendor_name",
+            "folder",
+            "criticality",
+            "start_rating",
+            "end_rating",
+            "rating_change"
+          ],
+          "type": "string"
+        }
+      },
       "RiskRelationshipSlugs": {
         "description": "filter results based on customer risk_relationship_slugs, which are returned from /v1/portfolio/risk_relationships_folders. This is optional.",
         "explode": true,
@@ -389,6 +409,16 @@
           "type": "array"
         },
         "style": "form"
+      },
+      "DaysAgo": {
+        "description": "This parameter filters results by the number of days ago.  This is optional but allows the user to filter results by the number of days ago.",
+        "in": "query",
+        "name": "days_ago",
+        "required": false,
+        "schema": {
+          "default": 360,
+          "type": "integer"
+        }
       },
       "CveId": {
         "description": "This parameter filters finding results by single Common Vulnerabilities and Exposures (CVE). For example:\n\n?cve_id=CVE-1999-0001",
@@ -711,6 +741,16 @@
           }
         },
         "description": "The URI didn't match an existing resource."
+      },
+      "GetPaginatedPortfolioRatingsReport": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PaginatedPortfolioRatingsReport"
+            }
+          }
+        },
+        "description": "OK"
       },
       "GetToeSearchResponse": {
         "content": {
@@ -1460,6 +1500,21 @@
         },
         "type": "object"
       },
+      "PaginatedPortfolioRatingsReport": {
+        "properties": {
+          "data": {
+            "description": "Data associated with response object.",
+            "items": {
+              "$ref": "#/components/schemas/PortfolioRating"
+            },
+            "type": "array"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/PaginationMeta"
+          }
+        },
+        "type": "object"
+      },
       "CreateTOE": {
         "description": "A request to add a company or TOE to the users portfolio",
         "properties": {
@@ -1801,6 +1856,68 @@
           "$ref": "#/components/schemas/TOESearchResult"
         },
         "type": "array"
+      },
+      "PortfolioRating": {
+        "properties": {
+          "criticality": {
+            "description": "Criticality level of the portfolio item",
+            "example": "Uncategorized",
+            "type": "string"
+          },
+          "end_date": {
+            "description": "End date of the rating period",
+            "format": "date-time",
+            "type": "string"
+          },
+          "end_rating": {
+            "description": "Final rating score",
+            "example": "0.6",
+            "format": "string",
+            "type": "number"
+          },
+          "folder": {
+            "description": "Portfolio folder name",
+            "example": "Uncategorized",
+            "type": "string"
+          },
+          "industry": {
+            "description": "Industry category",
+            "example": "Healthcare",
+            "type": "string"
+          },
+          "internal_id": {
+            "description": "Internal identifier",
+            "example": "1234",
+            "type": "string"
+          },
+          "internal_name": {
+            "description": "Internal name of the portfolio item",
+            "example": "Riskrecon",
+            "type": "string"
+          },
+          "rating_change": {
+            "description": "Change in rating between start and end dates",
+            "example": "-8.8",
+            "format": "float",
+            "type": "number"
+          },
+          "start_date": {
+            "description": "Start date of the rating period",
+            "format": "date-time",
+            "type": "string"
+          },
+          "start_rating": {
+            "description": "Initial rating score",
+            "example": "9.4",
+            "format": "float",
+            "type": "number"
+          },
+          "vendor_name": {
+            "description": "Name of the vendor",
+            "example": "Riskrecon, Co.",
+            "type": "string"
+          }
+        }
       },
       "Subsidiaries": {
         "description": "A collection of subsidiaries.",
@@ -4367,239 +4484,6 @@
   },
   "openapi": "3.0.3",
   "paths": {
-    "/v1/action_plan/findings/{toe_id}": {
-      "get": {
-        "callbacks": {},
-        "deprecated": false,
-        "description": "This API returns a list of findings for a given action plan of a TOE. The end-user needs to input the TOE ID (toe_id) for a given action plan in the API request.",
-        "operationId": "getActionPlanFindings",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/ToeId"
-          },
-          {
-            "$ref": "#/components/parameters/Page"
-          },
-          {
-            "$ref": "#/components/parameters/PerPage250"
-          },
-          {
-            "$ref": "#/components/parameters/FindingsSortAttribute"
-          },
-          {
-            "$ref": "#/components/parameters/SortMethod"
-          },
-          {
-            "$ref": "#/components/parameters/Severity"
-          },
-          {
-            "$ref": "#/components/parameters/AssetValue"
-          },
-          {
-            "$ref": "#/components/parameters/SecurityDomain"
-          },
-          {
-            "$ref": "#/components/parameters/SecurityCriteria"
-          },
-          {
-            "$ref": "#/components/parameters/CveIds"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GetPaginatedFindings"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequestErrorResponse"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorResponse"
-          },
-          "403": {
-            "$ref": "#/components/responses/ForbiddenErrorResponse"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundErrorResponse"
-          }
-        },
-        "summary": "This resource returns a list of finding details from an action plan of a TOE.",
-        "tags": [
-          "Action Plans"
-        ]
-      }
-    },
-    "/v1/action_plan/issue_progress/{toe_id}": {
-      "get": {
-        "callbacks": {},
-        "deprecated": false,
-        "description": "RiskRecon automatically reports each vendor’s progress in addressing their action plan issues. This API returns issue progress for a given action plan.",
-        "operationId": "actionPlanIssueProgress",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/ToeId"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/ActionPlanIssueProgress"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorResponse"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundErrorResponse"
-          }
-        },
-        "summary": "This resource tracks and reports a vendors progress in addressing action plan issues.",
-        "tags": [
-          "Action Plans"
-        ]
-      }
-    },
-    "/v1/action_plan/issue_summary/{toe_id}": {
-      "get": {
-        "callbacks": {},
-        "deprecated": false,
-        "description": "This API returns a list of issue summaries for a given action plan. There are no parameters for this use case. The end-user needs to input the TOE ID (toe_id) for a given action plan in the API request.",
-        "operationId": "getActionPlanIssueSummary",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/ToeId"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GetActionPlanIssueSummaryResponse"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorResponse"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundErrorResponse"
-          }
-        },
-        "summary": "This resource returns a vendor's action plan issue summary.",
-        "tags": [
-          "Action Plans"
-        ]
-      }
-    },
-    "/v1/action_plan/priority_matrix_counts/{toe_id}": {
-      "get": {
-        "callbacks": {},
-        "deprecated": false,
-        "description": "This API returns the counts of action plans as per their severity and priority. Found issues are assigned a Priority and Severity index. The end-user needs to input the TOE ID (toe_id) for a given action plan in the API request.\n\nIn this scenario, the following are returned in the response:\n* the asset value starting from 1 to 4, where 1 = Idle, 2 = Low, 3 = Medium, 4 = High\n* total count of issues for each asset value\n* total count of issues by severity. The severity values can be Low, Medium, High, and Critical.\n",
-        "operationId": "getActionPlanPriorityMatrix",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/ToeId"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GetActionPlanPriorityMatrixResponse"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorResponse"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundErrorResponse"
-          }
-        },
-        "summary": "This API returns the count of current action plan issues per their severity and priority.",
-        "tags": [
-          "Action Plans"
-        ]
-      }
-    },
-    "/v1/action_plan/vendor_status_summary_counts/{toe_id}": {
-      "get": {
-        "callbacks": {},
-        "deprecated": false,
-        "description": "This API returns the vendor status summary counts of a given action plan. The end-user needs to input the TOE ID (toe_id) for a given action plan in the API request.\n\nIn this scenario, the following are returned in the response:\n\n* total action plans provided to the vendor\n* the label of the action plans\n* the status of the action plans\n",
-        "operationId": "getActionPlanVendorStatusSummaryCounts",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/ToeId"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GetActionPlanVendorStatusSummaryCounts"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorResponse"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundErrorResponse"
-          }
-        },
-        "summary": "This API returns the vendor status summary counts of a given action plan.",
-        "tags": [
-          "Action Plans"
-        ]
-      }
-    },
-    "/v1/action_plan/{toe_id}": {
-      "get": {
-        "callbacks": {},
-        "deprecated": false,
-        "description": "This API returns action plan configrations both automated and manual for a given TOE.  The end-user needs to input the TOE ID (toe_id) for a given action plan in the API request.",
-        "operationId": "getActionPlanConfig",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/ToeId"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GetActionPlanConfigResponse"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorResponse"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundErrorResponse"
-          }
-        },
-        "summary": "This resource returns action plan configrations both automated and manual for a given TOE.",
-        "tags": [
-          "Action Plans"
-        ]
-      },
-      "post": {
-        "callbacks": {},
-        "deprecated": false,
-        "description": "This API sends action plan findings to internal and external recipients. The end-user needs to input the TOE ID (toe_id) for a given action plan in the API request. \n\nRecipients and frequency are optional. If recipients are not provided,  the action plan will be shared with previously shared recipients. If  frequency is not provided, the action plan will be shared manually.\n\nUsers can retrive action plan configuration from   ```(GET) /v1/action_plan/{toe_id} ``` API.\n* recipients: An Array of first_name, last_name, email, internal (true/false)  for each recipient. See schema for more details.\n* frequency:  0 (default) is for manaul/one-off, where 30/60/90 sets periodic automated action plan emails.",
-        "operationId": "shareActionPlan",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/ToeId"
-          }
-        ],
-        "requestBody": {
-          "$ref": "#/components/requestBodies/ShareActionPlanRequest"
-        },
-        "responses": {
-          "201": {
-            "$ref": "#/components/responses/AddShareActionPlanResponse"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequestErrorResponse"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorResponse"
-          },
-          "422": {
-            "$ref": "#/components/responses/UnprocessableEntityResponse"
-          }
-        },
-        "summary": "This resource sends action plan email to recipients of a TOE.",
-        "tags": [
-          "Action Plans"
-        ]
-      }
-    },
     "/v1/alerting/issues": {
       "get": {
         "callbacks": {},
@@ -4692,6 +4576,62 @@
         ]
       }
     },
+    "/v1/action_plan/issue_progress/{toe_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "RiskRecon automatically reports each vendor’s progress in addressing their action plan issues. This API returns issue progress for a given action plan.",
+        "operationId": "actionPlanIssueProgress",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ActionPlanIssueProgress"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This resource tracks and reports a vendors progress in addressing action plan issues.",
+        "tags": [
+          "Action Plans"
+        ]
+      }
+    },
+    "/v1/action_plan/priority_matrix_counts/{toe_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This API returns the counts of action plans as per their severity and priority. Found issues are assigned a Priority and Severity index. The end-user needs to input the TOE ID (toe_id) for a given action plan in the API request.\n\nIn this scenario, the following are returned in the response:\n* the asset value starting from 1 to 4, where 1 = Idle, 2 = Low, 3 = Medium, 4 = High\n* total count of issues for each asset value\n* total count of issues by severity. The severity values can be Low, Medium, High, and Critical.\n",
+        "operationId": "getActionPlanPriorityMatrix",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetActionPlanPriorityMatrixResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This API returns the count of current action plan issues per their severity and priority.",
+        "tags": [
+          "Action Plans"
+        ]
+      }
+    },
     "/v1/analysis/current/{toe_id}": {
       "get": {
         "callbacks": {},
@@ -4726,215 +4666,62 @@
         ]
       }
     },
-    "/v1/analysis/history/{toe_id}": {
+    "/v1/toes/by_cve": {
       "get": {
         "callbacks": {},
         "deprecated": false,
-        "description": "This resource returns a collection of historical `Analysis` objects by the TOE identifier. This includes the security domain and criteria ratings for each analysis.",
-        "operationId": "getHistoricalAnalysisRatings",
+        "description": "This endpoint allows the user to search for Company name, TOE ID by a valid CVE.\nThe user must provide a valid cve in query param.",
+        "operationId": "getToeByCve",
         "parameters": [
           {
-            "$ref": "#/components/parameters/ToeId"
+            "$ref": "#/components/parameters/CveId"
           }
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetHistoricalAnalysisRatingsResponse"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorResponse"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundErrorResponse"
-          }
-        },
-        "summary": "This resource returns a collection of historical `Analysis` objects by the TOE identifier.",
-        "tags": [
-          "Analyses"
-        ]
-      }
-    },
-    "/v1/compliance/controls/{toe_id}": {
-      "get": {
-        "callbacks": {},
-        "deprecated": false,
-        "description": "This resource returns risk standard controls associated with a TOE id and a particular custom or industry standard.  The risk standard id can be obtained from the /v1/compliance/{toe_id} response. Some will be mapped to RiskRecon security domain and criteria so will include the ratings for these domain/criteria and the TOE being queried.",
-        "operationId": "getRiskStandardsControls",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/ToeId"
-          },
-          {
-            "$ref": "#/components/parameters/RiskStandardId"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GetRiskStandardsControlsResponse"
+            "$ref": "#/components/responses/GetCveSearchResponse"
           },
           "400": {
             "$ref": "#/components/responses/BadRequestErrorResponse"
           },
           "401": {
             "$ref": "#/components/responses/UnauthorizedErrorResponse"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundErrorResponse"
           }
         },
-        "summary": "This resource returns risk standard controls associated with a TOE id and a particular custom or industry standard.",
+        "summary": "This endpoint allows the user to search for Company name, TOE ID by a valid CVE.",
         "tags": [
-          "Compliance"
+          "Target Of Evaluation TOE"
         ]
       }
     },
-    "/v1/compliance/{toe_id}": {
+    "/v1/toes": {
       "get": {
         "callbacks": {},
         "deprecated": false,
-        "description": "This resource returns an list of custom and industry standards. Each standard has a number of controls.  Some of these will be mapped to RiskRecon security domain and criteria and will have the associated ratings.",
-        "operationId": "getRiskStandards",
+        "description": "This API retrieves a collection of TOE objects mapped to a customer.\nThis include overall ratings and some domain rating information for the current analysis of the provided TOE id.\nAs a TOE can have multiple internal IDs, this API filters if the internal ID is one among the multiple internal IDs.",
+        "operationId": "getToes",
         "parameters": [
           {
-            "$ref": "#/components/parameters/ToeId"
+            "$ref": "#/components/parameters/InternalId"
+          },
+          {
+            "$ref": "#/components/parameters/LastRetrieved"
           }
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetRiskStandards"
+            "$ref": "#/components/responses/GetToesResponse"
           },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorResponse"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundErrorResponse"
-          }
-        },
-        "summary": "This resource returns an list of custom and industry standards.",
-        "tags": [
-          "Compliance"
-        ]
-      }
-    },
-    "/v1/data_loss_events/{toe_id}": {
-      "get": {
-        "callbacks": {},
-        "deprecated": false,
-        "description": "\"::Legacy Route please use portfolio_data_loss_events:: This resource returns a collection of `DataLossEvent` objects for a given TOE id. This are referred to as Breach Events in the RiskRecon site.\"",
-        "operationId": "getDataLossEvents",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/ToeId"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GetDataLossEventsResponse"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorResponse"
-          },
-          "403": {
-            "$ref": "#/components/responses/ForbiddenErrorResponse"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundErrorResponse"
-          }
-        },
-        "summary": ":: Legacy Route :: This resource returns a collection of `DataLossEvent` objects.",
-        "tags": [
-          "Data Loss Events"
-        ]
-      }
-    },
-    "/v1/display_names/security_criteria": {
-      "get": {
-        "callbacks": {},
-        "deprecated": false,
-        "description": "This resource returns a mapping of security_criteria labels and their current display names in the RiskRecon portal.  It also includes if the security_criteria is currently rated and if it is deprecated.",
-        "operationId": "getCriteriaDisplayNames",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GetDisplayNameResponse"
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
           },
           "401": {
             "$ref": "#/components/responses/UnauthorizedErrorResponse"
           }
         },
-        "summary": "This resource returns a mapping of security_criteria labels and their current display names in the RiskRecon portal.",
+        "summary": "This resource returns a collection of `TOE` objects mapped to a customer.",
         "tags": [
-          "Display Name"
-        ]
-      }
-    },
-    "/v1/display_names/security_domain": {
-      "get": {
-        "callbacks": {},
-        "deprecated": false,
-        "description": "This resource returns a mapping of security_domain labels and their current display names in the RiskRecon portal.  It also includes if the security_domain is currently rated and if it is deprecated.",
-        "operationId": "getDomainDisplayNames",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GetDisplayNameResponse"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorResponse"
-          }
-        },
-        "summary": "This resource returns a mapping of security_domain labels and their current display names in the RiskRecon portal.",
-        "tags": [
-          "Display Name"
-        ]
-      }
-    },
-    "/v1/findings/{toe_id}": {
-      "get": {
-        "callbacks": {},
-        "deprecated": false,
-        "description": "::Legacy Route please use findings_paginated:: This use case describes how the Findings API is used to retrieve a list of findings for the latest analysis for a TOE. The toe_id is passed in the API request. In this scenario, all findings for that TOE are returned in the response.\nTo limit or filter the data returned in the response, you can use various parameters in the API request:\n* Filter by an asset value: You can use the asset_value parameter to search for findings with high, medium, or low asset value.\n* Filter by severity: You can use the severity parameter to search for findings with high, medium, or low severity.\n* Filter by asset value and severity: You can use asset_value and severity parameters to search for findings with high, medium, or low asset value and severity.\n* Filter by multiple asset values: You can use the asset_value parameter multiple times to search for findings with multiple asset values.",
-        "operationId": "getFindings",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/ToeId"
-          },
-          {
-            "$ref": "#/components/parameters/RiskPolicy"
-          },
-          {
-            "$ref": "#/components/parameters/SecurityDomain"
-          },
-          {
-            "$ref": "#/components/parameters/SecurityCriteria"
-          },
-          {
-            "$ref": "#/components/parameters/AssetValues"
-          },
-          {
-            "$ref": "#/components/parameters/NumericAssetValues"
-          },
-          {
-            "$ref": "#/components/parameters/Priority"
-          },
-          {
-            "$ref": "#/components/parameters/Severities"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GetFindingResponse"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorResponse"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundErrorResponse"
-          }
-        },
-        "summary": ":: Legacy Route :: This resource returns a list of findings for latest analysis for a given TOE.",
-        "tags": [
-          "Findings"
+          "Target Of Evaluation TOE"
         ]
       }
     },
@@ -5030,6 +4817,91 @@
         ]
       }
     },
+    "/v1/user_mgmt": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "The User route is used to get all the user data for one’s organization.\nThere currently are no filters or params.",
+        "operationId": "getUserData",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetUserMgmtResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "The User route is used to get all the user data for one’s organization.",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/v1/action_plan/findings/{toe_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This API returns a list of findings for a given action plan of a TOE. The end-user needs to input the TOE ID (toe_id) for a given action plan in the API request.",
+        "operationId": "getActionPlanFindings",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          },
+          {
+            "$ref": "#/components/parameters/Page"
+          },
+          {
+            "$ref": "#/components/parameters/PerPage250"
+          },
+          {
+            "$ref": "#/components/parameters/FindingsSortAttribute"
+          },
+          {
+            "$ref": "#/components/parameters/SortMethod"
+          },
+          {
+            "$ref": "#/components/parameters/Severity"
+          },
+          {
+            "$ref": "#/components/parameters/AssetValue"
+          },
+          {
+            "$ref": "#/components/parameters/SecurityDomain"
+          },
+          {
+            "$ref": "#/components/parameters/SecurityCriteria"
+          },
+          {
+            "$ref": "#/components/parameters/CveIds"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetPaginatedFindings"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This resource returns a list of finding details from an action plan of a TOE.",
+        "tags": [
+          "Action Plans"
+        ]
+      }
+    },
     "/v1/integration/routes/{toe_id}": {
       "get": {
         "callbacks": {},
@@ -5058,164 +4930,12 @@
         ]
       }
     },
-    "/v1/portfolio/bulk_add": {
-      "post": {
-        "callbacks": {},
-        "deprecated": false,
-        "description": "This is a bulk request for requesting to add new TOEs (targets of evaluation) to your portfolio.\nThe request must have at least one item but no more than 25 per request.",
-        "operationId": "bulkToeRequest",
-        "parameters": [],
-        "requestBody": {
-          "$ref": "#/components/requestBodies/CreateToeRequest"
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/SubmittedResponse"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequestErrorResponse"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorResponse"
-          }
-        },
-        "summary": "This endpoint is for requesting to add new TOEs (targets of evaluation) to your portfolio.",
-        "tags": [
-          "Portfolio"
-        ]
-      }
-    },
-    "/v1/portfolio/risk_relationships_folders": {
+    "/v1/analysis/history/{toe_id}": {
       "get": {
         "callbacks": {},
         "deprecated": false,
-        "description": "This resource gets the customer's risk relationship folders names and slugs.\nThe slug will be used in requests that require the risk relationship. Risk relationships can be updated here https://portal.riskrecon.com/portal/risk-configuration if you have necessary permissions.",
-        "operationId": "getRiskRelationshipsFolders",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GetRiskRelationshipsFoldersResponse"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorResponse"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundErrorResponse"
-          }
-        },
-        "summary": "This resource gets the customer's risk relationship folders names and slugs.",
-        "tags": [
-          "Portfolio"
-        ]
-      }
-    },
-    "/v1/portfolio/subscription_level_config": {
-      "get": {
-        "callbacks": {},
-        "deprecated": false,
-        "description": "This resource returns the default subscription_level for bulk toe requests for your customer if it has been set.\n\nThis can be set if you want all /v1/portfolio/bulk_add requests to have the same subscription level.\n\nOptions are 1 (Discover) or 2 (Advisor)",
-        "operationId": "getSubscriptionLevelConfig",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/SubscriptionLevelConfigResponse"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorResponse"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundErrorResponse"
-          }
-        },
-        "summary": "This resource returns the default subscription_level for bulk toe requests for your customer.",
-        "tags": [
-          "Portfolio"
-        ]
-      },
-      "put": {
-        "callbacks": {},
-        "deprecated": false,
-        "description": "This resource sets the default subscription_level for bulk toe requests for your customer if it has been set.\n\nThis can be set if you want all /v1/portfolio/bulk_add requests to have the same subscription level.\n\nOptions are 1 (Discover) or 2 (Advisor)",
-        "operationId": "setSubscriptionLevelConfig",
-        "parameters": [],
-        "requestBody": {
-          "$ref": "#/components/requestBodies/UpdateSubscriptionLevelConfig"
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/SubscriptionLevelConfigResponse"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorResponse"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundErrorResponse"
-          }
-        },
-        "summary": "This resource sets the default subscription_level for bulk toe requests for your customer.",
-        "tags": [
-          "Portfolio"
-        ]
-      }
-    },
-    "/v1/portfolio_data_loss_events": {
-      "get": {
-        "callbacks": {},
-        "deprecated": false,
-        "description": "This resource returns a collection of `DataLossEvent` objects for a portfolio. This is for the entire portfolio and has pagination unlike the data_loss_events route.",
-        "operationId": "getBreachEvents",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/BreachEventsSortAttribute"
-          },
-          {
-            "$ref": "#/components/parameters/BreachEventDateStart"
-          },
-          {
-            "$ref": "#/components/parameters/ToeIdQuery"
-          },
-          {
-            "$ref": "#/components/parameters/CreatedAtStart"
-          },
-          {
-            "$ref": "#/components/parameters/Page"
-          },
-          {
-            "$ref": "#/components/parameters/PerPage"
-          },
-          {
-            "$ref": "#/components/parameters/PublicEventDateStart"
-          },
-          {
-            "$ref": "#/components/parameters/RiskRelationshipSlugs"
-          },
-          {
-            "$ref": "#/components/parameters/SortMethod"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GetBreachEvents"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequestErrorResponse"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorResponse"
-          }
-        },
-        "summary": "This resource returns a collection of `BreachEvent` objects.",
-        "tags": [
-          "Data Loss Events"
-        ]
-      }
-    },
-    "/v1/subsidiaries/toe_id/{toe_id}": {
-      "get": {
-        "callbacks": {},
-        "deprecated": false,
-        "description": "This route returns a collection of `Subsidiary` objects associated with a toe.\nAny TOEs that appear to be a subsidiary of the provided TOE id are returned in the response.",
-        "operationId": "getSubsidiariesByToeId",
+        "description": "This resource returns a collection of historical `Analysis` objects by the TOE identifier. This includes the security domain and criteria ratings for each analysis.",
+        "operationId": "getHistoricalAnalysisRatings",
         "parameters": [
           {
             "$ref": "#/components/parameters/ToeId"
@@ -5223,7 +4943,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetSubsidiariesResponse"
+            "$ref": "#/components/responses/GetHistoricalAnalysisRatingsResponse"
           },
           "401": {
             "$ref": "#/components/responses/UnauthorizedErrorResponse"
@@ -5232,9 +4952,9 @@
             "$ref": "#/components/responses/NotFoundErrorResponse"
           }
         },
-        "summary": "This route returns a collection of `Subsidiary` objects associated with a toe.",
+        "summary": "This resource returns a collection of historical `Analysis` objects by the TOE identifier.",
         "tags": [
-          "Subsidiaries"
+          "Analyses"
         ]
       }
     },
@@ -5359,6 +5079,618 @@
         ]
       }
     },
+    "/v1/toe_reports/{request_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This resource gets the PDF report.",
+        "operationId": "downloadPdfReport",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RequestId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PdfReportResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          }
+        },
+        "summary": "This resource returns the PDF report.",
+        "tags": [
+          "TOE Reports"
+        ]
+      }
+    },
+    "/v1/compliance/controls/{toe_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This resource returns risk standard controls associated with a TOE id and a particular custom or industry standard.  The risk standard id can be obtained from the /v1/compliance/{toe_id} response. Some will be mapped to RiskRecon security domain and criteria so will include the ratings for these domain/criteria and the TOE being queried.",
+        "operationId": "getRiskStandardsControls",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          },
+          {
+            "$ref": "#/components/parameters/RiskStandardId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetRiskStandardsControlsResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This resource returns risk standard controls associated with a TOE id and a particular custom or industry standard.",
+        "tags": [
+          "Compliance"
+        ]
+      }
+    },
+    "/v1/subsidiaries/toe_id/{toe_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This route returns a collection of `Subsidiary` objects associated with a toe.\nAny TOEs that appear to be a subsidiary of the provided TOE id are returned in the response.",
+        "operationId": "getSubsidiariesByToeId",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetSubsidiariesResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This route returns a collection of `Subsidiary` objects associated with a toe.",
+        "tags": [
+          "Subsidiaries"
+        ]
+      }
+    },
+    "/v1/toes/by_domains": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This endpoint allows the user to search for a TOE by a valid domain or hostname.\nThe user must provide a valid domain or hostname in domain query param.",
+        "operationId": "getToeByDomain",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Domain"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetToeSearchResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          }
+        },
+        "summary": "This endpoint allows the user to search for a TOE by a valid domain or hostname.",
+        "tags": [
+          "Target Of Evaluation TOE"
+        ]
+      }
+    },
+    "/v1/reports/portfolio_ratings": {
+      "post": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "Retrieves a paginated list of portfolio ratings with their changes over time",
+        "operationId": "getPaginatedPortfolioRatingsReport",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Page"
+          },
+          {
+            "$ref": "#/components/parameters/PerPage250"
+          },
+          {
+            "$ref": "#/components/parameters/PortfolioRatingReportSortAttribute"
+          },
+          {
+            "$ref": "#/components/parameters/SortMethod"
+          },
+          {
+            "$ref": "#/components/parameters/DaysAgo"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetPaginatedPortfolioRatingsReport"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "Get portfolio ratings report",
+        "tags": [
+          "Reports"
+        ]
+      }
+    },
+    "/v1/findings/{toe_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "::Legacy Route please use findings_paginated:: This use case describes how the Findings API is used to retrieve a list of findings for the latest analysis for a TOE. The toe_id is passed in the API request. In this scenario, all findings for that TOE are returned in the response.\nTo limit or filter the data returned in the response, you can use various parameters in the API request:\n* Filter by an asset value: You can use the asset_value parameter to search for findings with high, medium, or low asset value.\n* Filter by severity: You can use the severity parameter to search for findings with high, medium, or low severity.\n* Filter by asset value and severity: You can use asset_value and severity parameters to search for findings with high, medium, or low asset value and severity.\n* Filter by multiple asset values: You can use the asset_value parameter multiple times to search for findings with multiple asset values.",
+        "operationId": "getFindings",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          },
+          {
+            "$ref": "#/components/parameters/RiskPolicy"
+          },
+          {
+            "$ref": "#/components/parameters/SecurityDomain"
+          },
+          {
+            "$ref": "#/components/parameters/SecurityCriteria"
+          },
+          {
+            "$ref": "#/components/parameters/AssetValues"
+          },
+          {
+            "$ref": "#/components/parameters/NumericAssetValues"
+          },
+          {
+            "$ref": "#/components/parameters/Priority"
+          },
+          {
+            "$ref": "#/components/parameters/Severities"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetFindingResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": ":: Legacy Route :: This resource returns a list of findings for latest analysis for a given TOE.",
+        "tags": [
+          "Findings"
+        ]
+      }
+    },
+    "/v1/toes/risk_relationships": {
+      "put": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "User can move a TOE from one risk relationship folder to another by providing the toe_id and relationship folder slug in request. Relationship folder slug can be retrieved from [/v1/portfolio/risk_relationships_folders](#/Portfolio/getRiskRelationshipsFolders).",
+        "operationId": "moveToeRequest",
+        "parameters": [],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/MoveToeRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/MoveToeResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntityResponse"
+          }
+        },
+        "summary": "This endpoint moves an existing TOE from one risk relationship folder to another",
+        "tags": [
+          "Target Of Evaluation TOE"
+        ]
+      }
+    },
+    "/v1/portfolio/bulk_add": {
+      "post": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This is a bulk request for requesting to add new TOEs (targets of evaluation) to your portfolio.\nThe request must have at least one item but no more than 25 per request.",
+        "operationId": "bulkToeRequest",
+        "parameters": [],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CreateToeRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SubmittedResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          }
+        },
+        "summary": "This endpoint is for requesting to add new TOEs (targets of evaluation) to your portfolio.",
+        "tags": [
+          "Portfolio"
+        ]
+      }
+    },
+    "/v1/action_plan/vendor_status_summary_counts/{toe_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This API returns the vendor status summary counts of a given action plan. The end-user needs to input the TOE ID (toe_id) for a given action plan in the API request.\n\nIn this scenario, the following are returned in the response:\n\n* total action plans provided to the vendor\n* the label of the action plans\n* the status of the action plans\n",
+        "operationId": "getActionPlanVendorStatusSummaryCounts",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetActionPlanVendorStatusSummaryCounts"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This API returns the vendor status summary counts of a given action plan.",
+        "tags": [
+          "Action Plans"
+        ]
+      }
+    },
+    "/v1/compliance/{toe_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This resource returns an list of custom and industry standards. Each standard has a number of controls.  Some of these will be mapped to RiskRecon security domain and criteria and will have the associated ratings.",
+        "operationId": "getRiskStandards",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetRiskStandards"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This resource returns an list of custom and industry standards.",
+        "tags": [
+          "Compliance"
+        ]
+      }
+    },
+    "/v1/display_names/security_criteria": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This resource returns a mapping of security_criteria labels and their current display names in the RiskRecon portal.  It also includes if the security_criteria is currently rated and if it is deprecated.",
+        "operationId": "getCriteriaDisplayNames",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetDisplayNameResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          }
+        },
+        "summary": "This resource returns a mapping of security_criteria labels and their current display names in the RiskRecon portal.",
+        "tags": [
+          "Display Name"
+        ]
+      }
+    },
+    "/v1/portfolio/risk_relationships_folders": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This resource gets the customer's risk relationship folders names and slugs.\nThe slug will be used in requests that require the risk relationship. Risk relationships can be updated here https://portal.riskrecon.com/portal/risk-configuration if you have necessary permissions.",
+        "operationId": "getRiskRelationshipsFolders",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetRiskRelationshipsFoldersResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This resource gets the customer's risk relationship folders names and slugs.",
+        "tags": [
+          "Portfolio"
+        ]
+      }
+    },
+    "/v1/display_names/security_domain": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This resource returns a mapping of security_domain labels and their current display names in the RiskRecon portal.  It also includes if the security_domain is currently rated and if it is deprecated.",
+        "operationId": "getDomainDisplayNames",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetDisplayNameResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          }
+        },
+        "summary": "This resource returns a mapping of security_domain labels and their current display names in the RiskRecon portal.",
+        "tags": [
+          "Display Name"
+        ]
+      }
+    },
+    "/v1/portfolio_data_loss_events": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This resource returns a collection of `DataLossEvent` objects for a portfolio. This is for the entire portfolio and has pagination unlike the data_loss_events route.",
+        "operationId": "getBreachEvents",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/BreachEventsSortAttribute"
+          },
+          {
+            "$ref": "#/components/parameters/BreachEventDateStart"
+          },
+          {
+            "$ref": "#/components/parameters/ToeIdQuery"
+          },
+          {
+            "$ref": "#/components/parameters/CreatedAtStart"
+          },
+          {
+            "$ref": "#/components/parameters/Page"
+          },
+          {
+            "$ref": "#/components/parameters/PerPage"
+          },
+          {
+            "$ref": "#/components/parameters/PublicEventDateStart"
+          },
+          {
+            "$ref": "#/components/parameters/RiskRelationshipSlugs"
+          },
+          {
+            "$ref": "#/components/parameters/SortMethod"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetBreachEvents"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          }
+        },
+        "summary": "This resource returns a collection of `BreachEvent` objects.",
+        "tags": [
+          "Data Loss Events"
+        ]
+      }
+    },
+    "/v1/action_plan/issue_summary/{toe_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This API returns a list of issue summaries for a given action plan. There are no parameters for this use case. The end-user needs to input the TOE ID (toe_id) for a given action plan in the API request.",
+        "operationId": "getActionPlanIssueSummary",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetActionPlanIssueSummaryResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This resource returns a vendor's action plan issue summary.",
+        "tags": [
+          "Action Plans"
+        ]
+      }
+    },
+    "/v1/action_plan/{toe_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This API returns action plan configrations both automated and manual for a given TOE.  The end-user needs to input the TOE ID (toe_id) for a given action plan in the API request.",
+        "operationId": "getActionPlanConfig",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetActionPlanConfigResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This resource returns action plan configrations both automated and manual for a given TOE.",
+        "tags": [
+          "Action Plans"
+        ]
+      },
+      "post": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This API sends action plan findings to internal and external recipients. The end-user needs to input the TOE ID (toe_id) for a given action plan in the API request. \n\nRecipients and frequency are optional. If recipients are not provided,  the action plan will be shared with previously shared recipients. If  frequency is not provided, the action plan will be shared manually.\n\nUsers can retrive action plan configuration from   ```(GET) /v1/action_plan/{toe_id} ``` API.\n* recipients: An Array of first_name, last_name, email, internal (true/false)  for each recipient. See schema for more details.\n* frequency:  0 (default) is for manaul/one-off, where 30/60/90 sets periodic automated action plan emails.",
+        "operationId": "shareActionPlan",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ShareActionPlanRequest"
+        },
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/AddShareActionPlanResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntityResponse"
+          }
+        },
+        "summary": "This resource sends action plan email to recipients of a TOE.",
+        "tags": [
+          "Action Plans"
+        ]
+      }
+    },
+    "/v1/portfolio/subscription_level_config": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This resource returns the default subscription_level for bulk toe requests for your customer if it has been set.\n\nThis can be set if you want all /v1/portfolio/bulk_add requests to have the same subscription level.\n\nOptions are 1 (Discover) or 2 (Advisor)",
+        "operationId": "getSubscriptionLevelConfig",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SubscriptionLevelConfigResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This resource returns the default subscription_level for bulk toe requests for your customer.",
+        "tags": [
+          "Portfolio"
+        ]
+      },
+      "put": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This resource sets the default subscription_level for bulk toe requests for your customer if it has been set.\n\nThis can be set if you want all /v1/portfolio/bulk_add requests to have the same subscription level.\n\nOptions are 1 (Discover) or 2 (Advisor)",
+        "operationId": "setSubscriptionLevelConfig",
+        "parameters": [],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateSubscriptionLevelConfig"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SubscriptionLevelConfigResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "This resource sets the default subscription_level for bulk toe requests for your customer.",
+        "tags": [
+          "Portfolio"
+        ]
+      }
+    },
+    "/v1/data_loss_events/{toe_id}": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "\"::Legacy Route please use portfolio_data_loss_events:: This resource returns a collection of `DataLossEvent` objects for a given TOE id. This are referred to as Breach Events in the RiskRecon site.\"",
+        "operationId": "getDataLossEvents",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetDataLossEventsResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": ":: Legacy Route :: This resource returns a collection of `DataLossEvent` objects.",
+        "tags": [
+          "Data Loss Events"
+        ]
+      }
+    },
     "/v1/toe_reports": {
       "get": {
         "callbacks": {},
@@ -5408,175 +5740,6 @@
         "summary": "This resource allows the ordering and downloading of toe reports",
         "tags": [
           "TOE Reports"
-        ]
-      }
-    },
-    "/v1/toe_reports/{request_id}": {
-      "get": {
-        "callbacks": {},
-        "deprecated": false,
-        "description": "This resource gets the PDF report.",
-        "operationId": "downloadPdfReport",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/RequestId"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/PdfReportResponse"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequestErrorResponse"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorResponse"
-          }
-        },
-        "summary": "This resource returns the PDF report.",
-        "tags": [
-          "TOE Reports"
-        ]
-      }
-    },
-    "/v1/toes": {
-      "get": {
-        "callbacks": {},
-        "deprecated": false,
-        "description": "This API retrieves a collection of TOE objects mapped to a customer.\nThis include overall ratings and some domain rating information for the current analysis of the provided TOE id.\nAs a TOE can have multiple internal IDs, this API filters if the internal ID is one among the multiple internal IDs.",
-        "operationId": "getToes",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/InternalId"
-          },
-          {
-            "$ref": "#/components/parameters/LastRetrieved"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GetToesResponse"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequestErrorResponse"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorResponse"
-          }
-        },
-        "summary": "This resource returns a collection of `TOE` objects mapped to a customer.",
-        "tags": [
-          "Target Of Evaluation TOE"
-        ]
-      }
-    },
-    "/v1/toes/by_cve": {
-      "get": {
-        "callbacks": {},
-        "deprecated": false,
-        "description": "This endpoint allows the user to search for Company name, TOE ID by a valid CVE.\nThe user must provide a valid cve in query param.",
-        "operationId": "getToeByCve",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/CveId"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GetCveSearchResponse"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequestErrorResponse"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorResponse"
-          }
-        },
-        "summary": "This endpoint allows the user to search for Company name, TOE ID by a valid CVE.",
-        "tags": [
-          "Target Of Evaluation TOE"
-        ]
-      }
-    },
-    "/v1/toes/by_domains": {
-      "get": {
-        "callbacks": {},
-        "deprecated": false,
-        "description": "This endpoint allows the user to search for a TOE by a valid domain or hostname.\nThe user must provide a valid domain or hostname in domain query param.",
-        "operationId": "getToeByDomain",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/Domain"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GetToeSearchResponse"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequestErrorResponse"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorResponse"
-          }
-        },
-        "summary": "This endpoint allows the user to search for a TOE by a valid domain or hostname.",
-        "tags": [
-          "Target Of Evaluation TOE"
-        ]
-      }
-    },
-    "/v1/toes/risk_relationships": {
-      "put": {
-        "callbacks": {},
-        "deprecated": false,
-        "description": "User can move a TOE from one risk relationship folder to another by providing the toe_id and relationship folder slug in request. Relationship folder slug can be retrieved from [/v1/portfolio/risk_relationships_folders](#/Portfolio/getRiskRelationshipsFolders).",
-        "operationId": "moveToeRequest",
-        "parameters": [],
-        "requestBody": {
-          "$ref": "#/components/requestBodies/MoveToeRequest"
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/MoveToeResponse"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequestErrorResponse"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorResponse"
-          },
-          "422": {
-            "$ref": "#/components/responses/UnprocessableEntityResponse"
-          }
-        },
-        "summary": "This endpoint moves an existing TOE from one risk relationship folder to another",
-        "tags": [
-          "Target Of Evaluation TOE"
-        ]
-      }
-    },
-    "/v1/user_mgmt": {
-      "get": {
-        "callbacks": {},
-        "deprecated": false,
-        "description": "The User route is used to get all the user data for one’s organization.\nThere currently are no filters or params.",
-        "operationId": "getUserData",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GetUserMgmtResponse"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorResponse"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundErrorResponse"
-          }
-        },
-        "summary": "The User route is used to get all the user data for one’s organization.",
-        "tags": [
-          "Users"
         ]
       }
     }
@@ -5670,6 +5833,10 @@
     {
       "description": "Operations related to TOE Reports",
       "name": "TOE Reports"
+    },
+    {
+      "description": "Operations related to Reporting data",
+      "name": "Reports"
     }
   ]
 }
