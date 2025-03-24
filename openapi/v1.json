@@ -1891,9 +1891,9 @@
             "type": "string"
           },
           "internal_name": {
-            "description": "Internal name of the portfolio item",
+            "description": "List of internal name of the portfolio item",
             "example": "Riskrecon",
-            "type": "string"
+            "type": "array"
           },
           "rating_change": {
             "description": "Change in rating between start and end dates",
