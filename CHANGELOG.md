@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.4](https://github.com/WhitehawkCEC/whitehawk-external-mastercard-riskrecon-api/compare/0.4.3...0.4.4) (2025-10-20)
+
+
+### Features
+
+* `./.ci/sync-v2` ([d096d32](https://github.com/WhitehawkCEC/whitehawk-external-mastercard-riskrecon-api/commit/d096d32e7bc99b0fb04c4cf289045c3f43c74650))
+* `./.ci/sync-v2` ([f2f6100](https://github.com/WhitehawkCEC/whitehawk-external-mastercard-riskrecon-api/commit/f2f61004df3bb279998de3f2fabd5bff84279a8a))
+* `./.ci/sync-v2` ([5af661b](https://github.com/WhitehawkCEC/whitehawk-external-mastercard-riskrecon-api/commit/5af661b895e1a2375c7121a0970de3d1d23d066b))
+* `./.ci/sync-v2` ([6b7a158](https://github.com/WhitehawkCEC/whitehawk-external-mastercard-riskrecon-api/commit/6b7a1583e924e263d431e8242caad5cf3e51537b))
+
 ### [0.4.3](https://github.com/whitehawkcec/whitehawk-external-mastercard-riskrecon-api/compare/0.4.2...0.4.3) (2025-02-12)
 
 
