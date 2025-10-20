@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.5](https://github.com/whitehawkcec/whitehawk-external-mastercard-riskrecon-api/compare/0.4.4...0.4.5) (2025-10-20)
+
+
+### Features
+
+* **openapi:** specify type in array ([7e4b01e](https://github.com/whitehawkcec/whitehawk-external-mastercard-riskrecon-api/commit/7e4b01ef483bae58e12e34da9151ef6d7a947326))
+
 ### [0.4.4](https://github.com/WhitehawkCEC/whitehawk-external-mastercard-riskrecon-api/compare/0.4.3...0.4.4) (2025-10-20)
 
 
