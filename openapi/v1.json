@@ -1932,7 +1932,10 @@
           "internal_name": {
             "description": "List of internal name of the portfolio item",
             "example": "Riskrecon",
-            "type": "array"
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "rating_change": {
             "description": "Change in rating between start and end dates",
