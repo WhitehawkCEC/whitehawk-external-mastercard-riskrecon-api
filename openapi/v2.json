@@ -404,6 +404,10 @@
             "content": {},
             "description": "Unauthorized"
           },
+          "403": {
+            "content": {},
+            "description": "Unauthorized"
+          },
           "404": {
             "content": {},
             "description": "Not found"

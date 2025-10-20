@@ -101,6 +101,26 @@
       }
     },
     "parameters": {
+      "RiskDimensions": {
+        "description": "This parameter filters results by array of RiskDimensions. Defaults to cyber. privacy is a new option for customers with privacy licenses.\n?risk_dimensions[]=privacy&risk_dimensions[]=cyber",
+        "explode": true,
+        "in": "query",
+        "name": "risk_dimensions[]",
+        "required": false,
+        "schema": {
+          "items": {
+            "default": "cyber",
+            "enum": [
+              "cyber",
+              "privacy"
+            ],
+            "example": "cyber",
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "style": "form"
+      },
       "PublicEventDateStart": {
         "description": "Filter results after the provided date string in format YYYY-MM-DD.",
         "example": "2023-01-03",
@@ -428,6 +448,15 @@
         "schema": {
           "example": "CVE-1999-0001",
           "type": "string"
+        }
+      },
+      "CurrentRatingOnly": {
+        "description": "Option to return only the current most recent rating. Pretty much another way to set per_page to 1.",
+        "example": true,
+        "in": "query",
+        "name": "current_rating_only",
+        "schema": {
+          "type": "boolean"
         }
       },
       "SortMethod": {
@@ -903,6 +932,16 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/VendorStatusSummaryCounts"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "GetToeRatingsResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ToeRatings"
             }
           }
         },
@@ -2182,7 +2221,7 @@
           },
           "subscription_level": {
             "description": "The subscription level for the TOE.",
-            "example": "enterprise",
+            "example": "3",
             "type": "string"
           },
           "system_hosting_rating": {
@@ -2238,6 +2277,15 @@
           },
           "internal_names": {
             "$ref": "#/components/schemas/InternalName"
+          },
+          "privacy_subscription_level": {
+            "default": 2,
+            "description": "The SubscriptionLevelConfig for privacy.  Only 2 (Advisor) is available and this is only available if your customer has privacy enabled.",
+            "enum": [
+              2
+            ],
+            "example": 2,
+            "type": "integer"
           },
           "risk_relationship_slugs": {
             "description": "Risk relationship slugs which are returned from /v1/portfolio/risk_relationships_folders. This is optional.",
@@ -2412,6 +2460,12 @@
             "description": "The registrant_phone_ext if available or applicable.",
             "example": "5323",
             "nullable": true
+          },
+          "finding_short_description": {
+            "description": "The finding data description.",
+            "example": "Missing Security Headers",
+            "nullable": true,
+            "type": "string"
           },
           "registrant_org": {
             "description": "The registrant_org if available.",
@@ -3385,6 +3439,169 @@
         "nullable": true,
         "type": "string"
       },
+      "ToeRating": {
+        "properties": {
+          "analysis_id": {
+            "description": "The unique identifier for analysis.",
+            "example": "12345",
+            "type": "string"
+          },
+          "cyber_rating": {
+            "description": "The rating label of an analysis or of some domain or criteria of the analysis.",
+            "example": "a",
+            "nullable": true,
+            "type": "string"
+          },
+          "cyber_rating_numeric": {
+            "description": "The numeric rating of an analysis or of some domain or criteria of the analysis.",
+            "example": 5,
+            "nullable": true,
+            "type": "number"
+          },
+          "cyber_trend": {
+            "description": "Increase or decrease from the previous analysis rating.",
+            "example": 1.9,
+            "nullable": true,
+            "type": "number"
+          },
+          "privacy_rating": {
+            "description": "The rating label of an analysis or of some domain or criteria of the analysis.",
+            "example": "a",
+            "nullable": true,
+            "type": "string"
+          },
+          "privacy_rating_numeric": {
+            "description": "The numeric rating of an analysis or of some domain or criteria of the analysis.",
+            "example": 5,
+            "nullable": true,
+            "type": "number"
+          },
+          "privacy_trend": {
+            "description": "Increase or decrease from the previous analysis rating.",
+            "example": 1.9,
+            "nullable": true,
+            "type": "number"
+          },
+          "security_criteria_ratings": {
+            "description": "array of security_criteria_ratings",
+            "items": {
+              "properties": {
+                "display_name": {
+                  "description": "The display name seen on RiskRecon portal site.",
+                  "example": "OpenSSL Patching",
+                  "nullable": true,
+                  "type": "string"
+                },
+                "rated": {
+                  "description": "Is this domain or criteria rated?",
+                  "example": true,
+                  "nullable": true,
+                  "type": "boolean"
+                },
+                "rating": {
+                  "description": "The rating label of an analysis or of some domain or criteria of the analysis.",
+                  "example": "a",
+                  "nullable": true,
+                  "type": "string"
+                },
+                "rating_numeric": {
+                  "description": "The numeric rating of an analysis or of some domain or criteria of the analysis.",
+                  "example": 5,
+                  "nullable": true,
+                  "type": "number"
+                },
+                "risk_dimension": {
+                  "description": "Category of security domain or criteria. Can currently be cyber or privacy.",
+                  "example": "cyber",
+                  "type": "string"
+                },
+                "security_criteria": {
+                  "description": "The security_criteria associated with the rating.",
+                  "example": "threatintel_phishing_site",
+                  "type": "string"
+                },
+                "security_domain": {
+                  "description": "The security_domain category for the criterion.",
+                  "example": "patching_app_server",
+                  "type": "string"
+                },
+                "trend": {
+                  "description": "Increase or decrease from the previous analysis rating.",
+                  "example": 1.9,
+                  "nullable": true,
+                  "type": "number"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "security_domain_ratings": {
+            "description": "array of security_domain_ratings",
+            "items": {
+              "properties": {
+                "display_name": {
+                  "description": "The display name seen on RiskRecon portal site.",
+                  "example": "OpenSSL Patching",
+                  "nullable": true,
+                  "type": "string"
+                },
+                "rated": {
+                  "description": "Is this domain or criteria rated?",
+                  "example": true,
+                  "nullable": true,
+                  "type": "boolean"
+                },
+                "rating": {
+                  "description": "The rating label of an analysis or of some domain or criteria of the analysis.",
+                  "example": "a",
+                  "nullable": true,
+                  "type": "string"
+                },
+                "rating_numeric": {
+                  "description": "The numeric rating of an analysis or of some domain or criteria of the analysis.",
+                  "example": 5,
+                  "nullable": true,
+                  "type": "number"
+                },
+                "risk_dimension": {
+                  "description": "Category of security domain or criteria. Can currently be cyber or privacy.",
+                  "example": "cyber",
+                  "type": "string"
+                },
+                "security_domain": {
+                  "description": "The security_domain category rating",
+                  "example": "patching_app_server",
+                  "type": "string"
+                },
+                "trend": {
+                  "description": "Increase or decrease from the previous analysis rating.",
+                  "example": 1.9,
+                  "nullable": true,
+                  "type": "number"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "updated_at": {
+            "description": "The date a data loss event was updated.",
+            "example": "2021-10-01T22:18:57+00:00",
+            "type": "string"
+          }
+        },
+        "required": [
+          "analysis_id",
+          "updated_at",
+          "cyber_rating",
+          "cyber_rating_numeric",
+          "security_domain_ratings",
+          "security_criteria_ratings"
+        ],
+        "title": "ToeRating",
+        "type": "object"
+      },
       "Rating": {
         "description": "Trend data is available for historical analysis or if the `include_trend` is passed in as a param for current analysis request.",
         "properties": {
@@ -3469,6 +3686,12 @@
             "example": "5976423a-ee35-11e3-8569-14109ff1a304",
             "type": "string"
           },
+          "finding_short_description": {
+            "description": "The finding data description.",
+            "example": "Missing Security Headers",
+            "nullable": true,
+            "type": "string"
+          },
           "first_seen": {
             "description": "The date the finding was first seen.",
             "example": "2020-10-10",
@@ -3536,6 +3759,7 @@
           "finding_detail",
           "finding_extra_data_value",
           "finding_id",
+          "finding_short_description",
           "first_seen",
           "host_name",
           "hosting_provider",
@@ -4417,6 +4641,36 @@
         },
         "type": "object"
       },
+      "ToeRatings": {
+        "properties": {
+          "data": {
+            "description": "Data associated with response object.",
+            "items": {
+              "properties": {
+                "attributes": {
+                  "$ref": "#/components/schemas/ToeRating"
+                },
+                "id": {
+                  "description": "The identifier associated with response object.",
+                  "example": "12345",
+                  "type": "string"
+                },
+                "type": {
+                  "description": "The type of object returned.",
+                  "example": "analysis",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/PaginationMeta"
+          }
+        },
+        "type": "object"
+      },
       "PaginatedFindings": {
         "properties": {
           "data": {
@@ -4636,7 +4890,7 @@
       "get": {
         "callbacks": {},
         "deprecated": false,
-        "description": "This resource returns the most recent `Analysis` object by the TOE identifier. This includes the security domain and criteria ratings. Trend data is only included if `include_trend` query param is added.",
+        "description": ":: Legacy Route Please use getToeRatings :: This resource returns the most recent `Analysis` object by the TOE identifier. This includes the security domain and criteria ratings. Trend data is only included if `include_trend` query param is added.",
         "operationId": "getAnalysisRatings",
         "parameters": [
           {
@@ -4660,7 +4914,7 @@
             "$ref": "#/components/responses/NotFoundErrorResponse"
           }
         },
-        "summary": "This resource returns the most recent `Analysis` object by the TOE identifier. Trend data is only included if `include_trend` query param is added.",
+        "summary": ":: Legacy Route Please use getToeRatings :: This resource returns the most recent `Analysis` object by the TOE identifier. Trend data is only included if `include_trend` query param is added.",
         "tags": [
           "Analyses"
         ]
@@ -4841,6 +5095,49 @@
         ]
       }
     },
+    "/v1/toes/{toe_id}/ratings": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "Get the current or historical overall, domain and criteria ratings for a given TOE and a given risk dimension.",
+        "operationId": "getToeRatings",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          },
+          {
+            "$ref": "#/components/parameters/RiskDimensions"
+          },
+          {
+            "$ref": "#/components/parameters/CurrentRatingOnly"
+          },
+          {
+            "$ref": "#/components/parameters/Page"
+          },
+          {
+            "$ref": "#/components/parameters/PerPage250"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetToeRatingsResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenErrorResponse"
+          }
+        },
+        "summary": "Get the current or historical overall, domain and criteria ratings for a given TOE and a given risk dimension.",
+        "tags": [
+          "Target Of Evaluation TOE"
+        ]
+      }
+    },
     "/v1/action_plan/findings/{toe_id}": {
       "get": {
         "callbacks": {},
@@ -4934,7 +5231,7 @@
       "get": {
         "callbacks": {},
         "deprecated": false,
-        "description": "This resource returns a collection of historical `Analysis` objects by the TOE identifier. This includes the security domain and criteria ratings for each analysis.",
+        "description": ":: Legacy Route Please use getTOERatings :: This resource returns a collection of historical `Analysis` objects by the TOE identifier. This includes the security domain and criteria ratings for each analysis.",
         "operationId": "getHistoricalAnalysisRatings",
         "parameters": [
           {
@@ -4952,7 +5249,7 @@
             "$ref": "#/components/responses/NotFoundErrorResponse"
           }
         },
-        "summary": "This resource returns a collection of historical `Analysis` objects by the TOE identifier.",
+        "summary": ":: Legacy Route Please use getToeRatings :: This resource returns a collection of historical `Analysis` objects by the TOE identifier.",
         "tags": [
           "Analyses"
         ]
@@ -5036,6 +5333,9 @@
           },
           "401": {
             "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenErrorResponse"
           },
           "422": {
             "$ref": "#/components/responses/UnprocessableEntityResponse"
@@ -5411,13 +5711,20 @@
         "deprecated": false,
         "description": "This resource returns a mapping of security_criteria labels and their current display names in the RiskRecon portal.  It also includes if the security_criteria is currently rated and if it is deprecated.",
         "operationId": "getCriteriaDisplayNames",
-        "parameters": [],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RiskDimensions"
+          }
+        ],
         "responses": {
           "200": {
             "$ref": "#/components/responses/GetDisplayNameResponse"
           },
           "401": {
             "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenErrorResponse"
           }
         },
         "summary": "This resource returns a mapping of security_criteria labels and their current display names in the RiskRecon portal.",
@@ -5456,13 +5763,20 @@
         "deprecated": false,
         "description": "This resource returns a mapping of security_domain labels and their current display names in the RiskRecon portal.  It also includes if the security_domain is currently rated and if it is deprecated.",
         "operationId": "getDomainDisplayNames",
-        "parameters": [],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RiskDimensions"
+          }
+        ],
         "responses": {
           "200": {
             "$ref": "#/components/responses/GetDisplayNameResponse"
           },
           "401": {
             "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenErrorResponse"
           }
         },
         "summary": "This resource returns a mapping of security_domain labels and their current display names in the RiskRecon portal.",
@@ -5555,7 +5869,7 @@
       "get": {
         "callbacks": {},
         "deprecated": false,
-        "description": "This API returns action plan configrations both automated and manual for a given TOE.  The end-user needs to input the TOE ID (toe_id) for a given action plan in the API request.",
+        "description": "This API returns action plan configurations both automated and manual for a given TOE. The end-user needs to input the TOE ID (toe_id) for a given action plan in the API request.",
         "operationId": "getActionPlanConfig",
         "parameters": [
           {
@@ -5573,7 +5887,7 @@
             "$ref": "#/components/responses/NotFoundErrorResponse"
           }
         },
-        "summary": "This resource returns action plan configrations both automated and manual for a given TOE.",
+        "summary": "This resource returns action plan configurations both automated and manual for a given TOE.",
         "tags": [
           "Action Plans"
         ]
@@ -5581,7 +5895,7 @@
       "post": {
         "callbacks": {},
         "deprecated": false,
-        "description": "This API sends action plan findings to internal and external recipients. The end-user needs to input the TOE ID (toe_id) for a given action plan in the API request. \n\nRecipients and frequency are optional. If recipients are not provided,  the action plan will be shared with previously shared recipients. If  frequency is not provided, the action plan will be shared manually.\n\nUsers can retrive action plan configuration from   ```(GET) /v1/action_plan/{toe_id} ``` API.\n* recipients: An Array of first_name, last_name, email, internal (true/false)  for each recipient. See schema for more details.\n* frequency:  0 (default) is for manaul/one-off, where 30/60/90 sets periodic automated action plan emails.",
+        "description": "This API sends action plan findings to internal and external recipients. The end-user needs to input the TOE ID (toe_id) for a given action plan in the API request.\n\nRecipients and frequency are optional. If recipients are not provided, the action plan will be shared with previously shared recipients. If frequency is not provided, the action plan will be shared manually.\n\nUsers can retrive action plan configuration from ```(GET) /v1/action_plan/{toe_id} ``` API.\n* recipients: An Array of first_name, last_name, email, internal (true/false) for each recipient. See schema for more details.\n* frequency:  0 (default) is for manaul/one-off, where 30/60/90 sets periodic automated action plan emails.",
         "operationId": "shareActionPlan",
         "parameters": [
           {
