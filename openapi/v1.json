@@ -290,6 +290,7 @@
             "end_rating",
             "rating_change"
           ],
+          "example": "rating_change",
           "type": "string"
         }
       },
@@ -437,6 +438,7 @@
         "required": false,
         "schema": {
           "default": 360,
+          "example": 360,
           "type": "integer"
         }
       },
@@ -1450,7 +1452,7 @@
             "type": "string"
           },
           "toe_name": {
-            "description": "TOE name",
+            "description": "The Company or entity name.",
             "example": "Sample Enterprises, USA",
             "type": "string"
           }
@@ -1868,6 +1870,8 @@
       "AutomaticActionPlanConfig": {
         "properties": {
           "automated": {
+            "description": "Is the action plan automated?",
+            "example": true,
             "type": "boolean"
           },
           "frequency": {
@@ -1881,6 +1885,7 @@
             "type": "integer"
           },
           "recipients": {
+            "description": "An array of recipients.",
             "items": {
               "$ref": "#/components/schemas/Recipient"
             },
@@ -1905,14 +1910,13 @@
           },
           "end_date": {
             "description": "End date of the rating period",
-            "format": "date-time",
+            "example": "2021-10-01T22:18:57+00:00",
             "type": "string"
           },
           "end_rating": {
             "description": "Final rating score",
             "example": "0.6",
-            "format": "string",
-            "type": "number"
+            "type": "string"
           },
           "folder": {
             "description": "Portfolio folder name",
@@ -1920,46 +1924,40 @@
             "type": "string"
           },
           "industry": {
-            "description": "Industry category",
+            "description": "The category of the industry.",
             "example": "Healthcare",
             "type": "string"
           },
           "internal_id": {
-            "description": "Internal identifier",
+            "description": "The user defined identifiers for the TOE.",
             "example": "1234",
             "type": "string"
           },
           "internal_name": {
-            "description": "List of internal name of the portfolio item",
-            "example": "Riskrecon",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+            "$ref": "#/components/schemas/InternalName"
           },
           "rating_change": {
             "description": "Change in rating between start and end dates",
             "example": "-8.8",
-            "format": "float",
-            "type": "number"
+            "type": "string"
           },
           "start_date": {
             "description": "Start date of the rating period",
-            "format": "date-time",
+            "example": "2021-10-01T22:18:57+00:00",
             "type": "string"
           },
           "start_rating": {
             "description": "Initial rating score",
             "example": "9.4",
-            "format": "float",
-            "type": "number"
+            "type": "string"
           },
           "vendor_name": {
             "description": "Name of the vendor",
             "example": "Riskrecon, Co.",
             "type": "string"
           }
-        }
+        },
+        "type": "object"
       },
       "Subsidiaries": {
         "description": "A collection of subsidiaries.",
@@ -2125,6 +2123,7 @@
       "ManualActionPlanConfig": {
         "properties": {
           "recipients": {
+            "description": "An array of recipients.",
             "items": {
               "$ref": "#/components/schemas/Recipient"
             },
@@ -3107,7 +3106,7 @@
           },
           "company_id": {
             "description": "The company id of the user.  This is a legacy field and the customer_id should be used instead.",
-            "example": "1234",
+            "example": 1234,
             "nullable": true,
             "type": "number"
           },
@@ -3163,7 +3162,7 @@
           },
           "primary_user_id": {
             "description": "The primary user id if the user has multiple accounts and this isn't the primary one.",
-            "example": "1",
+            "example": 1,
             "nullable": true,
             "type": "number"
           },
@@ -3457,7 +3456,7 @@
           },
           "cyber_rating_numeric": {
             "description": "The numeric rating of an analysis or of some domain or criteria of the analysis.",
-            "example": 5,
+            "example": 9,
             "nullable": true,
             "type": "number"
           },
@@ -3475,7 +3474,7 @@
           },
           "privacy_rating_numeric": {
             "description": "The numeric rating of an analysis or of some domain or criteria of the analysis.",
-            "example": 5,
+            "example": 9,
             "nullable": true,
             "type": "number"
           },
@@ -3509,7 +3508,7 @@
                 },
                 "rating_numeric": {
                   "description": "The numeric rating of an analysis or of some domain or criteria of the analysis.",
-                  "example": 5,
+                  "example": 9,
                   "nullable": true,
                   "type": "number"
                 },
@@ -3520,7 +3519,7 @@
                 },
                 "security_criteria": {
                   "description": "The security_criteria associated with the rating.",
-                  "example": "threatintel_phishing_site",
+                  "example": "patching_openssl",
                   "type": "string"
                 },
                 "security_domain": {
@@ -3563,7 +3562,7 @@
                 },
                 "rating_numeric": {
                   "description": "The numeric rating of an analysis or of some domain or criteria of the analysis.",
-                  "example": 5,
+                  "example": 9,
                   "nullable": true,
                   "type": "number"
                 },
@@ -3855,7 +3854,7 @@
           },
           "current_analysis": {
             "description": "The current analysis_id for the TOE.",
-            "example": 15,
+            "example": "15",
             "type": "string"
           },
           "date": {
@@ -3882,7 +3881,7 @@
               },
               "value": {
                 "description": "The numeric rating of the new rating.",
-                "example": 10,
+                "example": "10",
                 "type": "string"
               }
             },
@@ -3897,7 +3896,7 @@
               },
               "value": {
                 "description": "The numeric rating of the previous rating.",
-                "example": 10,
+                "example": "10",
                 "type": "string"
               }
             },
@@ -3905,7 +3904,7 @@
           },
           "rating_change": {
             "description": "The rating change from the previous and new ratings.",
-            "example": 5,
+            "example": "5",
             "nullable": true,
             "type": "string"
           },
@@ -3974,18 +3973,22 @@
       "IssueSummary": {
         "properties": {
           "action_plan_last_shared_on": {
+            "description": "The date and time the action plan was last shared.",
             "example": "2021-10-01T22:18:57+00:00",
             "type": "string"
           },
           "current_open_issues_count": {
+            "description": "The count of currently open issues.",
             "example": 8,
             "type": "integer"
           },
           "total_resolved_issues_count": {
+            "description": "The count of resolved issues.",
             "example": 17,
             "type": "integer"
           },
           "total_shared_issues_count": {
+            "description": "The count of shared issues.",
             "example": 25,
             "type": "integer"
           }
@@ -4571,30 +4574,44 @@
         "type": "object"
       },
       "Analysis": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Rating"
+        "properties": {
+          "analysis_id": {
+            "description": "The unique identifier for an analysis.",
+            "example": "12345",
+            "type": "string"
           },
-          {
-            "properties": {
-              "analysis_id": {
-                "description": "The unique identifier for an analysis.",
-                "example": "12345",
-                "type": "string"
-              },
-              "analysis_ts": {
-                "description": "The date an analysis was updated.",
-                "example": "2021-10-01T22:18:57+00:00",
-                "type": "string"
-              },
-              "security_domain_ratings": {
-                "$ref": "#/components/schemas/SecurityDomainRating"
-              }
-            },
-            "type": "object"
+          "analysis_ts": {
+            "description": "The date an analysis was updated.",
+            "example": "2021-10-01T22:18:57+00:00",
+            "type": "string"
+          },
+          "rating": {
+            "description": "The legacy Rating label of an analysis or of some domain or criteria of the analysis.",
+            "example": "proceed",
+            "type": "string"
+          },
+          "rating_numeric": {
+            "description": "The numeric rating of an analysis or of some domain or criteria of the analysis.",
+            "example": 5,
+            "type": "number"
+          },
+          "rating_v2": {
+            "description": "The rating label of an analysis or of some domain or criteria of the analysis.",
+            "example": "a",
+            "type": "string"
+          },
+          "security_domain_ratings": {
+            "$ref": "#/components/schemas/SecurityDomainRating"
+          },
+          "trend": {
+            "description": "Increase or decrease from the previous analysis rating.",
+            "example": 1.9,
+            "nullable": true,
+            "type": "number"
           }
-        ],
-        "title": "Analysis"
+        },
+        "title": "Analysis",
+        "type": "object"
       },
       "PriorityMetricCounts": {
         "description": "A collection of PriorityMetricCount objects.",
@@ -5102,7 +5119,7 @@
       "get": {
         "callbacks": {},
         "deprecated": false,
-        "description": "Get the current or historical overall, domain and criteria ratings for a given TOE and a given risk dimension.",
+        "description": "Get the current or historical overall, domain and criteria ratings for a given TOE and a given risk dimension. Privacy can only be returned if privacy is enabled for your customer and you have a privacy license for the given TOE.",
         "operationId": "getToeRatings",
         "parameters": [
           {
@@ -5501,7 +5518,7 @@
       }
     },
     "/v1/reports/portfolio_ratings": {
-      "post": {
+      "get": {
         "callbacks": {},
         "deprecated": false,
         "description": "Retrieves a paginated list of portfolio ratings with their changes over time",
