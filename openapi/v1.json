@@ -499,6 +499,20 @@
           "type": "string"
         }
       },
+      "RiskDimension": {
+        "description": "This parameter filters results by RiskDimension. The default value is cyber. privacy is a new option for customers with privacy licenses.",
+        "in": "query",
+        "name": "risk_dimension",
+        "schema": {
+          "default": "cyber",
+          "enum": [
+            "cyber",
+            "privacy"
+          ],
+          "example": "cyber",
+          "type": "string"
+        }
+      },
       "FindingsSortAttribute": {
         "description": "This parameter is optional but allows the user to sort results of alerting issues by available sort attributes.",
         "in": "query",
@@ -3726,6 +3740,12 @@
             "example": 5,
             "type": "integer"
           },
+          "privacy_criteria": {
+            "description": "If the finding matches one of our categories in the privacy risk dimension, this field will contain the key of that security_criteria category.",
+            "example": "privacy_unencrypted_sensitive_systems",
+            "nullable": true,
+            "type": "string"
+          },
           "security_criteria": {
             "description": "The security_criteria category associated with the finding.",
             "example": "software_patching",
@@ -5035,6 +5055,9 @@
           },
           {
             "$ref": "#/components/parameters/CveIds"
+          },
+          {
+            "$ref": "#/components/parameters/RiskDimension"
           }
         ],
         "responses": {
