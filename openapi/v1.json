@@ -216,6 +216,16 @@
         },
         "style": "form"
       },
+      "AnalysisId": {
+        "description": "The unique identifier for the Analysis.",
+        "in": "path",
+        "name": "analysis_id",
+        "required": true,
+        "schema": {
+          "example": "1234",
+          "type": "string"
+        }
+      },
       "Domain": {
         "description": "Search TOEs by domain or hostname. This must be a valid domain or hostname.",
         "in": "query",
@@ -254,6 +264,32 @@
             "type": "string"
           },
           "type": "array"
+        },
+        "style": "form"
+      },
+      "EnforcementActionsSortAttribute": {
+        "description": "This parameter is optional but allows the user to sort results of enforcement actions by available sort attributes.",
+        "in": "query",
+        "name": "sort_attribute",
+        "required": false,
+        "schema": {
+          "default": "enforcement_action_date",
+          "enum": [
+            "enforcement_action_date"
+          ],
+          "example": "enforcement_action_date",
+          "type": "string"
+        }
+      },
+      "EnforcementActionStartDate": {
+        "description": "This parameter filters enforcement actions starting from the provided date string in format YYYY-MM-DD.",
+        "example": "2023-01-01",
+        "explode": true,
+        "in": "query",
+        "name": "enforcement_action_start_date",
+        "schema": {
+          "format": "date",
+          "type": "string"
         },
         "style": "form"
       },
@@ -732,6 +768,16 @@
         },
         "description": "OK"
       },
+      "GetEnforcementActions": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/EnforcementActions"
+            }
+          }
+        },
+        "description": "OK"
+      },
       "MoveToeResponse": {
         "content": {
           "application/json": {
@@ -1142,6 +1188,16 @@
         },
         "description": "OK"
       },
+      "GetIntegrationRoutesDetails": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/IntegrationRouteDetails"
+            }
+          }
+        },
+        "description": "OK"
+      },
       "UpdatedToeResponse": {
         "content": {
           "application/json": {
@@ -1195,6 +1251,44 @@
           }
         },
         "type": "object"
+      },
+      "IntegrationLinksDetails": {
+        "description": "An array of link objects with optional security domain, risk dimension and URL",
+        "items": {
+          "example": {
+            "link": "https://portal.example.com/vendor/123/cyber/security-profile/data_loss",
+            "risk_dimension": "cyber",
+            "security_domain": "data_loss"
+          },
+          "properties": {
+            "link": {
+              "description": "URL to the RiskRecon portal page",
+              "format": "uri",
+              "type": "string"
+            },
+            "risk_dimension": {
+              "description": "The risk dimension category",
+              "enum": [
+                "cyber",
+                "privacy"
+              ],
+              "example": "cyber",
+              "type": "string"
+            },
+            "security_domain": {
+              "description": "The security domain category (only present for security profile links)",
+              "example": "data_loss",
+              "type": "string"
+            }
+          },
+          "required": [
+            "risk_dimension",
+            "link"
+          ],
+          "type": "object"
+        },
+        "title": "Integration Route Links Details",
+        "type": "array"
       },
       "BreachEvent": {
         "properties": {
@@ -3044,6 +3138,68 @@
         "title": "Host",
         "type": "object"
       },
+      "EnforcementActions": {
+        "properties": {
+          "data": {
+            "description": "Data associated with response object.",
+            "items": {
+              "properties": {
+                "analysis_id": {
+                  "description": "The current analysis_id for the TOE.",
+                  "example": "15",
+                  "type": "string"
+                },
+                "description": {
+                  "description": "The description of the enforcement action.",
+                  "example": "Enforcement action description",
+                  "type": "string"
+                },
+                "enforcement_action_date": {
+                  "description": "The date of the enforcement action.",
+                  "example": "2021-10-01",
+                  "type": "string"
+                },
+                "regulation": {
+                  "description": "The regulation associated with the enforcement action.",
+                  "example": "GDPR",
+                  "type": "string"
+                },
+                "regulatory_body": {
+                  "description": "The regulatory body associated with the enforcement action.",
+                  "example": "Regulatory Body Name",
+                  "type": "string"
+                },
+                "sources": {
+                  "description": "The sources for the enforcement action.",
+                  "items": {
+                    "example": "https://example.com/source1",
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "toe_id": {
+                  "$ref": "#/components/schemas/ToeId"
+                },
+                "toe_short_name": {
+                  "description": "The Company or entity name.",
+                  "example": "Riskrecon, CO.",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/PaginationMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "type": "object"
+      },
       "OrderToeReport": {
         "properties": {
           "report_type": {
@@ -3077,6 +3233,24 @@
         },
         "title": "ArrayOfActionPlanIssueProgress",
         "type": "array"
+      },
+      "IntegrationRouteDetails": {
+        "description": "An object containing the available portal routes.",
+        "properties": {
+          "links": {
+            "$ref": "#/components/schemas/IntegrationLinksDetails"
+          },
+          "toe_id": {
+            "$ref": "#/components/schemas/ToeId"
+          },
+          "toe_short_name": {
+            "description": "The Company or entity name.",
+            "example": "Riskrecon, CO.",
+            "type": "string"
+          }
+        },
+        "title": "Integration Route Details",
+        "type": "object"
       },
       "ActionPlanConfig": {
         "properties": {
@@ -5422,6 +5596,37 @@
         ]
       }
     },
+    "/v1/integration/routes/{toe_id}/details": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "The Integration Routes Details API provides a list of URLs for the detailed views within each security domain in the Security Profile and its corresponding risk_dimensions section of the RiskRecon Portal.\nAPI will also check if the customer has access and subscription enabled for requested risk dimensions and toes.\nThe only parameter for this API is the TOE ID, which is required.",
+        "operationId": "getIntegrationRoutesDetails",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetIntegrationRoutesDetails"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundErrorResponse"
+          }
+        },
+        "summary": "The Integration Routes Details API provides a list of URLs for the detailed views within each security domain in the Security Profile and its corresponding risk_dimensions section of the RiskRecon Portal.",
+        "tags": [
+          "Integration Routes"
+        ]
+      }
+    },
     "/v1/toe_reports/{request_id}": {
       "get": {
         "callbacks": {},
@@ -5635,6 +5840,55 @@
         ]
       }
     },
+    "/v1/privacy/portfolio_enforcement_actions": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This resource returns a collection of `EnforcementAction` in portfolio.",
+        "operationId": "getEnforcementActions",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/EnforcementActionsSortAttribute"
+          },
+          {
+            "$ref": "#/components/parameters/EnforcementActionStartDate"
+          },
+          {
+            "$ref": "#/components/parameters/ToeIdQuery"
+          },
+          {
+            "$ref": "#/components/parameters/Page"
+          },
+          {
+            "$ref": "#/components/parameters/PerPage"
+          },
+          {
+            "$ref": "#/components/parameters/RiskRelationshipSlugs"
+          },
+          {
+            "$ref": "#/components/parameters/SortMethod"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetEnforcementActions"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntityResponse"
+          }
+        },
+        "summary": "This resource returns a collection of `EnforcementAction` objects.",
+        "tags": [
+          "Privacy"
+        ]
+      }
+    },
     "/v1/toes/risk_relationships": {
       "put": {
         "callbacks": {},
@@ -5729,6 +5983,9 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/ToeId"
+          },
+          {
+            "$ref": "#/components/parameters/RiskDimension"
           }
         ],
         "responses": {
@@ -5737,6 +5994,9 @@
           },
           "401": {
             "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenErrorResponse"
           },
           "404": {
             "$ref": "#/components/responses/NotFoundErrorResponse"
@@ -6194,6 +6454,10 @@
     {
       "description": "Operations related to Reporting data",
       "name": "Reports"
+    },
+    {
+      "description": "Operations related to Privacy",
+      "name": "Privacy"
     }
   ]
 }
