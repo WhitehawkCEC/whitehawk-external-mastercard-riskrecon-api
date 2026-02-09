@@ -168,7 +168,7 @@
         "name": "asset_value_numeric[]",
         "schema": {
           "items": {
-            "example": 1,
+            "example": "1",
             "type": "string"
           },
           "type": "array"
@@ -215,16 +215,6 @@
           "type": "string"
         },
         "style": "form"
-      },
-      "AnalysisId": {
-        "description": "The unique identifier for the Analysis.",
-        "in": "path",
-        "name": "analysis_id",
-        "required": true,
-        "schema": {
-          "example": "1234",
-          "type": "string"
-        }
       },
       "Domain": {
         "description": "Search TOEs by domain or hostname. This must be a valid domain or hostname.",
@@ -447,7 +437,9 @@
       },
       "AlertTypes": {
         "description": "type of score change alert This parameter is optional but allows the user to filter results by available alert_types.",
-        "example": "rating_improved",
+        "example": [
+          "rating_improved"
+        ],
         "explode": true,
         "in": "query",
         "name": "alert_types[]",
@@ -647,7 +639,9 @@
       },
       "Priorities": {
         "description": "Filter findings based on  priority. Priority is based on asset_value and severity.",
-        "example": 5,
+        "example": [
+          5
+        ],
         "explode": true,
         "in": "query",
         "name": "priorities[]",
@@ -691,6 +685,16 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/CompanyAddToPortfolio"
+            }
+          }
+        },
+        "required": true
+      },
+      "ChangeSubscriptionRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ChangeSubscriptions"
             }
           }
         },
@@ -895,7 +899,7 @@
       },
       "AddShareActionPlanResponse": {
         "content": {
-          "application/text": {
+          "text/plain": {
             "schema": {
               "example": "Created",
               "type": "string"
@@ -968,6 +972,16 @@
           }
         },
         "description": "OK"
+      },
+      "ChangeSubscriptionResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ChangedSubscriptions"
+            }
+          }
+        },
+        "description": "ChangeSubscription list of affected subscriptions and success message."
       },
       "GetAlertingNewIssues": {
         "content": {
@@ -1423,6 +1437,63 @@
         "title": "Breach Event",
         "type": "object"
       },
+      "PortfolioLicense": {
+        "properties": {
+          "name": {
+            "description": "Name indicating a Riskrecon subscription level purchased by the customer",
+            "enum": [
+              "ADVISOR",
+              "DISCOVER",
+              "SNAPSHOT"
+            ],
+            "example": "ADVISOR",
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string"
+          },
+          "riskDimension": {
+            "description": "Category of security domain or criteria. Can currently be cyber or privacy.",
+            "enum": [
+              "CYBER",
+              "PRIVACY"
+            ],
+            "example": "CYBER",
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "riskDimension"
+        ],
+        "title": "PortfolioLicense",
+        "type": "object"
+      },
+      "ChangedSubscriptions": {
+        "description": "Response object when the list of subscriptions for a TOE has been updated",
+        "properties": {
+          "events": {
+            "items": {
+              "$ref": "#/components/schemas/ChangedSubscription"
+            },
+            "type": "array"
+          },
+          "message": {
+            "description": "Success message or info about modified subscriptions",
+            "example": "portfolio subscription for toe_id: 7db00def-832f-43bd-83a2-6eefb8638491 adjusted successfully",
+            "maxLength": 240,
+            "minLength": 0,
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "events"
+        ],
+        "title": "Change Subscription Response",
+        "type": "object"
+      },
       "ShareActionPlan": {
         "properties": {
           "frequency": {
@@ -1798,6 +1869,20 @@
             "type": "boolean"
           }
         },
+        "type": "object"
+      },
+      "ChangeSubscriptions": {
+        "description": "A request to add or modify portfolio subscriptions for a TOE",
+        "properties": {
+          "licenses": {
+            "description": "The list of licenses to which this user wishes to subscribe for this TOE",
+            "items": {
+              "$ref": "#/components/schemas/PortfolioLicense"
+            },
+            "type": "array"
+          }
+        },
+        "title": "Change Subscription Request",
         "type": "object"
       },
       "EmptyArray": {
@@ -2971,7 +3056,7 @@
             "type": "string"
           },
           "internal": {
-            "description": "Is the recipient internal? Intenal recipients only receives confirmation emails when action plan is shared. Atleast one external recipient is required if not previously shared.",
+            "description": "Is the recipient internal? Internal recipients only receives confirmation emails when action plan is shared. At least one external recipient is required if not previously shared.",
             "example": false,
             "type": "boolean"
           },
@@ -3621,6 +3706,73 @@
           }
         },
         "title": "Security Domain Rating",
+        "type": "object"
+      },
+      "ChangedSubscription": {
+        "description": "Information about a successfully modified subscription for a TOE",
+        "properties": {
+          "customerId": {
+            "description": "The customer Id of the user.",
+            "example": "5976423a-ee35-11e3-8569-14109ff1a304",
+            "format": "uuid",
+            "type": "string"
+          },
+          "newLicense": {
+            "description": "The license level of a newly added subscription",
+            "enum": [
+              "ADVISOR",
+              "DISCOVER",
+              "ENTERPRISE",
+              "SNAPSHOT"
+            ],
+            "example": "ADVISOR",
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string"
+          },
+          "oldLicense": {
+            "description": "The license level of a subscription that has been replaced",
+            "enum": [
+              "ADVISOR",
+              "DISCOVER",
+              "ENTERPRISE",
+              "SNAPSHOT",
+              null
+            ],
+            "example": "ADVISOR",
+            "maxLength": 10,
+            "minLength": 0,
+            "nullable": true,
+            "type": "string"
+          },
+          "riskDimension": {
+            "description": "Category of security domain or criteria. Can currently be cyber or privacy.",
+            "enum": [
+              "CYBER",
+              "PRIVACY"
+            ],
+            "example": "CYBER",
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string"
+          },
+          "subscriptionAdjustedOn": {
+            "description": "The date at which this subscription was updated",
+            "example": "2021-10-01T22:18:57+00:00",
+            "type": "string"
+          },
+          "toeId": {
+            "$ref": "#/components/schemas/ToeId"
+          }
+        },
+        "required": [
+          "customerId",
+          "newLicense",
+          "oldLicense",
+          "riskDimension",
+          "subscriptionAdjustedOn"
+        ],
+        "title": "Change Subscription Response Item",
         "type": "object"
       },
       "HostName": {
@@ -4628,7 +4780,7 @@
         "properties": {
           "analysis_id": {
             "description": "The current analysis_id for the TOE.",
-            "example": 15,
+            "example": "15",
             "type": "string"
           },
           "asset_value": {
@@ -4947,7 +5099,7 @@
       "url": "https://riskrecon.zendesk.com/hc/en-us"
     },
     "description": "RiskRecon provides organizations with frequent, comprehensive, actionable visibility into the security quality of their business partners.  RiskRecon does this by automatically measuring the security performance of any enterprise across security domains and criteria, providing visibility into security programs.\n\nAll of the security discovery and analytics are based on public information with no inside access required.  The RiskRecon service requires an account with RiskRecon.",
-    "title": "Riskrecon API",
+    "title": "Mastercard Riskrecon API",
     "version": "1.0"
   },
   "openapi": "3.0.3",
@@ -5097,6 +5249,37 @@
         "summary": "This API returns the count of current action plan issues per their severity and priority.",
         "tags": [
           "Action Plans"
+        ]
+      }
+    },
+    "/v1/toes/{toe_id}/subscriptions": {
+      "post": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This request sets the list of subscription licenses that determine whether a TOE appears in your portfolio, and for which risk dimensions. The currently available Risk Dimensions are CYBER and PRIVACY. The available license types are AVISOR, DISCOVER, and SNAPSHOT. A cyber license of ADVISOR or DISCOVER is a prerequisite of any privacy license. SNAPSHOT licenses are not available for the privacy risk dimension at this time.",
+        "operationId": "changeSubscription",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ToeId"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ChangeSubscriptionRequest"
+        },
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/ChangeSubscriptionResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          }
+        },
+        "summary": "This endpoint adds and updates subscription licenses for a TOE.",
+        "tags": [
+          "Portfolio"
         ]
       }
     },
@@ -5605,6 +5788,9 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/ToeId"
+          },
+          {
+            "$ref": "#/components/parameters/RiskDimensions"
           }
         ],
         "responses": {
@@ -6198,7 +6384,7 @@
       "post": {
         "callbacks": {},
         "deprecated": false,
-        "description": "This API sends action plan findings to internal and external recipients. The end-user needs to input the TOE ID (toe_id) for a given action plan in the API request.\n\nRecipients and frequency are optional. If recipients are not provided, the action plan will be shared with previously shared recipients. If frequency is not provided, the action plan will be shared manually.\n\nUsers can retrive action plan configuration from ```(GET) /v1/action_plan/{toe_id} ``` API.\n* recipients: An Array of first_name, last_name, email, internal (true/false) for each recipient. See schema for more details.\n* frequency:  0 (default) is for manaul/one-off, where 30/60/90 sets periodic automated action plan emails.",
+        "description": "This API sends action plan findings to internal and external recipients. The end-user needs to input the TOE ID (toe_id) for a given action plan in the API request.\n\nRecipients and frequency are optional. If recipients are not provided, the action plan will be shared with previously shared recipients. If frequency is not provided, the action plan will be shared manually.\n\nUsers can retrieve action plan configuration from ```(GET) /v1/action_plan/{toe_id} ``` API.\n* recipients: An Array of first_name, last_name, email, internal (true/false) for each recipient. See schema for more details.\n* frequency:  0 (default) is for manual/one-off, where 30/60/90 sets periodic automated action plan emails.",
         "operationId": "shareActionPlan",
         "parameters": [
           {
@@ -6370,28 +6556,12 @@
     {
       "description": "Sandbox server",
       "url": "https://api.sandbox.riskrecon.com",
-      "variables": {
-        "protocol": {
-          "default": "https",
-          "enum": [
-            "http",
-            "https"
-          ]
-        }
-      }
+      "variables": {}
     },
     {
       "description": "Production server",
       "url": "https://api.riskrecon.com",
-      "variables": {
-        "protocol": {
-          "default": "https",
-          "enum": [
-            "http",
-            "https"
-          ]
-        }
-      }
+      "variables": {}
     }
   ],
   "tags": [
