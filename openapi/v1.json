@@ -371,6 +371,20 @@
         },
         "style": "form"
       },
+      "ToeSortAttribute": {
+        "description": "This parameter is optional but allows the user to sort results of paginated TOEs by available sort attributes.",
+        "in": "query",
+        "name": "sort_attribute",
+        "required": false,
+        "schema": {
+          "enum": [
+            "toe_short_name",
+            "date_updated"
+          ],
+          "example": "toe_short_name",
+          "type": "string"
+        }
+      },
       "PerPage250": {
         "description": "This parameter sets the results limit per page.  This defaults to 20 and currently has a max of 250.",
         "in": "query",
@@ -903,6 +917,16 @@
             "schema": {
               "example": "Created",
               "type": "string"
+            }
+          }
+        },
+        "description": "OK"
+      },
+      "GetPaginatedToes": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PaginatedToes"
             }
           }
         },
@@ -1639,6 +1663,36 @@
         "title": "TOE Report Ordered Response",
         "type": "object"
       },
+      "PaginatedToes": {
+        "properties": {
+          "data": {
+            "description": "Data associated with response object.",
+            "items": {
+              "properties": {
+                "attributes": {
+                  "$ref": "#/components/schemas/PaginatedToe"
+                },
+                "id": {
+                  "description": "The identifier associated with response object.",
+                  "example": "5976423a-ee35-11e3-8569-14109ff1a304",
+                  "type": "string"
+                },
+                "type": {
+                  "description": "The type of object returned.",
+                  "example": "toe",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/PaginationMeta"
+          }
+        },
+        "type": "object"
+      },
       "ErrorWrapper": {
         "properties": {
           "Errors": {
@@ -2124,6 +2178,7 @@
           "internal_id": {
             "description": "The user defined identifiers for the TOE.",
             "example": "1234",
+            "nullable": true,
             "type": "string"
           },
           "internal_name": {
@@ -3969,6 +4024,159 @@
             "type": "number"
           }
         },
+        "type": "object"
+      },
+      "PaginatedToe": {
+        "properties": {
+          "analysis_id": {
+            "description": "The unique identifier for analysis.",
+            "example": "12345",
+            "type": "string"
+          },
+          "cyber_rating": {
+            "description": "The rating label of an analysis or of some domain or criteria of the analysis.",
+            "example": "a",
+            "nullable": true,
+            "type": "string"
+          },
+          "cyber_rating_numeric": {
+            "description": "The numeric rating of an analysis or of some domain or criteria of the analysis.",
+            "example": 9,
+            "nullable": true,
+            "type": "number"
+          },
+          "date_updated": {
+            "description": "The date a data loss event was updated.",
+            "example": "2020-07-24T02:35:58Z",
+            "type": "string"
+          },
+          "duns_numbers": {
+            "description": "The DUNS number for the TOE.  This may or may not be populated.",
+            "items": {
+              "example": "12345",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "frequency": {
+            "description": "Is this TOE setup for a one_time or continuous scan?",
+            "example": "continuous",
+            "type": "string"
+          },
+          "internal_id": {
+            "$ref": "#/components/schemas/InternalId"
+          },
+          "internal_name": {
+            "$ref": "#/components/schemas/InternalName"
+          },
+          "privacy_rating": {
+            "description": "The rating label of an analysis or of some domain or criteria of the analysis.",
+            "example": "a",
+            "nullable": true,
+            "type": "string"
+          },
+          "privacy_rating_numeric": {
+            "description": "The numeric rating of an analysis or of some domain or criteria of the analysis.",
+            "example": 9,
+            "nullable": true,
+            "type": "number"
+          },
+          "privacy_subscription_level": {
+            "description": "The privacy subscription level for the TOE.",
+            "example": "advisor",
+            "nullable": true,
+            "type": "string"
+          },
+          "risk_configurations": {
+            "$ref": "#/components/schemas/RiskConfigurations"
+          },
+          "security_domain_ratings": {
+            "description": "array of security_domain_ratings",
+            "items": {
+              "properties": {
+                "display_name": {
+                  "description": "The display name seen on RiskRecon portal site.",
+                  "example": "OpenSSL Patching",
+                  "nullable": true,
+                  "type": "string"
+                },
+                "rated": {
+                  "description": "Is this domain or criteria rated?",
+                  "example": true,
+                  "nullable": true,
+                  "type": "boolean"
+                },
+                "rating": {
+                  "description": "The rating label of an analysis or of some domain or criteria of the analysis.",
+                  "example": "a",
+                  "nullable": true,
+                  "type": "string"
+                },
+                "rating_numeric": {
+                  "description": "The numeric rating of an analysis or of some domain or criteria of the analysis.",
+                  "example": 9,
+                  "nullable": true,
+                  "type": "number"
+                },
+                "risk_dimension": {
+                  "description": "Category of security domain or criteria. Can currently be cyber or privacy.",
+                  "example": "cyber",
+                  "type": "string"
+                },
+                "security_domain": {
+                  "description": "The security_domain category rating",
+                  "example": "patching_app_server",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "seed_hostnames": {
+            "description": "The seed hostnames are the hostnames used to start the scan.  This doesn't include all hostnames from the scan results",
+            "items": {
+              "description": "The hostname used to start scan.",
+              "example": "riskrecon.com",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "subscription_level": {
+            "description": "The subscription level for the TOE.",
+            "example": "advisor",
+            "type": "string"
+          },
+          "ticker_symbols": {
+            "$ref": "#/components/schemas/TickerSymbols"
+          },
+          "toe_id": {
+            "$ref": "#/components/schemas/ToeId"
+          },
+          "toe_short_name": {
+            "description": "The Company or entity name.",
+            "example": "Riskrecon, CO.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "toe_short_name",
+          "toe_id",
+          "ticker_symbols",
+          "analysis_id",
+          "date_updated",
+          "seed_hostnames",
+          "risk_configurations",
+          "internal_name",
+          "internal_id",
+          "duns_numbers",
+          "frequency",
+          "subscription_level",
+          "cyber_rating",
+          "cyber_rating_numeric",
+          "security_domain_ratings"
+        ],
+        "title": "PaginatedToe",
         "type": "object"
       },
       "PaginatedFinding": {
@@ -5974,6 +6182,58 @@
         "summary": "Get portfolio ratings report",
         "tags": [
           "Reports"
+        ]
+      }
+    },
+    "/v1/toes_paginated": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "This API retrieves a collection of TOE objects mapped to a customer.\nThis include overall ratings and some domain rating information for the current analysis of the provided TOE id.\nAs a TOE can have multiple internal IDs, this API filters if the internal ID is one among the multiple internal IDs.",
+        "operationId": "getPaginatedToes",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/InternalId"
+          },
+          {
+            "$ref": "#/components/parameters/LastRetrieved"
+          },
+          {
+            "$ref": "#/components/parameters/Page"
+          },
+          {
+            "$ref": "#/components/parameters/PerPage250"
+          },
+          {
+            "$ref": "#/components/parameters/RiskDimensions"
+          },
+          {
+            "$ref": "#/components/parameters/SortMethod"
+          },
+          {
+            "$ref": "#/components/parameters/ToeIdQuery"
+          },
+          {
+            "$ref": "#/components/parameters/ToeSortAttribute"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetPaginatedToes"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenErrorResponse"
+          }
+        },
+        "summary": "This resource returns a collection of `TOE` objects mapped to a customer.",
+        "tags": [
+          "Target Of Evaluation TOE"
         ]
       }
     },
